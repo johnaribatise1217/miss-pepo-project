@@ -4,7 +4,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <section className="h-[125vh] w-full bg-bgAct bg-no-repeat bg-center pt-[6rem]">
+    <section className="h-[125vh] w-full bg-bgAct bg-no-repeat bg-cover pt-[6rem]">
       <div className="container h-full flex justify-between mt-[3rem] gap-[3rem] w-full">
         <div className="left flex flex-col items-start mt-[1.5rem] w-full gap-[2rem] bricolage-grotesque">
           <p className='text-white 2xl:text-[80px] xl:text-[70px] leading-[110%] tracking-[-1%] font-[400]'>Actor and <br />Scene-Stealer</p>
