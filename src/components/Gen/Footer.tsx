@@ -4,8 +4,8 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer className='w-full py-[5%] bg-footer flex flex-col gap-[10rem]'>
-      <div className="up flex container justify-between w-full gap-[4rem] items-start">
+    <footer className='w-full xl:py-[3%] 2xl:py-[5%] bg-footer flex flex-col xl:gap-[5rem] 2xl:gap-[10rem]'>
+      <div className="up flex container justify-between w-full 2xl:gap-[4rem] items-start">
         <div className='w-[20%] flex flex-col items-start gap-[1.5rem]'>
           <span className='bricolage-grotesque text-pryWhite text-[30px]'>For Booking</span>
           <div className='flex flex-col inter w-full gap-[0.5rem] items-start'>

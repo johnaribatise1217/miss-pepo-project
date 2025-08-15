@@ -33,6 +33,7 @@ module.exports = {
       },
       backgroundImage:{
         bgPepo : "url('/images/bg-pepo.jpg')",
+        bgAct: "url('/images/act-hea.svg')",
         bgIG1 : "url('/images/instagram1.svg')",
         bgIG2 : "url('/images/instagram2.svg')",
         bgIG3 : "url('/images/instagram3.svg')",

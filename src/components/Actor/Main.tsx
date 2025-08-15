@@ -59,7 +59,7 @@ const ActorMain = () => {
                   slidesPerView: 2.5,
                 },
                 1024: {
-                  slidesPerView: 3.4,
+                  slidesPerView: 2.5,
                 },
                 1280: {
                   slidesPerView: 3.5,

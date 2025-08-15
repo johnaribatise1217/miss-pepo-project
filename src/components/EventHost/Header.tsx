@@ -22,10 +22,10 @@ const Header = () => {
   };
 
   return (
-    <section className="h-[120vh] w-full bg-bgEvent bg-no-repeat bg-cover pt-[5rem]"
+    <section className="h-[120vh] w-full bg-bgEvent bg-no-repeat bg-cover pt-[6rem]"
     >
-      <div className="container flex flex-col items-start gap-[2rem] text-white mt-[15%]">
-        <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite text-[80px]">
+      <div className="container flex flex-col items-start mt-[3rem] gap-[2rem] text-white">
+        <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite xl:text-[70px] 2xl:text-[80px]">
           Hosting <br /> Memorable <br />Experiences
         </p>
         <p className='inter text-[22px] leading-[150%] font-[200] max-w-[50%]'>

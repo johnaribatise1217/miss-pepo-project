@@ -27,7 +27,7 @@ const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.4 }}
-            className="fixed right-10 top-10 h-auto w-[1000px] rounded-[20px] bg-white z-50 shadow-xl"
+            className="fixed right-10 top-[10px] h-auto overflow-auto 2xl:max-w-[70%] xl:max-w-[80%] rounded-[20px] bg-white z-50 shadow-xl"
           >
             {children}
           </motion.div>

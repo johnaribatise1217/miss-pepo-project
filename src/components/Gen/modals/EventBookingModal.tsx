@@ -130,22 +130,22 @@ const EventBookingModal = (
 
   return (
     <ModalBase isOpen={isOpen} onClose={onClose}>
-      <div className="flex justify-between bg-inherit items-center mt-[1rem] px-8 py-4">
-        <h2 className="xl:text-[44px] lg:text-[30px] text-black font-[400] bricolage-grotesque ">Event Host Booking</h2>
+      <div className="flex justify-between bg-inherit items-center mt-[1rem] px-8 xl:py-2 2xl:py-4">
+        <h2 className="2xl:text-[44px] xl:text-[30px] text-black font-[400] bricolage-grotesque ">Event Host Booking</h2>
         <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
           ✕
         </button>
       </div>
-      <div className="flex items-start gap-[2rem] w-full px-8 py-4">
-        <div className="left w-[50%] max-h-[680px] overflow-y-auto space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start">
-          <p className='bricolage-grotesque text-[28px] font-[300] leading-[140%]'>Choose Date & Time</p>
-          <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+      <div className="flex items-start gap-[2rem] w-full px-8 xl:py-2 2xl:py-4">
+        <div className="left w-[50%] xl:max-h-[400px] lg:max-h-[300px] 2xl:max-h-[660px] xl:space-y-1 overflow-y-auto space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start">
+          <p className='bricolage-grotesque text-[28px] xl:text-[22px] font-[300] leading-[140%]'>Choose Date & Time</p>
+          <div className='flex justify-between inter items-center w-full xl:py-2 px-3 2xl:py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
             <span className='text-[14px] font-bold'>Event Date</span>
             <p className="font-light text-[14px]">{formatRange()}</p>
           </div>
           <div className='flex flex-col w-full gap-[1rem]'>
             <div className="flex justify-between items-center">
-              <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.5rem]">
+              <div className="left 2xl:text-[20px] xl:text-[16px] font-semibold text-[#7E7360] items-center gap-[0.5rem]">
                 <span className="">
                   {format(currentMonth, "MMMM")}
                 </span>
@@ -179,7 +179,7 @@ const EventBookingModal = (
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-7 text-[16px] font-semibold w-full text-center mb-1">
+            <div className="grid grid-cols-7 xl:text-[14px] 2xl:text-[16px] font-semibold w-full text-center mb-1">
               {daysOfWeek.map((d) => (
                 <div key={d} className="py-1">
                   {d}
@@ -188,7 +188,7 @@ const EventBookingModal = (
             </div>
 
             {/* Calendar with animation */}
-            <div className="relative min-h-[250px]">
+            <div className="relative 2xl:min-h-[250px] xl:min-h-[200px]">
               <AnimatePresence custom={dir} initial={false}>
                 <motion.div
                   key={format(currentMonth, "yyyy-MM")}
@@ -217,7 +217,7 @@ const EventBookingModal = (
                         const disabled: boolean = isBefore(startOfDay(day), today);
 
                         const base =
-                          "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+                          "2xl:p-3 xl:p-1 xl:py-2 rounded-[9px] flex items-center justify-center text-sm border relative";
 
                         let stateClass = "";
                         const outsideCurrentMonth = !isSameMonth(day, currentMonth);
@@ -257,7 +257,7 @@ const EventBookingModal = (
                 </motion.div>
               </AnimatePresence>
             </div>
-            <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+            <div className='flex justify-between inter items-center w-full xl:py-2 px-3 2xl:py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
               <span className='text-[14px] font-bold'>Event Time</span>
               <p className="font-light text-[14px]">{startTime} - {endTime}</p>
             </div>
@@ -266,31 +266,34 @@ const EventBookingModal = (
                 type="text"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 xl:py-2 2xl:py-4 text-sm"
               />
               <input
                 type="text"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 xl:py-2 2xl:py-4 text-sm"
               />
             </div>
-            <div className="flex w-full gap-2">
+            <p className='2xl:text-[28px] xl:text-[20px] bricolage-grotesque py-2'>Event Information</p>
+            <div className="flex flex-col items-start w-full gap-2">
+              <label htmlFor="dropdown1" className='font-[500] text-[15px]'>Event Type</label>
               <select
                 value={dropdown1}
                 onChange={(e) => setDropdown1(e.target.value)}
-                className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                className="flex-1 w-full inter bg-[#F2F2F2] border rounded-lg xl:py-2 px-3 2xl:py-4 text-sm"
               >
                 <option value="">Select Event Type</option>
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </select>
             </div>
-            <div className="flex w-full gap-2">
+            <div className="flex flex-col items-start w-full gap-2">
+              <label htmlFor="dropdown1" className='font-[500] text-[15px]'>Event Audience Demographic</label>
               <select
                 value={dropdown1}
                 onChange={(e) => setDropdown1(e.target.value)}
-                className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                className="flex-1 w-full inter bg-[#F2F2F2] border rounded-lg xl:py-2 px-3 2xl:py-4 text-sm"
               >
                 <option value="">Nigerian</option>
                 <option value="option1">Option 1</option>
@@ -301,7 +304,7 @@ const EventBookingModal = (
               <select
                 value={dropdown1}
                 onChange={(e) => setDropdown1(e.target.value)}
-                className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                className="flex-1 inter bg-[#F2F2F2] border rounded-lg xl:py-2 px-3 2xl:py-4 text-sm"
               >
                 <option value="">Texas</option>
                 <option value="option1">Option 1</option>
@@ -312,7 +315,7 @@ const EventBookingModal = (
               <select
                 value={dropdown1}
                 onChange={(e) => setDropdown1(e.target.value)}
-                className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                className="flex-1 inter bg-[#F2F2F2] border rounded-lg xl:py-2 px-3 2xl:py-4 text-sm"
               >
                 <option value="">Houston</option>
                 <option value="option1">Option 1</option>
@@ -347,16 +350,16 @@ const EventBookingModal = (
         </div>
       </div>
 
-      <div className="flex items-center gap-[2rem] border-t px-8 py-4">
+      <div className="flex items-center gap-[2rem] border-t xl:py-2 px-8 2xl:py-3">
         <button
           onClick={onPrevious}
-          className="px-6 py-4 border-2 border-b-4 border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
+          className="2xl:px-6 2xl:py-4 xl:px-3 xl:py-3 border-2 border-b-4 border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
         >
           Previous
         </button>
         <button
           onClick={onProceed}
-          className="bg-[#7E7360] px-6 py-4 border-[#645C4C] border-2 border-b-4 text-[#D9D9D9] rounded-[15px] cursor-not-allowed"
+          className="bg-[#7E7360] 2xl:px-6 2xl:py-4 xl:px-3 xl:py-3 border-[#645C4C] border-2 border-b-4 text-[#D9D9D9] rounded-[15px] cursor-not-allowed"
         >
           Proceed to Checkout
         </button>

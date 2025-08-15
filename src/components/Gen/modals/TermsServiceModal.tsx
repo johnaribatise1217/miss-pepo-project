@@ -11,19 +11,19 @@ const TermsServiceModal = ({ isOpen, onClose, onAgree } : any) => {
 
   return (
     <ModalBase isOpen={isOpen} onClose={onClose}>
-      <div className="flex justify-between bg-inherit items-center mt-[1rem] px-8 py-4">
-        <h2 className="xl:text-[44px] lg:text-[30px] text-black font-[400] bricolage-grotesque ">Terms of Services</h2>
+      <div className="flex justify-between bg-inherit items-center mt-[1rem] px-8 xl:py-2 2xl:py-4">
+        <h2 className="2xl:text-[44px] xl:text-[30px] text-black font-[400] bricolage-grotesque ">Terms of Services</h2>
         <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
           ✕
         </button>
       </div>
       {/* Scrollable Body */}
-      <div className="overflow-y-auto max-h-[650px] w-full px-8 py-4 space-y-3">
+      <div className="overflow-y-auto xl:max-h-[400px] 2xl:max-h-[500px] w-full px-8 py-4 xl:space-y-2 2xl:space-y-3">
         {/* TERMS CONTENT */}
-        <p className='inter text-[17px] leading-[150%] font-[400] text-black'>
+        <p className='inter xl:text-[17px] 2xl:text-[17px] leading-[150%] font-[400] text-black'>
           These Terms of Service ("Agreement") govern the provision of event hosting services by MsPepo, a professional <br /> Master of Ceremonies (MC) based in Houston, TX. By booking MsPepo's services, the Client agrees to be <br /> bound by the terms outlined below.
         </p>
-        <ol className="list-decimal gap-[0.5rem] text-[18px] flex flex-col space-y-2 ml-4">
+        <ol className="list-decimal gap-[0.5rem] xl:text-[16px] 2xl:text-[18px] flex flex-col space-y-2 ml-4">
           <li className=''><strong><span className='font-extrabold inter'>Services:</span></strong> {" "} 
           <span className='font-[300]'>MsPepo provides professional hosting and MC services for events. The specific date, time, and location of the event must be agreed upon and confirmed by both parties at the time of booking.</span>
           </li>

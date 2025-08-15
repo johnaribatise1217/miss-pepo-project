@@ -8,14 +8,14 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
   };
 
   return (
-    <div className='relative bg-bgPepo bg-cover bg-no-repeat max-w-full h-[100vh] pt-[5rem]'
+    <div className='relative bg-bgPepo bg-cover bg-no-repeat max-w-full h-[110vh] pt-[5rem]'
     >
       <div className='container h-full'>
-        <div className='flex flex-col gap-[2rem] text-white h-[500px] w-[50%] mt-[10%]'>
-          <p className='text-[112px] bricolage-grotesque font-normal leading-[110%]'>
+        <div className='flex flex-col gap-[1rem] text-white h-[500px] w-[50%] mt-[5rem]'>
+          <p className='2xl:text-[112px] xl:text-[90px] bricolage-grotesque font-normal leading-[110%]'>
             Ms.Pepo
           </p>
-          <p className='text-[72px] inter font-[200]'>
+          <p className='2xl:text-[72px] xl:text-[50px] inter font-[200]'>
             Where the <br />Vibe Begins
           </p>
           <div className='flex items-center text-secGrey2 text-[16px] gap-[1rem]'>

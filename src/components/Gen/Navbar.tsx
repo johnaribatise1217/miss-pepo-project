@@ -19,7 +19,7 @@ const Navbar = () => {
           height={100}
           className='w-[75px] h-[35px] object-contain'
         />
-        <div className='flex items-center px-[12px] py-[12px]
+        <div className='flex items-center xl:py-[9px] px-[12px] 2xl:py-[12px]
          justify-between gap-[1rem] w-[412px]'>
           {navLinks.map((link, index) => (
             <Link href={link.path} key={index}
