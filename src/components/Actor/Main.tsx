@@ -7,6 +7,7 @@ import { youtubeCard as data } from './data'
 import YoutubeCard from './YoutubeCard'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import { Autoplay, FreeMode } from 'swiper/modules'
+import { Thumbs } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/thumbs'
@@ -36,17 +37,18 @@ const ActorMain = () => {
             />
           </div>
           <div className=" flex flex-col gap-[2rem] items-start">
-            <p className='bricolage-grotesque text-[52px] leading-[120%] text-white'>
+             <p className='bricolage-grotesque text-[clamp(28px,4.5vw,52px)] leading-[120%] text-white'>
               Experience my art <br /> of storytelling
             </p>
-            <p className='text-[19px] leading-[150%] font-[200] inter'>
-              Acting is where my voice, body, and emotion align to <br /> tell unforgettable stories. Whether on screen or stage, I <br /> bring every character to life with authenticity and depth <br /> — always leaving a lasting impression.</p>
-              <button className='border-gray-500 text-[16px] px-6 py-4 rounded-[16px] border-b-4 border-[1px]'>Watch Me in Action</button>
+            <p className='text-[clamp(16px,3vw,18px)] leading-[150%] font-[200] inter'>
+              Acting is where my voice, body, and emotion align to <br /> tell unforgettable stories. Whether on screen or stage, I <br /> bring every character to life with authenticity and depth <br /> — always leaving a lasting impression.
+            </p>
+            <button className='border-gray-500 text-[clamp(14px,1.6vw,16px)] px-6 py-4 rounded-[16px] border-b-4 border-[1px]'>Watch Me in Action</button>
           </div>
         </div>
         <div className='second text-pryWhite w-full flex flex-col bricolage-grotesque items-start gap-[2rem]'>
-          <p className='text-[53px] leading-[120%]'>Your Rising Star of Dynamic Artistry</p>
-          <p className='inter text-[19px] font-[200] w-full'>Ms. Pepo is an exceptional actor known for her dynamic performances and ability to embody diverse <br /> characters. With a passion for storytelling, she captivates audiences and leaves a lasting impression.</p>
+          <p className='text-[clamp(32px,4.5vw,53px)] leading-[120%]'>Your Rising Star of Dynamic Artistry</p>
+          <p className='inter text-[clamp(16px,2.2vw,19px)] font-[200] w-full'>Ms. Pepo is an exceptional actor known for her dynamic performances and ability to embody diverse <br /> characters. With a passion for storytelling, she captivates audiences and leaves a lasting impression.</p>
           <div>
             <Swiper
               slidesPerView={3.5}
@@ -64,15 +66,33 @@ const ActorMain = () => {
                 1280: {
                   slidesPerView: 3.5,
                 },
+                1530: { 
+                  slidesPerView: 3,
+                }
               }}
-              modules={[Autoplay, FreeMode]}
+              modules={[Autoplay, FreeMode, Thumbs]}
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: true,
+              }}
+              freeMode={true}
+              // thumbs={{ swiper: thumbsSwiper }}
+              watchSlidesProgress
+              // onSwiper={setThumbsSwiper}
               mousewheel={true}
               navigation={true}
-              className="container min-w-[100vw] overflow-visible"
+              className="container ml-[3rem] min-w-[100vw] overflow-visible"
             >
               {SwiperImages.map((image, index) => (
-                <SwiperSlide key={index} className='z-1000'>
-                  <img src={image} alt="image" className='object-contain h-[500px] rounded-[20px]' />
+                <SwiperSlide key={index} className='z-1000 flex 2xl:h-[550px]  h-[500px]'>
+                  {/* <img src={image} alt="image" className='object-contain h-[500px] rounded-[20px]' /> */}
+                  <Image
+                    src={image}
+                    alt="image"
+                    width={500}
+                    height={500}
+                    className='object-cover 2xl:w-[400px] 2xl:h-[550px] h-[500px] rounded-[20px]'
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
