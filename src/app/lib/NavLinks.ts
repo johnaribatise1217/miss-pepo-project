@@ -21,7 +21,7 @@ export const navLinks: Link[] = [
     id : 3
   },
   {
-    name: 'Influencer',
+    name: 'Content Creator',
     path : "/influencer",
     id : 4
   }

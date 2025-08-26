@@ -14,23 +14,24 @@ const TikTokBg = [
 
 const Main = () => {
   return (
-    <section className='bg-pryBlack min-h-screen overflow-auto py-[8.5%]'>
+    <section className='bg-pryBlack min-h-screen overflow-auto py-[10%]'>
       <div className="container flex text-pryWhite items-start
        flex-col bricolage-grotesque gap-[15rem] h-full">
         <div className="one w-full flex items-start flex-col gap-[2rem]">
-          <div className="flex w-full justify-between items-end">
-            <span className='text-[52px] leading-[120%]'>
+          <div className="lg:flex w-full block justify-between lg:items-end">
+            <span className='text-[clamp(39px,4vw,52px)] w-full leading-[120%]'>
               Featured Instagram <br /> Content of Ms. Pepo
             </span>
             <Link 
               href="https://www.instagram.com/mspepo/"
+              className='lg:flex hidden'
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className='inter text-[16px] border-2 p-4 px-6 rounded-[16px] border-b-[5px] border-[#343434]'>View More</button>
+              <button className='inter w-full  text-[16px] border-2 p-4 px-6 rounded-[16px] border-b-[5px] border-[#343434]'>View More</button>
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full">
+          <div className="hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full">
             {instagramPosts.map((post, index) => (
               <InstagramCard
                 key={index}

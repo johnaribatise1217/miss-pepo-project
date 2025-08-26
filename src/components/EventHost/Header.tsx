@@ -22,16 +22,15 @@ const Header = () => {
   };
 
   return (
-    <section className="h-[120vh] max-w-full bg-bgEvent bg-no-repeat bg-cover pt-[6rem]"
-    >
-      <div className="container flex flex-col items-start my-[10%] gap-[2rem] text-white">
-        <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite text-[clamp(32px,4.5vw,80px)]">
+    <section className="lg:min-h-[115vh] min-h-[120vh] sm:bg-center relative bg-eventMobile max-w-full lg:bg-bgEvent bg-no-repeat bg-cover lg:bg-cover pt-[5rem]">
+      <div className="container flex flex-col mt-[5rem] items-start sm:my-[10%] gap-[1.5rem] text-white">
+        <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite text-[clamp(65px,4.5vw,112px)]">
           Hosting <br /> Memorable <br />Experiences
         </p>
-        <p className='inter text-[clamp(16px,2.2vw,22px)] leading-[150%] font-[200] max-w-[50%]'>
-          As an expert event host, I transform your <br /> event into an unforgettable occasion that will <br /> always linger in your mind.
+        <p className='inter text-[clamp(19px,3vw,25px)] leading-[150%] font-[300]'>
+          As an expert event host, I transform your <br /> event into an unforgettable occasion that <br /> will always linger in your mind.
         </p>
-        <button onClick={handleTermsClick} className='bg-white inter text-[clamp(14px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
+        <button onClick={handleTermsClick} className='bg-white w-full sm:w-auto inter text-[clamp(16px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
           Book Me!
         </button>
       </div>

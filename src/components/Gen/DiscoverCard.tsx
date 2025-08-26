@@ -5,12 +5,12 @@ import Link from 'next/link'
 
 const DiscoverCard = ({imgBg, path, bgColor, title, message} : DiscoverCard) => {
   return (
-    <div className="relative group max-h-[500px] h-full font-bricolage overflow-hidden rounded-[30px]">
+    <div className="relative w-full group max-h-[500px] h-full font-bricolage overflow-y-hidden overflow-x-hidden rounded-[30px]">
       <Image
         src={imgBg}
         alt={`${title}`}
-        height={100}
-        width={100}
+        height={1000}
+        width={1000}
         className="w-full h-full object-cover rounded-[30px] scale-110 transition-all duration-500 group-hover:scale-95"
       />
 

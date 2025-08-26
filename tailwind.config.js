@@ -11,6 +11,16 @@ module.exports = {
         bricolage: ["var(--font-bricolage-grotesque)", "sans-serif"], // Add this
         inter: ["var(--font-inter)", "sans-serif"], // Add this // Add this
       },
+      animation: {
+        'spin-slow': 'spin 1s linear infinite',
+      },
+      keyframes: {
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          "50%" : {transform : 'rotate(45deg)'},
+          '100%': { transform: 'rotate(90deg)' },
+        }
+      },
       colors:{
         pryBlack : "#010101",
         blackOne : "#282726",
@@ -40,10 +50,15 @@ module.exports = {
         bgIG4 : "url('/images/instagram4.svg')",
         bgEvent : "url('/images/ev-header.svg')",
         bgContent : "linear-gradient(to right, #1D2A3B, #1D2A3B 50%), url('/images/content.svg')",
+        bgInfluencer : "url('/images/influencer-header.svg')",
         tiktok1 : "url('/images/tiktok1.svg')",
         tiktok2 : "url('/images/tiktok-2.svg')",
         tiktok3 : "url('/images/tiktok3.svg')",
         tiktok4 : "url('/images/tiktok4.svg')",
+        homeMobile : "url('/images/home-mobile.svg')",
+        eventMobile : "url('/images/event-mobile.svg')",
+        actorMobile : "url('/images/actor-mobile.svg')",
+        contentMobile : "url('/images/influencer-mobile.svg')"
       }
     },
   },

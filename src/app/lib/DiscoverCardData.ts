@@ -27,5 +27,5 @@ export const CardData: DiscoverCard[] = [
     message : "Her Charm captivates all",
     path : "/influencer",
     bgColor : "bg-secPablo"
-  }
+  },
 ]

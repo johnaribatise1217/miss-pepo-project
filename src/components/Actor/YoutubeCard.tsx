@@ -15,13 +15,13 @@ const YoutubeCard = ({ videoId, title, duration, subtitle, thumbnail, href } : a
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative w-full h-[320px] rounded-xl overflow-hidden mb-4">
+      <div className="relative w-full h-[300px] md:h-[350px] rounded-xl overflow-hidden mb-4">
         {!isHovered ? (
           <Image
             src={thumbnail}
             alt={title}
             fill
-            className="object-fill transition-transform duration-300 group-hover:scale-105"
+            className="object-contain md:object-fill transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <iframe
