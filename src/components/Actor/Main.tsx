@@ -20,7 +20,7 @@ const ActorMain = () => {
       <div className='container flex text-pryWhite items-start
        flex-col bricolage-grotesque gap-[7rem] lg:gap-[15rem] h-full'>
         <div className='first flex-col-reverse lg:flex-row lg:gap-[6rem] flex lg:items-center w-full gap-[5rem] justify-between'>
-          <button className='border-gray-500 flex w-full text-center lg:hidden text-[clamp(16px,1.6vw,16px)] px-6 py-5 rounded-[16px] border-b-4 border-[1px]'>Watch Me in Action</button>
+          <button className='border-gray-500 w-full lg:hidden text-[clamp(16px,2vw,18px)] px-6 py-5 rounded-[16px] border-b-4 border-[1px]'>Watch Me in Action</button>
           <div className='flex h-[500px] lg:h-[600px] w-full lg:w-1/2'>
             <Image
               src="/images/actor3.svg"
