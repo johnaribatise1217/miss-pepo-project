@@ -131,21 +131,21 @@ const EventBookingModal = (
   return (
     <ModalBase isOpen={isOpen} onClose={onClose}>
       <div className="flex justify-between bg-inherit items-center mt-[1rem] px-8 xl:py-2 2xl:py-4">
-        <h2 className="2xl:text-[44px] xl:text-[30px] text-black font-[400] bricolage-grotesque ">Event Host Booking</h2>
+        <h2 className="2xl:text-[44px] text-[30px] text-black font-[400] bricolage-grotesque ">Event Host Booking</h2>
         <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
           ✕
         </button>
       </div>
-      <div className="flex items-start gap-[2rem] w-full px-8 xl:py-2 2xl:py-4">
-        <div className="left w-[50%] xl:max-h-[400px] lg:max-h-[300px] 2xl:max-h-[660px] xl:space-y-1 overflow-y-auto space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start">
+      <div className="flex flex-col lg:flex-row md:items-start gap-[2rem] w-full px-8 xl:py-2 2xl:py-4">
+        <div className="left w-full lg:w-[50%] xl:max-h-[400px] lg:max-h-[300px] 2xl:max-h-[660px] xl:space-y-1 overflow-y-auto space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start">
           <p className='bricolage-grotesque text-[28px] xl:text-[22px] font-[300] leading-[140%]'>Choose Date & Time</p>
-          <div className='flex justify-between inter items-center w-full xl:py-2 px-3 2xl:py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+          <div className='flex justify-between inter items-center w-full p-4 xl:py-2 px-3 2xl:py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
             <span className='text-[14px] font-bold'>Event Date</span>
             <p className="font-light text-[14px]">{formatRange()}</p>
           </div>
           <div className='flex flex-col w-full gap-[1rem]'>
             <div className="flex justify-between items-center">
-              <div className="left 2xl:text-[20px] xl:text-[16px] font-semibold text-[#7E7360] items-center gap-[0.5rem]">
+              <div className="left 2xl:text-[20px] text-[17px] font-semibold text-[#7E7360] items-center gap-[0.8rem]">
                 <span className="">
                   {format(currentMonth, "MMMM")}
                 </span>
@@ -188,7 +188,7 @@ const EventBookingModal = (
             </div>
 
             {/* Calendar with animation */}
-            <div className="relative 2xl:min-h-[250px] xl:min-h-[200px]">
+            <div className="relative 2xl:min-h-[250px] min-h-[200px]">
               <AnimatePresence custom={dir} initial={false}>
                 <motion.div
                   key={format(currentMonth, "yyyy-MM")}
@@ -201,7 +201,7 @@ const EventBookingModal = (
                   className="grid grid-rows-6 gap-1"
                 >
                   {calendarMatrix.map((week, wi) => (
-                    <div key={wi} className="grid grid-cols-7 gap-1">
+                    <div key={wi} className="grid grid-cols-7 gap-2">
                       {week.map((day, di) => {
                         const isStart = range.start && isSameDay(day, range.start);
                         const isEnd = range.end && isSameDay(day, range.end);
@@ -217,7 +217,7 @@ const EventBookingModal = (
                         const disabled: boolean = isBefore(startOfDay(day), today);
 
                         const base =
-                          "2xl:p-3 xl:p-1 xl:py-2 rounded-[9px] flex items-center justify-center text-sm border relative";
+                          "2xl:p-3 p-2 rounded-[9px] flex items-center justify-center text-sm border relative";
 
                         let stateClass = "";
                         const outsideCurrentMonth = !isSameMonth(day, currentMonth);
@@ -257,7 +257,7 @@ const EventBookingModal = (
                 </motion.div>
               </AnimatePresence>
             </div>
-            <div className='flex justify-between inter items-center w-full xl:py-2 px-3 2xl:py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+            <div className='flex justify-between inter items-center w-full p-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
               <span className='text-[14px] font-bold'>Event Time</span>
               <p className="font-light text-[14px]">{startTime} - {endTime}</p>
             </div>
@@ -324,7 +324,7 @@ const EventBookingModal = (
             </div>
           </div>
         </div>
-        <div className="right flex flex-col gap-[1.5rem] bricolage-grotesque w-[45%]">
+        <div className="right flex flex-col w-full gap-[1.5rem] bricolage-grotesque lg:w-[45%]">
           <div className="flex flex-col gap-[1rem] border-[#D9D9D9] border-[1px] rounded-[10px] p-4">
             <p className='text-[22px] leading-[140%]'>Payment Summary</p>
             <div className="flex justify-between items-start w-full">

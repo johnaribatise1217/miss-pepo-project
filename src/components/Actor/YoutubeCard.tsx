@@ -21,11 +21,11 @@ const YoutubeCard = ({ videoId, title, duration, subtitle, thumbnail, href } : a
             src={thumbnail}
             alt={title}
             fill
-            className="object-contain md:object-fill transition-transform duration-300 group-hover:scale-105"
+            className="object-cover md:object-fill transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0`}
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0`}
             className="w-full h-full"
             allow="autoplay"
             frameBorder="0"
@@ -40,10 +40,12 @@ const YoutubeCard = ({ videoId, title, duration, subtitle, thumbnail, href } : a
         </span>
       </div>
 
-      <h2 className="text-white text-[28px] leading-[140%] font-[200] bricolage-grotesque mb-2 truncate">{title}</h2>
-      <p className="text-pryWhite font-[200] inter text-[18px] mb-3">
-        {subtitle}
-      </p>
+      <h2 className="text-white text-[21px] md:text-[28px] leading-[140%] font-[200] bricolage-grotesque mb-2 truncate">{title}</h2>
+      {subtitle && 
+        <p className="text-pryWhite font-[200] inter text-[18px] mb-3">
+          {subtitle}
+        </p>
+      }
 
       {/* <div className="flex flex-wrap gap-2 mb-2">
         {tags.map((tag : string, idx : number) => (

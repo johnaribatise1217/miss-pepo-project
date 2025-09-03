@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react'
+'use client'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ModalProps {
@@ -7,6 +8,30 @@ interface ModalProps {
   children: ReactNode;
 }
 const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint in Tailwind
+    };
+
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const variants = isMobile
+    ? {
+        initial: { y: "100%" },
+        animate: { y: 0 },
+        exit: { y: "100%" },
+      }
+    : {
+        initial: { x: "100%" },
+        animate: { x: 0 },
+        exit: { x: "100%" },
+      };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -22,15 +47,19 @@ const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
           />
 
           {/* Sliding Modal */}
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.4 }}
-            className="fixed right-10 top-[10px] h-auto overflow-auto 2xl:max-w-[70%] lg:max-w-[80%] rounded-[20px] bg-white z-50 shadow-xl"
-          >
-            {children}
-          </motion.div>
+          {isOpen && (
+            <motion.div
+              variants={variants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ type: "tween", duration: 0.4 }}
+              className="fixed md:right-10 top-[80px] min-h-screen md:top-[40px] w-full md:min-h-10 overflow-auto 
+                        2xl:max-w-[70%] md:max-w-[80%] rounded-[20px] bg-white z-50 shadow-xl"
+            >
+              {children}
+            </motion.div>
+          )}
         </>
       )}
     </AnimatePresence>

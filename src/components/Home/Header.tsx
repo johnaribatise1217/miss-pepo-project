@@ -40,7 +40,7 @@ const RotaryButton = ({onClick} : any) => {
   }, [])
 
   return (
-    <div className="relative w-40 h-40 mt-[2rem] flex items-center justify-center">
+    <div className="relative overflow-hidden w-40 h-40 mt-[2rem] flex items-center justify-center">
       {/* The rotating text */}
       <div onClick={onClick} className="absolute w-full h-full animate-spin-slow">
         <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
