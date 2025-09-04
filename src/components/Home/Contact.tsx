@@ -1,6 +1,39 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+  const [status, setStatus] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('Sending...');
+
+    const response = await fetch('/api/sendEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+    setTimeout(() => {
+      setStatus(result.message);
+    }, 2500)
+    setStatus(null)
+  };
+  
   return (
     <section className='bg-secBlack py-[10%] min-h-[810px] w-full'>
       <div className='container flex-col lg:flex-row flex lg:gap-[1rem] gap-[4rem] h-full items-start'>
@@ -14,24 +47,26 @@ const Contact = () => {
           </p>
         </div>
         <div className="right w-full lg:w-1/2 h-full">
-          <form action="" className='w-full inter flex flex-col h-full gap-[1.5rem]'>
-            <input type="text" name="" id="" placeholder='Name'
+          <form onSubmit={handleSubmit} action="" className='w-full inter flex flex-col h-full gap-[1.5rem]'>
+            {status && <p className="mt-2 w-full text-black bg-white p-4 rounded-[16px]">{status}</p>}
+            <input type="text" name="name" id="" placeholder='Name' required
+              value={formData.name} onChange={handleChange}
               className='bg-pryGrey w-full py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
-             />
+            />
             <div className='w-full flex lg:flex-row flex-col items-center gap-[1.2rem] '>
-              <input type="text" name="" id="" placeholder='Phone'
-                className='bg-pryGrey lg:w-1/2 w-full py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
+              <input required type="text" name="phone" value={formData.phone} id="" placeholder='Phone' onChange={handleChange}
+                className='bg-pryGrey w-full lg:w-1/2 py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
               />
-               <input type="text" name="" id="" placeholder='Email'
-                className='bg-pryGrey lg:w-1/2 w-full  py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
+              <input required type="text" name="email" id="" placeholder='Email' onChange={handleChange}
+                className='bg-pryGrey w-full lg:w-1/2 py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
               />
             </div>
-            <input type="text" name="" id="" placeholder='Select Subject'
+            <input required type="text" value={formData.subject} name="subject" onChange={handleChange} id="" placeholder='Select Subject'
               className='bg-pryGrey w-full py-[16px] px-[12px] border-[1px] border-[#484848] rounded-[12px] outline-none text-secGrey'
-             />
-            <textarea name="message" placeholder='Type your message'
-             className='bg-pryGrey h-[180px] rounded-[20px] text-secGrey resize-none outline-none px-[12px] py-[16px]' id="message"></textarea>
-            <button type='submit' className='bg-pryPablo mb-[3rem] shadow-[0_6px_0_0_#5e5547] lg:w-[15%] p-[20px] rounded-[16px] text-white cursor-pointer'>
+            />
+            <textarea required name="message" placeholder='Type your message' onChange={handleChange} value={formData.message}
+            className='bg-pryGrey h-[180px] rounded-[20px] text-secGrey resize-none outline-none px-[12px] py-[16px]' id="message"></textarea>
+            <button type='submit' className='bg-pryPablo shadow-[0_6px_0_0_#5e5547] mb-[3rem] w-full lg:w-[20%] p-[20px] rounded-[16px] text-white cursor-pointer'>
               Send
             </button>
           </form>

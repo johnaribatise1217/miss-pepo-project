@@ -117,7 +117,7 @@ const Main = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-               <button className='inter text-[16px] hidden lg:flex border-2 p-4 px-6 rounded-[16px] border-b-[5px] border-[#343434]'>View More</button>
+              <button className='inter text-[16px] hidden lg:flex border-2 p-4 px-6 rounded-[16px] border-b-[5px] border-[#343434]'>View More</button>
             </Link>
           </div>
           <div className="flex w-full gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
