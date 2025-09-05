@@ -54,7 +54,7 @@ const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
               animate="animate"
               exit="exit"
               transition={{ type: "tween", duration: 0.4 }}
-              className="fixed md:right-10 top-[80px] min-h-screen md:top-[40px] w-full md:min-h-10 overflow-auto 
+              className="fixed md:right-10 top-[80px] min-h-screen md:top-[40px] w-full md:min-h-[70vh] overflow-auto 
                         2xl:max-w-[70%] md:max-w-[80%] rounded-[20px] bg-white z-50 shadow-xl"
             >
               {children}
