@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     shortcut: "favicon.ico",
   },
   description: "Miss Pepo - Where the Vibe Begins.",
-  keywords: ["Miss Pepo", "Influencer", "Content Creator", "Social Media", "Brand Ambassador", ],
+  keywords: ["Miss Pepo", "Onaopemipo Olatunde", "Influencer", "Content Creator", "Actor", "Social Media", "Brand Ambassador", ],
   authors: [{ name: "Miss Pepo" }],
 };
 

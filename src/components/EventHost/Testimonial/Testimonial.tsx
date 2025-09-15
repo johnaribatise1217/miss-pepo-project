@@ -4,6 +4,7 @@ import TestimonialSlider from './TestimonialSlider'
 import Image from 'next/image'
 import EventBookingModal from '@/components/Gen/modals/EventBookingModal'
 import TermsServiceModal from '@/components/Gen/modals/TermsServiceModal'
+import { motion } from 'framer-motion'
 
 const Testimonial = () => {
   const [showTerms, setShowTerms] = useState(false);
@@ -24,18 +25,32 @@ const Testimonial = () => {
   };
   return (
     <section className='bg-secBlack relative w-full min-h-[100vh] py-[8.5%] flex flex-col gap-[2rem]'>
-      <div className='container flex flex-col gap-[2.5rem] items-start'>
-        <div>
-          <p className='text-[clamp(38px,5vw,52px)] leading-[120%] overflow-hidden bricolage-grotesque font-[400] text-pryWhite'>
-            What my Clients say <br /> About Me
-          </p>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.3, ease: "easeInOut" }}
+        viewport={{ once: true, amount: 0.5 }}
+        className='w-full py-1'
+      >
+        <div className='container flex flex-col gap-[2.5rem] items-start'>
+          <div>
+            <p className='text-[clamp(38px,5vw,52px)] leading-[120%] overflow-hidden bricolage-grotesque font-[400] text-pryWhite'>
+              What my Clients say <br /> About Me
+            </p>
+          </div>
+          <TestimonialSlider/>
         </div>
-        <TestimonialSlider/>
-      </div>
+      </motion.div>
       <div className='container bg-pryPablo mt-[6rem] md:mt-[8rem] lg:mt-[12rem] 
       flex-col-reverse lg:flex-row flex justify-between items-center gap-[3rem]
       sm:p-[30px] p-5 xl:p-[40px] lg:h-[500px] rounded-[35px]'>
-        <div className='flex flex-col items-start w-full lg:w-1/2 gap-[2rem]'>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }} // triggers when 20% in view
+          className="py-1 flex flex-col items-start w-full lg:w-1/2 gap-[2rem]"
+        >
           <p className='bricolage-grotesque text-[37px] md:text-[52px] font-[500] w-full text-pryWhite leading-[120%]'>Book Ms. Pepo for <br /> your Next Event</p>
           <p className='inter hidden lg:flex lg:text-[20px] text-pryWhite font-[300] w-full'>
             Ms. Pepo brings a unique flair to every event she <br /> hosts. Her commitment to audience engagement <br /> and personalized experience ensures unforgettable <br /> moments for all
@@ -44,8 +59,14 @@ const Testimonial = () => {
             Ms. Pepo brings a unique flair to every event she hosts. Her commitment to audience engagement and personalized experience ensures unforgettable moments for all
           </p>
           <button onClick={handleTermsClick} className='bg-white w-full lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px]'>Book Me!</button>
-        </div>
-        <div className='lg:w-[45%] w-full h-full relative'>
+        </motion.div>
+        <motion.div
+          className='lg:w-[45%] w-full h-full relative'
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 1 }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
           <Image
             src="/images/book-me.svg"
             alt='service'
@@ -53,7 +74,7 @@ const Testimonial = () => {
             height={100}
             className='w-full h-full rounded-[20px] object-cover'
           />
-        </div>
+        </motion.div>
       </div>
       <TermsServiceModal 
         isOpen={showTerms}
