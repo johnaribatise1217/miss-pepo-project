@@ -1,10 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+// import {motion} from 'framer-motion'
 
 const Footer = () => {
   return (
     <footer className='w-full py-[6%] 2xl:py-[8%] bg-footer flex flex-col gap-[5rem] 2xl:gap-[10rem]'>
+      {/* <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeInOut" }}
+        viewport={{ once: true, amount: 0.3 }} // triggers when 20% in view
+        className="py-6"
+      > */}
       <div className="up flex flex-col lg:flex-row container justify-between w-full gap-[3rem] items-start">
         <div className='lg:w-[20%] w-full flex flex-col items-start gap-[1.5rem]'>
           <span className='bricolage-grotesque text-pryWhite text-[30px]'>For Booking</span>
@@ -85,6 +93,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {/* </motion.div> */}
 
       <div className="down container w-full flex flex-col gap-[2rem]">
         <div className='content-none w-full h-[1px] bg-underline'></div>

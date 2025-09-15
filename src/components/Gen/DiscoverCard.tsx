@@ -28,7 +28,7 @@ const DiscoverCard = ({imgBg, path, bgColor, title, message} : DiscoverCard) => 
 
       <div className="absolute bottom-[-100%] left-0 w-full px-6 text-white text-sm transition-all duration-700 delay-100 group-hover:bottom-10 z-20">
         <Link href={path}>
-          <button className="bg-pryPablo text-[clamp(14px,1.6vw,16px)] font-[700] text-white shadow-[0_6px_0_0_#5e5547] px-4 py-4 rounded-md">Show More</button>
+          <button className="bg-pryPablo text-[clamp(14px,1.6vw,16px)] mb-[1rem] font-[700] text-white shadow-[0_6px_0_0_#5e5547] px-4 py-4 rounded-md">Show More</button>
         </Link>
       </div>
     </div>

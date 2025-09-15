@@ -2,6 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import {motion} from 'framer-motion'
 
 const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> }) => {
 
@@ -12,17 +13,25 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
   return (
     <div className='relative bg-cover sm:bg-center lg:min-h-[115vh] min-h-[120vh] bg-homeMobile lg:bg-bgPepo lg:bg-cover bg-no-repeat max-w-full pt-[5rem]'
     >
-      <div className='container h-full'>
-        <div className='flex flex-col gap-[2rem] text-white  mt-[5rem] w-full sm:my-[15%]'>
-          <p className='text-[clamp(80px,5vw,112px)] bricolage-grotesque font-normal leading-[110%]'>
-            Ms.Pepo
-          </p>
-            <p className='text-[clamp(45px,5vw,72px)] inter font-[200]'>
-              Where the <br />Vibe Begins
-          </p>
-          <RotaryButton onClick={scrollToNext}/>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.4 }} // triggers when 20% in view
+        className="py-4 w-full"
+      >
+        <div className='container h-full'>
+          <div className='flex flex-col gap-[2rem] text-white  mt-[5rem] w-full sm:my-[15%]'>
+            <p className='text-[clamp(80px,5vw,112px)] overflow-auto bricolage-grotesque font-normal leading-[110%]'>
+              Ms.Pepo
+            </p>
+              <p className='text-[clamp(45px,5vw,72px)] inter font-[200]'>
+                Where the <br />Vibe Begins
+            </p>
+            <RotaryButton onClick={scrollToNext}/>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

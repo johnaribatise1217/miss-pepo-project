@@ -34,15 +34,15 @@ const TestimonialSlider = () => {
   return (
     <div className='flex flex-col items-start gap-[1.5rem]'>
       <div className="mt-6 hidden lg:grid lg:grid-cols-3 gap-6 transition-all duration-500">
-        <AnimatePresence mode="wait">
           {testimonials.map((testimonial) => (
+            <AnimatePresence mode="wait" key={testimonial.id}>
             <motion.div
               key={testimonial.id}
               className="bg-black flex flex-col justify-between min-h-[350px] gap-[3rem] text-pryWhite px-7 cursor-pointer p-6 rounded-3xl h-full"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, ease: "easeInOut" }}
+              viewport={{ once: true, amount: 0.5 }}
             >
               <p className="text-pryWhite font-[300] w-full text-[16px] inter leading-[150%]">"{testimonial.text1}"</p>
               {testimonial.text2 && (
@@ -50,8 +50,8 @@ const TestimonialSlider = () => {
               )}
               <p className="font-bold text-[16px] mt-4">{testimonial.name}</p>
             </motion.div>
+            </AnimatePresence>
           ))}
-        </AnimatePresence>
       </div>
       <div className="flex mt-6 w-full lg:hidden gap-5 overflow-x-auto scrollbar-hide scroll-smooth"
         style={{
