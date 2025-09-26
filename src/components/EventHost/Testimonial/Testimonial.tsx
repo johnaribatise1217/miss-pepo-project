@@ -30,14 +30,14 @@ const Testimonial = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.3, ease: "easeInOut" }}
         viewport={{ once: true, amount: 0.5 }}
-        className='w-full py-1'
+        className='w-full py-1 container flex flex-col gap-[2.5rem] items-start'
       >
-        <div className='container flex flex-col gap-[2.5rem] items-start'>
-          <div>
-            <p className='text-[clamp(38px,5vw,52px)] leading-[120%] overflow-hidden bricolage-grotesque font-[400] text-pryWhite'>
-              What my Clients say <br /> About Me
-            </p>
-          </div>
+        <div className='overflow-hidden'>
+          <p className='text-[clamp(38px,5vw,52px)] leading-[120%] bricolage-grotesque font-[400] text-pryWhite'>
+            What my Clients say <br /> About Me
+          </p>
+        </div>
+        <div className=''>
           <TestimonialSlider/>
         </div>
       </motion.div>
@@ -68,7 +68,7 @@ const Testimonial = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <Image
-            src="/images/book-me.svg"
+            src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845024/book-me_lzr2ax.svg"
             alt='service'
             width={100}
             height={100}

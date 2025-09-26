@@ -3,6 +3,7 @@ import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Gen/Navbar";
 import Footer from "@/components/Gen/Footer";
+import dbConnect from "../../backend/connect";
 // import Modal from "@/components/Gen/Modal";
 
 const bricolageGrotesque = Bricolage_Grotesque({
@@ -31,6 +32,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  dbConnect()
   return (
     <html lang="en">
       <body className={`${bricolageGrotesque.className} ${inter.className}`}>

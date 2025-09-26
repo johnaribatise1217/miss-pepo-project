@@ -12,7 +12,7 @@ const dbConnect = async() => {
   if(process.env.NODE_ENV === "production") DB_URI = process.env.MONGODB_URI!
 
   await mongoose.connect(DB_URI).then((con) => console.log('DB connected')).
-  catch((error) => console.log("DB failed to connect"))
+  catch((error) => console.log(error))
 }
 
 export default dbConnect

@@ -5,15 +5,15 @@ import Image from 'next/image'
 import React from 'react'
 
 const exploreImages : string[] = [
-  '/images/explore1.svg',
-  '/images/explore2.svg',
-  '/images/explore3.jpg',
-  '/images/explore4.svg',
-  '/images/explore5.png',
-  '/images/explore6.png',
-  '/images/explore7.png',
-  '/images/explore8.png',
-  '/images/explore9.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844602/explore1_xnsvx2.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844608/explore2_ctzyrc.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844605/explore3_bftvc5.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844618/explore4_exkpal.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844607/explore5_pwwvbw.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844610/explore6_wx0qrv.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844610/explore7_kzhkjw.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844612/explore8_notr29.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844614/explore9_b6v9ud.png',
 ]
 
 const SectionTwo = () => {
@@ -35,7 +35,7 @@ const SectionTwo = () => {
           viewport={{ once: true, amount: 0.4 }}
         >
           <Image
-            src="/images/section2-one.svg"
+            src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844528/section2-one_ynsbqw.svg"
             alt='misspepo'
             height={1000}
             width={1000}
@@ -72,7 +72,7 @@ const SectionTwo = () => {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
-                  viewport={{ once: true, amount: 0.5 }}
+                  viewport={{ once: true, amount: 0.2 }}
                 >
                   <Image
                     src={card}

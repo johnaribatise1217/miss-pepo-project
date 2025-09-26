@@ -2,6 +2,9 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 'use server'
 import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '../../../../../backend/connect';
+
+dbConnect()
 
 const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
 

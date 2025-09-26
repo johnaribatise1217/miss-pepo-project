@@ -1,14 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // images: {
-  //   localPatterns: [
-  //     {
-  //       pathname: '/images/**',
-  //       search: '',
-  //     },
-  //   ],
-  // },
+  images: {
+    domains : ["res.cloudinary.com"]
+  },
 };
 
 export default nextConfig;
