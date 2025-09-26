@@ -23,14 +23,16 @@ const Navbar = () => {
     <nav className='w-full top-[25px] sm:top-10 left-0 fixed z-50'>
       {/* For desktop view */}
       <div className='container font-inter bg-white/10 backdrop-blur-[50px] shadow-md px-[18px] py-[20px] rounded-[16px] flex items-center justify-between'>
+      <Link href="/">
         <Image
-          src='/images/pepologo.png'
+          src='https://res.cloudinary.com/dfptoh5fz/image/upload/v1758846969/pepologo_enwfxi.png'
           alt='logo'
           width={100}
           loading='lazy'
           height={100}
           className='w-[75px] h-[30px] object-contain'
         />
+      </Link>
         <div className='hidden lg:flex items-center xl:py-[9px] px-[12px] 2xl:py-[12px]
          justify-between gap-[1rem] w-[412px]'>
           {navLinks.map((link, index) => (

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import ModalBase from './ModalBase'
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -29,6 +29,18 @@ interface DateRange {
 const EventBookingModal = (
   { isOpen, onClose, onProceed, onPrevious } : any
 ) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
   const today: Date = startOfDay(new Date());
   const minYear: number = today.getFullYear();
   const minDate: Date = new Date(minYear, 0, 1); // Jan 1 of current year
@@ -40,8 +52,10 @@ const EventBookingModal = (
   const [range, setRange] = useState<DateRange>({ start: null, end: null });
   const [startTime, setStartTime] = useState<string>("11:00 AM");
   const [endTime, setEndTime] = useState<string>("05:00 PM");
-  const [dropdown1, setDropdown1] = useState<string>("");
-  const [dropdown2, setDropdown2] = useState<string>("");
+  const [eventType, setEventType] = useState<string>("");
+  const [nationality, setNationality] = useState<string>("Nigerian");
+  const [state, setState] = useState<string>("Texas");
+  const [city, setCity] = useState<string>("Houston");
   const [dir, setDir] = useState<number>(0); // -1 prev, 1 next
 
   const goNext = (): void => {
@@ -136,8 +150,8 @@ const EventBookingModal = (
           ✕
         </button>
       </div>
-      <div className="flex items-start  max-h-screen overflow-y-auto gap-[2rem] w-full px-8 py-4">
-        <div className="left w-[50%] max-h-screen space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start">
+      <div className={`flex-1 flex ${isMobile ? 'flex-col overflow-y-auto' : 'flex-row overflow-hidden'} items-start gap-[2rem] w-full px-8 py-4`}>
+        <div className={`left ${isMobile ? 'w-full' : 'flex-1 pr-[2rem] overflow-y-auto'} space-y-2 mb-[1rem] flex flex-col gap-[1rem] items-start`}>
           <p className='bricolage-grotesque text-[28px] font-[300] leading-[140%]'>Choose Date & Time</p>
           <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
             <span className='text-[14px] font-bold'>Event Date</span>
@@ -277,8 +291,8 @@ const EventBookingModal = (
             </div>
             <div className="flex w-full gap-2">
               <select
-                value={dropdown1}
-                onChange={(e) => setDropdown1(e.target.value)}
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
                 className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
               >
                 <option value="">Select Event Type</option>
@@ -288,40 +302,40 @@ const EventBookingModal = (
             </div>
             <div className="flex w-full gap-2">
               <select
-                value={dropdown1}
-                onChange={(e) => setDropdown1(e.target.value)}
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
                 className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
               >
-                <option value="">Nigerian</option>
+                <option value="Nigerian">Nigerian</option>
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </select>
             </div>
             <div className="flex w-full gap-2">
               <select
-                value={dropdown1}
-                onChange={(e) => setDropdown1(e.target.value)}
+                value={state}
+                onChange={(e) => setState(e.target.value)}
                 className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
               >
-                <option value="">Texas</option>
+                <option value="Texas">Texas</option>
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </select>
             </div>
             <div className="flex w-full gap-2">
               <select
-                value={dropdown1}
-                onChange={(e) => setDropdown1(e.target.value)}
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
                 className="flex-1 inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
               >
-                <option value="">Houston</option>
+                <option value="Houston">Houston</option>
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </select>
             </div>
           </div>
         </div>
-        <div className="right flex flex-col gap-[1.5rem] bricolage-grotesque w-[45%]">
+        <div className={`right flex flex-col gap-[1.5rem] bricolage-grotesque ${isMobile ? 'w-full' : 'w-[320px] flex-none'}`}>
           <div className="flex flex-col gap-[1rem] border-[#D9D9D9] border-[1px] rounded-[10px] p-4">
             <p className='text-[22px] leading-[140%]'>Payment Summary</p>
             <div className="flex justify-between items-start w-full">
@@ -340,7 +354,7 @@ const EventBookingModal = (
               Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 day before event date.
             </p>
             <ul className="list-disc ml-[2rem] inter font-[300] text-[15px]">
-              <li>Accomadation Allowance</li>
+              <li>Accommodation Allowance</li>
               <li>Transport Allowance</li>
             </ul>
           </div>
@@ -365,4 +379,4 @@ const EventBookingModal = (
   )
 }
 
-export default EventBookingModal
+export default EventBookingModal;

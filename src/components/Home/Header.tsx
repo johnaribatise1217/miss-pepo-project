@@ -22,7 +22,7 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
       >
         <div className='container h-full'>
           <div className='flex flex-col gap-[2rem] text-white  mt-[5rem] w-full sm:my-[15%]'>
-            <p className='text-[clamp(80px,5vw,112px)] overflow-auto bricolage-grotesque font-normal leading-[110%]'>
+            <p className='text-[clamp(80px,5vw,112px)] overflow-x-hiddenn overflow-y-hidden bricolage-grotesque font-normal leading-[110%]'>
               Ms.Pepo
             </p>
               <p className='text-[clamp(45px,5vw,72px)] inter font-[200]'>

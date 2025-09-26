@@ -8,11 +8,11 @@ import YoutubeCard from './YoutubeCard'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const SwiperImages : string[] = [
-  '/images/actor1.svg',
-  '/images/actor2.svg',
-  '/images/actor3.svg',
-  '/images/actor4.svg',
-  '/images/actor5.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845273/image_52_uc504e.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845583/actor2_a5fwnw.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845124/actor3_hcxmwx.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845383/image_51_shvbmx.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845392/image_xbud0i.jpg',
 ]
 
 const ActorMain = () => {
@@ -36,7 +36,7 @@ const ActorMain = () => {
             viewport={{ once: true, amount: 0.4 }}
           >
             <Image
-              src="/images/actor3.svg"
+              src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845124/actor3_hcxmwx.svg"
               alt='actor'
               height={1000}
               width={1000}
@@ -114,11 +114,11 @@ const ActorMain = () => {
             viewport={{ once: true, amount: 0.4 }}
           >
             <Image
-              src="/images/explore.svg"
+              src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758843906/explore-new_o0kwkb.jpg"
               alt='explore'
               height={500}
               width={500}
-              className='object-cover rounded-[20px] w-full h-[450px] md:h-[576px]'
+              className='object-cover rounded-[20px] w-full h-[480px] md:h-[576px]'
             />
           </motion.div>
           <div className='lg:w-[40%] w-full flex flex-col gap-[1rem]'>
@@ -138,7 +138,7 @@ const ActorMain = () => {
           <p className="first text-[clamp(37px,3.5vw,53px)] text-pryWhite leading-[120%]">
             Some Projects I have <br /> Featured In
           </p>
-          <div className="youtube w-full grid sm:grid-cols-1 lg:grid-cols-2 place-items-start gap-[2.5rem]">
+          <div className="youtube w-full grid overflow-y-hidden sm:grid-cols-1 lg:grid-cols-2 place-items-start gap-[2.5rem]">
             {data.map((card, index : number) => (
               <AnimatePresence key={index}>
                 <motion.div
@@ -146,8 +146,8 @@ const ActorMain = () => {
                   key={index}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  viewport={{ once: true, amount: 0.2 }}
                 >
                   <YoutubeCard 
                     subtitle={card.subtitle}  

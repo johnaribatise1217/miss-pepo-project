@@ -22,14 +22,14 @@ const Discover = () => {
             Charismatic, versatile, and unforgettable — Ms. Pepo thrives as an acclaimed Event Host, Actor, and Content Creator, bringing unmatched energy to every platform.
           </p>
           <div className='w-full hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-[2rem]'>
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {CardData.map((card, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  viewport={{ once: true, amount: 0.5 }}
+                  viewport={{ once: true, amount: 0.2 }}
                 >
                 <DiscoverCard 
                   title={card.title}
