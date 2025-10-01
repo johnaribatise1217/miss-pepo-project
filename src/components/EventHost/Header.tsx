@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import TermsServiceModal from '../Gen/modals/TermsServiceModal';
-import EventBookingModal from '../Gen/modals/EventBookingModal';
 import { motion } from 'framer-motion';
+import NewEventBookingModal from '../Gen/modals/NewEventBookingModal';
 
 const Header = () => {
   const [showTerms, setShowTerms] = useState(false);
@@ -48,7 +48,15 @@ const Header = () => {
         onClose={() => setShowTerms(false)} 
         onAgree={handleTermsAgree}
       />
-      <EventBookingModal 
+      {/* <EventBookingModal 
+        isOpen={showBooking} 
+        onClose={() => setShowBooking(false)} 
+        onProceed={() => {
+          // Handle proceed logic here
+        }}
+        onPrevious={handleBookingPrevious}
+      /> */}
+      <NewEventBookingModal
         isOpen={showBooking} 
         onClose={() => setShowBooking(false)} 
         onProceed={() => {
@@ -56,7 +64,6 @@ const Header = () => {
         }}
         onPrevious={handleBookingPrevious}
       />
-
     </section>
   )
 }

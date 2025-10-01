@@ -49,15 +49,10 @@ const Discover = () => {
             msOverflowStyle: 'none', /* IE and Edge */
           }}
           >
-            <AnimatePresence mode="wait">
               {CardData.map((card, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  viewport={{ once: true, amount: 0.5 }}
+                <div
                   className='flex-none w-[280px]'
+                  key={index}
                 >
                   <DiscoverCard 
                     title={card.title}
@@ -67,9 +62,8 @@ const Discover = () => {
                     message={card.message}
                     key={index}
                   />
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
           </div>
         </div>
       </motion.div>

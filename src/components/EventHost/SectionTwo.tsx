@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import React from 'react'
 
@@ -65,14 +65,9 @@ const SectionTwo = () => {
             msOverflowStyle: 'none', /* IE and Edge */
           }}
           > 
-            <AnimatePresence mode="wait">
               {exploreImages.map((card, index) => (
-                <motion.div
+                <div
                   key={index} className='flex-none'
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  viewport={{ once: true, amount: 0.2 }}
                 >
                   <Image
                     src={card}
@@ -81,9 +76,8 @@ const SectionTwo = () => {
                     height={500}
                     className='w-auto h-[400px] md:h-[500px] object-cover rounded-[20px]'
                   />
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
           </div>
         </div>
       </motion.div>
