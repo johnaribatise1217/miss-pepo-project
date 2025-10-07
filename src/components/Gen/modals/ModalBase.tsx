@@ -12,7 +12,7 @@ const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
 
   useEffect(() => {
     const checkScreen = () => {
-      setIsMobile(window.innerWidth < 768); // md breakpoint in Tailwind
+      setIsMobile(window.innerWidth < 1024); // md breakpoint in Tailwind
     };
 
     checkScreen();
@@ -54,7 +54,7 @@ const ModalBase = ({isOpen, onClose , children} : ModalProps) => {
               animate="animate"
               exit="exit"
               transition={{ type: "tween", duration: 0.4 }}
-              className="fixed md:right-10 top-[80px] bottom-0 max-h-screen md:top-[40px] w-full md:min-h-[70vh] overflow-auto 
+              className="fixed md:right-10 bottom-0 top-[80px] md:bottom-5 min-h-screen md:top-[40px] w-full md:min-h-[50vh] lg:min-h-[90vh] overflow-auto 
                         2xl:max-w-[70%] md:max-w-[80%] rounded-[20px] bg-white z-50 shadow-xl"
             >
               {children}

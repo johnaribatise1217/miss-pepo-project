@@ -29,7 +29,7 @@ interface DateRange {
 const NewEventBookingModal = (
   { isOpen, onClose, onProceed, onPrevious } : any
 ) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false)
   
   useEffect(() => {
     const checkScreen = () => {
@@ -143,244 +143,492 @@ const NewEventBookingModal = (
   const years: number[] = Array.from({ length: 11 }, (_, i) => minYear + i);
 
   return (
-    <ModalBase isOpen={isOpen} onClose={onClose}>
-      <div className='flex fixed z-10 w-full left-0 top-10 mt-[2rem] justify-between bg-inherit items-center px-8 py-4'>
-        <h2 className='text-[30px] text-black font-[400] bricolage-grotesque'>Event Host Booking</h2>
-        <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
-          ✕
-        </button>
-      </div>
-      <div className='flex mt-[6rem] overflow-x-hidden h-auto flex-col gap-[1.5rem] px-8'>
-        <div className="first w-full flex flex-col gap-[1rem] items-start">
-          <p className='bricolage-grotesque text-[25px] font-[400] leading-[140%]'>Choose Date & Time</p>
-          <div className='flex justify-between inter items-center w-full px-3 py-5 border-[1px] border-[#D9D9D9] rounded-[12px]'>
-            <span className='text-[15px] inter font-bold'>Event Date</span>
-            <p className="font-light text-[14px]">{formatRange()}</p>
+    <>
+      {isMobile ? 
+      <ModalBase isOpen={isOpen} onClose={onClose}>
+          <div className='flex sticky top-0 z-10 w-full md:sticky md:top-0 left-0 mt-[2rem] justify-between bg-inherit items-center px-8 py-3'>
+            <h2 className='text-[30px] text-black font-[400] bricolage-grotesque'>Event Host Booking</h2>
+            <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
+              ✕
+            </button>
           </div>
-          <div className="flex flex-col w-full gap-[1rem]">
-            <div className="flex justify-between items-center">
-              <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.8rem]">
-                <span className="">
-                  {format(currentMonth, "MMMM")}
-                </span>
-                <select
-                  value={currentMonth.getFullYear()}
-                  onChange={(e) => {
-                    const newYear = parseInt(e.target.value, 10);
-                    setCurrentMonth(new Date(newYear, currentMonth.getMonth(), 1));
-                  }}
-                  className="rounded px-2 py-1"
-                >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
+          <div className='flex mt-[1.5rem] mb-[2rem] overflow-x-hidden h-auto flex-col gap-[1.5rem] px-8'>
+            <div className="first w-full flex flex-col gap-[1rem] items-start">
+              <p className='bricolage-grotesque text-[25px] font-[400] leading-[140%]'>Choose Date & Time</p>
+              <div className='flex justify-between inter items-center w-full px-3 py-5 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+                <span className='text-[15px] inter font-bold'>Event Date</span>
+                <p className="font-light text-[14px]">{formatRange()}</p>
               </div>
-              <div className="space-x-2">
-                <button
-                  onClick={goPrev}
-                  className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
-                >
-                  ‹
-                </button>
-                <button
-                  onClick={goNext}
-                  className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
-                >
-                  ›
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-7 inter text-[16px] font-semibold w-full text-center mb-1">
-              {daysOfWeek.map((d) => (
-                <div key={d} className="py-1">
-                  {d}
+              <div className="flex flex-col w-full gap-[1rem]">
+                <div className="flex justify-between items-center">
+                  <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.8rem]">
+                    <span className="">
+                      {format(currentMonth, "MMMM")}
+                    </span>
+                    <select
+                      value={currentMonth.getFullYear()}
+                      onChange={(e) => {
+                        const newYear = parseInt(e.target.value, 10);
+                        setCurrentMonth(new Date(newYear, currentMonth.getMonth(), 1));
+                      }}
+                      className="rounded px-2 py-1"
+                    >
+                      {years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-x-2">
+                    <button
+                      onClick={goPrev}
+                      className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={goNext}
+                      className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
+                    >
+                      ›
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Calendar with animation */}
-            <div className="relative overflow-hidden max-h-[260px]">
-              <AnimatePresence custom={dir} initial={false}>
-                <motion.div
-                  key={format(currentMonth, "yyyy-MM")}
-                  custom={dir}
-                  variants={pageVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ type: "tween", duration: 0.18 }}
-                  className="grid grid-rows-6 gap-1"
-                >
-                  {calendarMatrix.map((week, wi) => (
-                    <div key={wi} className="grid grid-cols-7 gap-1 md:gap-[0.6rem]">
-                      {week.map((day, di) => {
-                        const isStart = range.start && isSameDay(day, range.start);
-                        const isEnd = range.end && isSameDay(day, range.end);
-                        const inRange =
-                          range.start &&
-                          range.end &&
-                          isWithinInterval(day, { start: range.start, end: range.end });
-
-                        // Check today
-                        const isToday = isSameDay(day, today);
-
-                        // Disable if before today
-                        const disabled: boolean = isBefore(startOfDay(day), today);
-
-                        const base =
-                          "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
-
-                        let stateClass = "";
-                        const outsideCurrentMonth = !isSameMonth(day, currentMonth);
-
-                        if (disabled) {
-                          stateClass =
-                            "text-gray-300 bg-[#FBFBFB] border-[#F0F0F0] cursor-not-allowed";
-                        } else if (isStart || isEnd) {
-                          stateClass = "bg-[#7E7360] text-white font-medium border-[#CECECE]";
-                        } else if (inRange) {
-                          stateClass = "bg-yellow-100 border-[#CECECE]";
-                        } else if(outsideCurrentMonth){
-                          stateClass = "bg-[#E6F4FF] border-[#CECECE] hover:bg-blue-100 cursor-pointer"
-                        }else {
-                          stateClass =
-                            "hover:bg-gray-100 cursor-pointer bg-[#F2F2F2] border-[#CECECE]";
-                        }
-
-                        // Highlight today with purple border
-                        if (isToday) {
-                          stateClass += " ring-2 ring-[#8A2BE2]"; // Purple outline (customizable)
-                        }
-
-                        return (
-                          <button
-                            key={`${wi}-${di}`}
-                            onClick={() => handleDateClick(day)}
-                            disabled={disabled}
-                            className={`${base} ${stateClass}`}
-                          >
-                            {format(day, "d")}
-                          </button>
-                        );
-                      })}
+                <div className="grid grid-cols-7 inter text-[16px] font-semibold w-full text-center mb-1">
+                  {daysOfWeek.map((d) => (
+                    <div key={d} className="py-1">
+                      {d}
                     </div>
                   ))}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
-              <span className='text-[14px] font-bold'>Event Time</span>
-              <p className="font-light text-[14px]">{startTime} - {endTime}</p>
-            </div>
-            <div className="flex gap-2 mt-2">
-              <input
-                type="text"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
-              />
-              <input
-                type="text"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
-              />
-            </div>
-            <h3 className='text-[28px] font-[400] bricolage-grotesque '>Event Information</h3>
-            <div className="flex flex-col w-full gap-[1rem]">
-              <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Type</label>
-              <select
-                value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
-                className="flex w-full outline-none h-[3rem] inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
-              >
-                <option value="">Select Event Type</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-full gap-2">
-              <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Audience Demographic</label>
-              <select
-                value={nationality}
-                onChange={(e) => setNationality(e.target.value)}
-                className="flex w-full h-[3rem] outline-none inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
-              >
-                <option value="Nigerian">Nigerian</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-full gap-2">
-              <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (state)</label>
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
-              >
-                <option value="Texas">Texas</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-full gap-2">
-              <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (city)</label>
-              <select
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
-              >
-                <option value="Houston">Houston</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="second flex mb-[11rem] flex-col gap-[1.5rem] bricolage-grotesque">
-          <div className="flex flex-col gap-[1rem] border-[#D9D9D9] border-[1px] rounded-[10px] p-4">
-            <p className='text-[22px] leading-[140%]'>Payment Summary</p>
-            <div className="flex justify-between items-start w-full">
-              <small className='text-[15px] font-[300] inter'>Service Charge</small>
-              <small className='text-[15px] font-[400] inter'>$0.00</small>
-            </div>
-            <div className='w-full h-[1px] content-none bg-[#D9D9D9]'></div>
-            <div className="flex inter text-[15px] font-[700] w-full justify-between items-center">
-              <span>Total</span>
-              <span>$0.00</span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-[0.5rem] border-[#D9D9D9] bg-[#F2F2F2] border-[2px] rounded-[10px] p-5">
-            <h4 className='text-[22px] bricolage-grotesque '>Note!</h4>
-            <p className='inter text-[15px] font-[300]'>
-              Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 day before event date.
-            </p>
-            <ul className="list-disc ml-[2rem] inter font-[300] text-[15px]">
-              <li>Accommodation Allowance</li>
-              <li>Transport Allowance</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+                </div>
 
-      <div className="flex z-50 bg-inherit overflow-x-hidden left-0 fixed bottom-0 flex-col w-full items-center gap-[1.5rem] border-t px-8 py-2">
-        <button
-          onClick={onPrevious}
-          className="px-6 py-4 w-full border-2 border-b-4 border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
-        >
-          Previous
-        </button>
-        <button
-          onClick={onProceed}
-          className="bg-[#7E7360] w-full px-6 py-4 border-[#645C4C] border-2 border-b-4 text-[#D9D9D9] rounded-[15px] cursor-not-allowed"
-        >
-          Proceed to Checkout
-        </button>
-      </div>
-    </ModalBase>
+                {/* Calendar with animation */}
+                <div className="relative overflow-hidden max-h-[260px]">
+                  <AnimatePresence custom={dir} initial={false}>
+                    <motion.div
+                      key={format(currentMonth, "yyyy-MM")}
+                      custom={dir}
+                      variants={pageVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ type: "tween", duration: 0.18 }}
+                      className="grid grid-rows-6 gap-1"
+                    >
+                      {calendarMatrix.map((week, wi) => (
+                        <div key={wi} className="grid grid-cols-7 gap-1 md:gap-[0.6rem]">
+                          {week.map((day, di) => {
+                            const isStart = range.start && isSameDay(day, range.start);
+                            const isEnd = range.end && isSameDay(day, range.end);
+                            const inRange =
+                              range.start &&
+                              range.end &&
+                              isWithinInterval(day, { start: range.start, end: range.end });
+
+                            // Check today
+                            const isToday = isSameDay(day, today);
+
+                            // Disable if before today
+                            const disabled: boolean = isBefore(startOfDay(day), today);
+
+                            const base =
+                              "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+
+                            let stateClass = "";
+                            const outsideCurrentMonth = !isSameMonth(day, currentMonth);
+
+                            if (disabled) {
+                              stateClass =
+                                "text-gray-300 bg-[#FBFBFB] border-[#F0F0F0] cursor-not-allowed";
+                            } else if (isStart || isEnd) {
+                              stateClass = "bg-[#7E7360] text-white font-medium border-[#CECECE]";
+                            } else if (inRange) {
+                              stateClass = "bg-yellow-100 border-[#CECECE]";
+                            } else if(outsideCurrentMonth){
+                              stateClass = "bg-[#E6F4FF] border-[#CECECE] hover:bg-blue-100 cursor-pointer"
+                            }else {
+                              stateClass =
+                                "hover:bg-gray-100 cursor-pointer bg-[#F2F2F2] border-[#CECECE]";
+                            }
+
+                            // Highlight today with purple border
+                            if (isToday) {
+                              stateClass += " ring-2 ring-[#8A2BE2]"; // Purple outline (customizable)
+                            }
+
+                            return (
+                              <button
+                                key={`${wi}-${di}`}
+                                onClick={() => handleDateClick(day)}
+                                disabled={disabled}
+                                className={`${base} ${stateClass}`}
+                              >
+                                {format(day, "d")}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+                  <span className='text-[14px] font-bold'>Event Time</span>
+                  <p className="font-light text-[14px]">{startTime} - {endTime}</p>
+                </div>
+                <div className="flex gap-2 mt-2">
+                  <input
+                    type="text"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                  />
+                  <input
+                    type="text"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                  />
+                </div>
+                <h3 className='text-[28px] font-[400] bricolage-grotesque '>Event Information</h3>
+                <div className="flex flex-col w-full gap-[1rem]">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Type</label>
+                  <select
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
+                    className="flex w-full outline-none h-[3rem] inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="">Select Event Type</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Audience Demographic</label>
+                  <select
+                    value={nationality}
+                    onChange={(e) => setNationality(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Nigerian">Nigerian</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (state)</label>
+                  <select
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Texas">Texas</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (city)</label>
+                  <select
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Houston">Houston</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="second flex flex-col gap-[1.5rem] bricolage-grotesque">
+              <div className="flex flex-col gap-[1rem] border-[#D9D9D9] border-[1px] rounded-[10px] p-4">
+                <p className='text-[22px] leading-[140%]'>Payment Summary</p>
+                <div className="flex justify-between items-start w-full">
+                  <small className='text-[15px] font-[300] inter'>Service Charge</small>
+                  <small className='text-[15px] font-[400] inter'>$0.00</small>
+                </div>
+                <div className='w-full h-[1px] content-none bg-[#D9D9D9]'></div>
+                <div className="flex inter text-[15px] font-[700] w-full justify-between items-center">
+                  <span>Total</span>
+                  <span>$0.00</span>
+                </div>
+              </div>
+              <div className="flex mb-[3rem] flex-col gap-[0.5rem] border-[#D9D9D9] bg-[#F2F2F2] border-[2px] rounded-[10px] p-5">
+                <h4 className='text-[22px] bricolage-grotesque '>Note!</h4>
+                <p className='inter text-[15px] font-[300]'>
+                  Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 day before event date.
+                </p>
+                <ul className="list-disc ml-[2rem] inter font-[300] text-[15px]">
+                  <li>Accommodation Allowance</li>
+                  <li>Transport Allowance</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex z-50 bg-inherit overflow-x-hidden left-0 sticky bottom-20  flex-col w-full items-center gap-[1.5rem] border-t px-8 py-2">
+            <button
+              onClick={onPrevious}
+              className="px-6 py-4 w-full border-2 border-b-4 border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
+            >
+              Previous
+            </button>
+            <button
+              onClick={onProceed}
+              className="bg-[#7E7360] w-full px-6 py-4 border-[#645C4C] border-2 border-b-4 text-[#D9D9D9] rounded-[15px] cursor-not-allowed"
+            >
+              Proceed to Checkout
+            </button>
+          </div>
+        </ModalBase>
+        : 
+        <ModalBase isOpen={isOpen} onClose={onClose}> 
+          <div className='flex sticky z-10 w-full top-0 left-0 mt-[2rem] justify-between bg-inherit items-center px-8 py-2'>
+            <h2 className='text-[clamp(38px,3vw,53px)] text-black font-[400] bricolage-grotesque'>Event Host Booking</h2>
+            <button onClick={onClose} className="text-[#7E7360] text-[20px] p-3 rounded-[5px] bg-[#F2F2F2] hover:text-gray-600">
+              ✕
+            </button>
+          </div>
+
+          <div 
+            className="flex w-full items-start gap-[2.5rem] mt-[1.5rem] mb-[2rem] max-h-[calc(100vh-10rem)] px-8"
+          >
+            <div className="first w-[50%] h-full overflow-auto flex flex-col gap-[1rem] items-start ">
+              <p className='bricolage-grotesque text-[25px] font-[400] leading-[140%]'>Choose Date & Time</p>
+              <div className='flex justify-between inter items-center w-full px-3 py-5 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+                <span className='text-[15px] inter font-bold'>Event Date</span>
+                <p className="font-light text-[14px]">{formatRange()}</p>
+              </div>
+               <div className="flex flex-col w-full gap-[1rem]">
+                <div className="flex justify-between items-center">
+                  <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.8rem]">
+                    <span className="">
+                      {format(currentMonth, "MMMM")}
+                    </span>
+                    <select
+                      value={currentMonth.getFullYear()}
+                      onChange={(e) => {
+                        const newYear = parseInt(e.target.value, 10);
+                        setCurrentMonth(new Date(newYear, currentMonth.getMonth(), 1));
+                      }}
+                      className="rounded px-2 py-1"
+                    >
+                      {years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-x-2">
+                    <button
+                      onClick={goPrev}
+                      className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={goNext}
+                      className="px-3 rounded-[8px] border text-[30px] text-[#7E7360] hover:bg-gray-50"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-7 inter text-[16px] font-semibold w-full text-center mb-1">
+                  {daysOfWeek.map((d) => (
+                    <div key={d} className="py-1">
+                      {d}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar with animation */}
+                <div className="relative overflow-hidden max-h-[260px]">
+                  <AnimatePresence custom={dir} initial={false}>
+                    <motion.div
+                      key={format(currentMonth, "yyyy-MM")}
+                      custom={dir}
+                      variants={pageVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ type: "tween", duration: 0.18 }}
+                      className="grid grid-rows-6 gap-1"
+                    >
+                      {calendarMatrix.map((week, wi) => (
+                        <div key={wi} className="grid grid-cols-7 gap-1 md:gap-[0.6rem]">
+                          {week.map((day, di) => {
+                            const isStart = range.start && isSameDay(day, range.start);
+                            const isEnd = range.end && isSameDay(day, range.end);
+                            const inRange =
+                              range.start &&
+                              range.end &&
+                              isWithinInterval(day, { start: range.start, end: range.end });
+
+                            // Check today
+                            const isToday = isSameDay(day, today);
+
+                            // Disable if before today
+                            const disabled: boolean = isBefore(startOfDay(day), today);
+
+                            const base =
+                              "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+
+                            let stateClass = "";
+                            const outsideCurrentMonth = !isSameMonth(day, currentMonth);
+
+                            if (disabled) {
+                              stateClass =
+                                "text-gray-300 bg-[#FBFBFB] border-[#F0F0F0] cursor-not-allowed";
+                            } else if (isStart || isEnd) {
+                              stateClass = "bg-[#7E7360] text-white font-medium border-[#CECECE]";
+                            } else if (inRange) {
+                              stateClass = "bg-yellow-100 border-[#CECECE]";
+                            } else if(outsideCurrentMonth){
+                              stateClass = "bg-[#E6F4FF] border-[#CECECE] hover:bg-blue-100 cursor-pointer"
+                            }else {
+                              stateClass =
+                                "hover:bg-gray-100 cursor-pointer bg-[#F2F2F2] border-[#CECECE]";
+                            }
+
+                            // Highlight today with purple border
+                            if (isToday) {
+                              stateClass += " ring-2 ring-[#8A2BE2]"; // Purple outline (customizable)
+                            }
+
+                            return (
+                              <button
+                                key={`${wi}-${di}`}
+                                onClick={() => handleDateClick(day)}
+                                disabled={disabled}
+                                className={`${base} ${stateClass}`}
+                              >
+                                {format(day, "d")}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <div className='flex justify-between inter items-center w-full px-3 py-4 border-[1px] border-[#D9D9D9] rounded-[12px]'>
+                  <span className='text-[14px] font-bold'>Event Time</span>
+                  <p className="font-light text-[14px]">{startTime} - {endTime}</p>
+                </div>
+                <div className="flex gap-2 mt-2">
+                  <input
+                    type="text"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                  />
+                  <input
+                    type="text"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="flex-1 bg-[#F2F2F2] border rounded-lg px-2 py-4 text-sm"
+                  />
+                </div>
+                <h3 className='text-[28px] font-[400] bricolage-grotesque '>Event Information</h3>
+                <div className="flex flex-col w-full gap-[1rem]">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Type</label>
+                  <select
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
+                    className="flex w-full outline-none h-[3rem] inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="">Select Event Type</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Audience Demographic</label>
+                  <select
+                    value={nationality}
+                    onChange={(e) => setNationality(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Nigerian">Nigerian</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (state)</label>
+                  <select
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Texas">Texas</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+                <div className="flex flex-col w-full gap-2">
+                  <label htmlFor="Event Type" className='inter text-[16px] font-semibold'>Event Location (city)</label>
+                  <select
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="flex w-full h-[3rem] outline-none  inter bg-[#F2F2F2] border rounded-lg px-3 py-4 text-sm"
+                  >
+                    <option value="Houston">Houston</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="second w-[50%] sticky top-0 self-start gap-[2rem] bricolage-grotesque flex flex-col">
+              <div className="flex flex-col gap-[1rem] border-[#D9D9D9] border-[1px] rounded-[10px] p-4">
+                <p className='text-[22px] leading-[140%]'>Payment Summary</p>
+                <div className="flex justify-between items-start w-full">
+                  <small className='text-[15px] font-[300] inter'>Service Charge</small>
+                  <small className='text-[15px] font-[400] inter'>$0.00</small>
+                </div>
+                <div className='w-full h-[1px] content-none bg-[#D9D9D9]'></div>
+                <div className="flex inter text-[15px] font-[700] w-full justify-between items-center">
+                  <span>Total</span>
+                  <span>$0.00</span>
+                </div>
+              </div>
+              <div className="flex sticky flex-col gap-[0.5rem] border-[#D9D9D9] bg-[#F2F2F2] border-[2px] rounded-[10px] p-5">
+                <h4 className='text-[22px] bricolage-grotesque '>Note!</h4>
+                <p className='inter text-[15px] font-[300]'>
+                  Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 day before event date:
+                </p>
+                <ul className="list-disc ml-[2rem] inter font-[300] text-[15px]">
+                  <li>Accommodation Allowance</li>
+                  <li>Transport Allowance</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="flex z-50 bg-inherit overflow-x-hidden left-0 sticky bottom-0  w-full items-center gap-[1.5rem] border-t px-8 py-4">
+            <button
+              onClick={onPrevious}
+              className="px-6 py-4 w-[25%] border-2 border-b-4 border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
+            >
+              Previous
+            </button>
+            <button
+              onClick={onProceed}
+              className="bg-[#7E7360] w-[25%] px-6 py-4 border-[#645C4C] border-2 border-b-4 text-[#D9D9D9] rounded-[15px] cursor-not-allowed"
+            >
+              Proceed to Checkout
+            </button>
+          </div>
+        </ModalBase>
+      }
+    </>
   )
 }
 

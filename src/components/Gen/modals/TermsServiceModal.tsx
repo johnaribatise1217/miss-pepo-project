@@ -18,7 +18,7 @@ const TermsServiceModal = ({ isOpen, onClose, onAgree } : any) => {
         </button>
       </div>
       {/* Scrollable Body */} 
-      <div className="overflow-y-auto max-h-[505px] xl:max-h-[500px] 2xl:max-h-[620px] w-full px-8 py-4 xl:space-y-2 2xl:space-y-3">
+      <div className="overflow-y-auto max-h-[505px] md:max-h-[600px] lg:max-h-[500px] 2xl:max-h-[620px] w-full px-8 py-4 xl:space-y-2 2xl:space-y-3">
         {/* TERMS CONTENT */}
         <p className='inter xl:text-[17px] 2xl:text-[17px] leading-[150%] font-[400] text-black'>
           These Terms of Service ("Agreement") govern the provision of event hosting services by MsPepo, a professional <br /> Master of Ceremonies (MC) based in Houston, TX. By booking MsPepo's services, the Client agrees to be <br /> bound by the terms outlined below.
@@ -81,17 +81,17 @@ const TermsServiceModal = ({ isOpen, onClose, onAgree } : any) => {
         </div>
       </div>
       {/* Footer */}
-      <div className="flex flex-col-reverse w-full md:flex-row items-center gap-[1rem] border-t px-8 py-2">
+      <div className="flex left-0 sticky bottom-0 z-50 flex-col-reverse w-full lg:flex-row items-center gap-[1rem] border-t px-8 py-2">
         <button
           onClick={onClose}
-          className="px-6 py-4 border-2 border-b-4 w-full md:w-auto border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
+          className="px-6 py-4 border-2 border-b-4 w-full lg:w-auto border-[#D9D9D9] rounded-[15px] hover:bg-gray-100"
         >
           Disagree
         </button>
         <button
           onClick={onAgree}
           disabled={!isFormComplete}
-          className={`px-6 py-4 border-2 border-b-4 w-full md:w-auto border-[#645C4C] rounded-[15px] text-white ${
+          className={`px-6 py-4 border-2 border-b-4 w-full lg:w-auto border-[#645C4C] rounded-[15px] text-white ${
             isFormComplete
               ? "bg-[#7E7360]"
               : "bg-[#D9D9D9] text-[#7E7360] cursor-not-allowed"
