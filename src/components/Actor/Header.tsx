@@ -16,7 +16,7 @@ const Header = () => {
       >
         <div className="container h-full flex justify-between mt-[4rem] sm:my-[10%] w-full">
           <div className="left flex flex-col items-start w-full gap-[1.5rem] bricolage-grotesque">
-            <p className='text-white text-[clamp(60px,5vw,112px)] hidden lg:flex leading-[110%] tracking-[-1%] font-[400]'>Actor and <br />Scene-Stealer</p>
+            <p className='text-white text-[clamp(60px,5vw,112px)] hidden lg:flex leading-[110%] tracking-[-1%] font-[400] overflow-hidden'>Actor and <br />Scene-Stealer</p>
             <p className='text-white overflow-y-hidden lg:hidden text-[clamp(65px,5vw,112px)] leading-[110%] tracking-[-1%] font-[400]'>Bringing <br />Characters <br />to Life</p>
             <p className='text-white inter hidden lg:flex text-[20px] text-wrap leading-[150%] tracking-[-0.5%] font-[300]'>
               On screen, I don’t just play roles. I embody <br />them with creative precision and emotional <br />depth, I bring each character to life with <br /> intention and impact.
