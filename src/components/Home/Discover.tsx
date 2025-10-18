@@ -2,7 +2,7 @@
 import { CardData } from '@/app/lib/DiscoverCardData'
 import React from 'react'
 import DiscoverCard from '../Gen/DiscoverCard'
-import {AnimatePresence, motion} from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 const Discover = () => {
   return (
@@ -31,30 +31,7 @@ const Discover = () => {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   viewport={{ once: true, amount: 0.2 }}
                 >
-                <DiscoverCard 
-                  title={card.title}
-                  bgColor={card.bgColor}
-                  imgBg={card.imgBg}
-                  path={card.path}
-                  message={card.message}
-                  key={index}
-                />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-          <div className="flex w-full gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth md:hidden"
-          style={{
-            scrollbarWidth: 'none', /* Firefox */
-            msOverflowStyle: 'none', /* IE and Edge */
-          }}
-          >
-              {CardData.map((card, index) => (
-                <div
-                  className='flex-none w-[280px]'
-                  key={index}
-                >
-                  <DiscoverCard 
+                  <DiscoverCard
                     title={card.title}
                     bgColor={card.bgColor}
                     imgBg={card.imgBg}
@@ -62,8 +39,31 @@ const Discover = () => {
                     message={card.message}
                     key={index}
                   />
-                </div>
+                </motion.div>
               ))}
+            </AnimatePresence>
+          </div>
+          <div className="flex w-full gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth md:hidden"
+            style={{
+              scrollbarWidth: 'none', /* Firefox */
+              msOverflowStyle: 'none', /* IE and Edge */
+            }}
+          >
+            {CardData.map((card, index) => (
+              <div
+                className='flex-none w-[280px]'
+                key={index}
+              >
+                <DiscoverCard
+                  title={card.title}
+                  bgColor={card.bgColor}
+                  imgBg={card.imgBg}
+                  path={card.path}
+                  message={card.message}
+                  key={index}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </motion.div>

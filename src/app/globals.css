@@ -4,8 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-  padding : 0;
+* {
+  padding: 0;
   box-sizing: border-box;
   overflow: auto;
 }
@@ -21,14 +21,14 @@ body {
   flex-direction: column;
 }
 
-.influencer-bg{
+.influencer-bg {
   background: url('/images/influencer-header.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.bricolage-grotesque{
+.bricolage-grotesque {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -42,15 +42,24 @@ body {
   font-style: normal;
 }
 
-.swiper-container{
-  display : grid;
+.swiper-container {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap : 2rem;
+  gap: 2rem;
 }
 
 .container {
   width: 90%;
   margin-inline: auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Mobile (up to 640px) */
@@ -62,34 +71,39 @@ body {
 
 @media (min-width: 641px) and (max-width: 767px) {
   .container {
-    width: 80%; /* Default or adjusted value */
+    width: 80%;
+    /* Default or adjusted value */
   }
 }
 
 /* Tablet (641px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .container {
-    width: 82%; /* Default or adjusted value */
+    width: 82%;
+    /* Default or adjusted value */
   }
 }
 
 /* Laptop (1024px to 1279px) */
 @media (min-width: 1024px) and (max-width: 1279px) {
   .container {
-    width: 85%; /* Adjusted to match your 1024px rule */
+    width: 85%;
+    /* Adjusted to match your 1024px rule */
   }
 }
 
 /* Desktop (1280px to 1529px) */
 @media (min-width: 1280px) and (max-width: 1529px) {
   .container {
-    width: 85%; /* Matches your 1280px rule */
+    width: 85%;
+    /* Matches your 1280px rule */
   }
 }
 
 /* Large Desktop (1530px and above) */
 @media (min-width: 1530px) {
   .container {
-    width: 70%; /* Matches your 1530px rule */
+    width: 70%;
+    /* Matches your 1530px rule */
   }
 }

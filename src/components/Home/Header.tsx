@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> }) => {
 
@@ -25,10 +25,10 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
             <p className='text-[clamp(80px,5vw,112px)] overflow-x-hiddenn overflow-y-hidden bricolage-grotesque font-normal leading-[110%]'>
               Ms.Pepo
             </p>
-              <p className='text-[clamp(45px,5vw,72px)] inter font-[200]'>
-                Where the <br />Vibe Begins
+            <p className='text-[clamp(45px,5vw,75px)] inter font-[200]'>
+              Where the <br />Vibe Begins
             </p>
-            <RotaryButton onClick={scrollToNext}/>
+            <RotaryButton onClick={scrollToNext} />
           </div>
         </div>
       </motion.div>
@@ -36,7 +36,7 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
   )
 }
 
-const RotaryButton = ({onClick} : any) => {
+const RotaryButton = ({ onClick }: any) => {
   const text = "CLICK TO SCROLL * CLICK TO SCROLL *";
   const colors = ['#7E7360', '#947A6F']
   const [colorIndex, setColorIndex] = useState(0)
@@ -70,10 +70,10 @@ const RotaryButton = ({onClick} : any) => {
       </div>
 
       {/* The centered button */}
-      <button 
-      onClick={onClick}
-      style={{ background: colors[colorIndex] }}
-      className="relative cursor-pointer z-10 w-12 h-12 rounded-[5px] border border-b-3 border-[#3F3B34] p-4 text-black font-bold flex items-center justify-center shadow-md">
+      <button
+        onClick={onClick}
+        style={{ background: colors[colorIndex] }}
+        className="relative cursor-pointer z-10 w-12 h-12 rounded-[5px] border border-b-3 border-[#3F3B34] p-4 text-black font-bold flex items-center justify-center shadow-md">
         <svg
           className="w-8 h-8 text-[16px] text-white"
           fill="none"

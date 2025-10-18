@@ -9,88 +9,97 @@ import { motion } from 'framer-motion'
 const Testimonial = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
-  
-  const handleTermsClick = () => {
-    setShowTerms(true);
-  };
 
+  const handleTermsClick = () => setShowTerms(true);
   const handleTermsAgree = () => {
     setShowTerms(false);
     setShowBooking(true);
   };
-
   const handleBookingPrevious = () => {
     setShowBooking(false);
     setShowTerms(true);
   };
+
   return (
-    <section className='bg-secBlack relative w-full min-h-[100vh] py-[8.5%] flex flex-col gap-[2rem]'>
+    <section className="bg-secBlack relative w-full min-h-[100vh] py-[8.5%] flex flex-col gap-[2rem] overflow-x-hidden">
+      {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.3, ease: "easeInOut" }}
+        transition={{ duration: 1.3, ease: 'easeInOut' }}
         viewport={{ once: true, amount: 0.5 }}
-        className='w-full py-1 container flex flex-col gap-[2.5rem] items-start'
+        className="w-full py-1 max-w-[1280px] mx-auto flex flex-col gap-[2.5rem] items-start px-5 sm:px-10"
       >
-        <div className='overflow-hidden'>
-          <p className='text-[clamp(38px,5vw,52px)] leading-[120%] bricolage-grotesque font-[400] text-pryWhite'>
+        <div className="overflow-hidden">
+          <p className="text-[clamp(38px,5vw,52px)] leading-[120%] bricolage-grotesque font-[400] text-pryWhite">
             What my Clients say <br /> About Me
           </p>
         </div>
-        <div className=''>
-          <TestimonialSlider/>
+        <div className="w-full">
+          <TestimonialSlider />
         </div>
       </motion.div>
-      <div className='container bg-pryPablo mt-[6rem] md:mt-[8rem] lg:mt-[12rem] 
-      flex-col-reverse lg:flex-row flex justify-between items-center gap-[3rem]
-      sm:p-[30px] p-5 xl:p-[40px] lg:h-[500px] rounded-[35px]'>
+
+      {/* Booking Section */}
+      <div className="max-w-[1280px] mx-auto bg-pryPablo mt-[6rem] md:mt-[8rem] lg:mt-[12rem] flex flex-col-reverse lg:flex-row justify-between items-center gap-[3rem] sm:p-[30px] p-5 xl:p-[40px] lg:h-[500px] rounded-[35px] overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeInOut" }}
-          viewport={{ once: true, amount: 0.3 }} // triggers when 20% in view
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          viewport={{ once: true, amount: 0.3 }}
           className="py-1 flex flex-col items-start w-full lg:w-1/2 gap-[2rem]"
         >
-          <p className='bricolage-grotesque text-[37px] md:text-[52px] font-[500] w-full text-pryWhite leading-[120%]'>Book Ms. Pepo for <br /> your Next Event</p>
-          <p className='inter hidden lg:flex lg:text-[20px] text-pryWhite font-[300] w-full'>
+          <p className="bricolage-grotesque text-[37px] md:text-[52px] font-[500] w-full text-pryWhite leading-[120%]">
+            Book Ms. Pepo for <br /> your Next Event
+          </p>
+
+          <p className="inter hidden lg:flex lg:text-[20px] text-pryWhite font-[300] w-full">
             Ms. Pepo brings a unique flair to every event she <br /> hosts. Her commitment to audience engagement <br /> and personalized experience ensures unforgettable <br /> moments for all
           </p>
-          <p className='inter text-[18px] lg:hidden text-pryWhite font-[300] w-full'>
+
+          <p className="inter text-[18px] lg:hidden text-pryWhite font-[300] w-full">
             Ms. Pepo brings a unique flair to every event she hosts. Her commitment to audience engagement and personalized experience ensures unforgettable moments for all
           </p>
-          <button onClick={handleTermsClick} className='bg-white w-full lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px]'>Book Me!</button>
+
+          <button
+            onClick={handleTermsClick}
+            className="bg-white w-full lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px] hover:bg-gray-50 transition"
+          >
+            Book Me!
+          </button>
         </motion.div>
+
         <motion.div
-          className='lg:w-[45%] w-full h-full relative'
+          className="lg:w-[45%] w-full h-full relative"
           initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 1 }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeInOut' }}
           viewport={{ once: true, amount: 0.3 }}
         >
           <Image
             src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845024/book-me_lzr2ax.svg"
-            alt='service'
-            width={100}
-            height={100}
-            className='w-full h-full rounded-[20px] object-cover'
+            alt="service"
+            width={1000}
+            height={1000}
+            className="w-full h-full rounded-[20px] object-cover"
           />
         </motion.div>
       </div>
-      <TermsServiceModal 
+
+      {/* Modals */}
+      <TermsServiceModal
         isOpen={showTerms}
-        onClose={() => setShowTerms(false)} 
+        onClose={() => setShowTerms(false)}
         onAgree={handleTermsAgree}
       />
-      <EventBookingModal 
-        isOpen={showBooking} 
-        onClose={() => setShowBooking(false)} 
-        onProceed={() => {
-          // Handle proceed logic here
-        }}
+      <EventBookingModal
+        isOpen={showBooking}
+        onClose={() => setShowBooking(false)}
+        onProceed={() => { }}
         onPrevious={handleBookingPrevious}
       />
     </section>
-  )
-}
+  );
+};
 
-export default Testimonial
+export default Testimonial;

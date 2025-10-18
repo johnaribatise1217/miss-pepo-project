@@ -8,7 +8,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     const pathname = usePathname();
 
     // hide Navbar and Footer only on /booking
-    const hideLayout = pathname === "/booking";
+    const hideLayout = pathname === "/booking" || pathname === "/success";
 
     return (
         <>
