@@ -3,14 +3,15 @@ import React, { useState } from 'react'
 import TermsServiceModal from '../Gen/modals/TermsServiceModal';
 import { motion } from 'framer-motion';
 import NewEventBookingModal from '../Gen/modals/NewEventBookingModal';
+import Link from 'next/link';
 
 const Header = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
 
-  const handleTermsClick = () => {
-    setShowTerms(true);
-  };
+  // const handleTermsClick = () => {
+  //   setShowTerms(true);
+  // };
 
   const handleTermsAgree = () => {
     setShowTerms(false);
@@ -41,9 +42,9 @@ const Header = () => {
             As an expert event host, I transform your <br /> event into an unforgettable occasion that <br /> will always linger in your mind.
           </p>
 
-          <button onClick={handleTermsClick} className='bg-white w-full sm:w-auto inter text-[clamp(16px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
+          <Link href='/booking' className='bg-white w-full sm:w-auto inter text-[clamp(16px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
             Book Me!
-          </button>
+          </Link>
         </div>
       </motion.div>
       <TermsServiceModal

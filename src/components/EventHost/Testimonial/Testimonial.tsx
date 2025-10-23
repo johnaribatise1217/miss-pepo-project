@@ -5,16 +5,17 @@ import Image from 'next/image'
 import EventBookingModal from '@/components/Gen/modals/EventBookingModal'
 import TermsServiceModal from '@/components/Gen/modals/TermsServiceModal'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 const Testimonial = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
 
-  const handleTermsClick = () => setShowTerms(true);
-  const handleTermsAgree = () => {
-    setShowTerms(false);
-    setShowBooking(true);
-  };
+  // const handleTermsClick = () => setShowTerms(true);
+  // const handleTermsAgree = () => {
+  //   setShowTerms(false);
+  //   setShowBooking(true);
+  // };
   const handleBookingPrevious = () => {
     setShowBooking(false);
     setShowTerms(true);
@@ -61,12 +62,11 @@ const Testimonial = () => {
             Ms. Pepo brings a unique flair to every event she hosts. Her commitment to audience engagement and personalized experience ensures unforgettable moments for all
           </p>
 
-          <button
-            onClick={handleTermsClick}
+          <Link href='/booking'
             className="bg-white w-full lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px] hover:bg-gray-50 transition"
           >
             Book Me!
-          </button>
+          </Link>
         </motion.div>
 
         <motion.div
@@ -90,7 +90,7 @@ const Testimonial = () => {
       <TermsServiceModal
         isOpen={showTerms}
         onClose={() => setShowTerms(false)}
-        onAgree={handleTermsAgree}
+      // onAgree={handleTermsAgree}
       />
       <EventBookingModal
         isOpen={showBooking}
