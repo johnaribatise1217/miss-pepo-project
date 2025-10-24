@@ -29,7 +29,7 @@ const Header = () => {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeInOut" }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.5 }}
         className="py-3 w-full"
       >
         <div className="container flex flex-col mt-[5rem] items-start sm:my-[10%] gap-[1.5rem] text-white overflow-x-hidden break-words">

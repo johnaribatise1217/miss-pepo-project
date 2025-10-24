@@ -29,7 +29,7 @@ const Testimonial = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.3, ease: 'easeInOut' }}
         viewport={{ once: true, amount: 0.5 }}
-        className="w-full py-1 max-w-[1280px] mx-auto flex flex-col gap-[2.5rem] items-start px-5 sm:px-10"
+        className="w-full py-1 container mx-auto flex flex-col gap-[2.5rem] items-start "
       >
         <div className="overflow-hidden">
           <p className="text-[clamp(38px,5vw,52px)] leading-[120%] bricolage-grotesque font-[400] text-pryWhite">
@@ -42,7 +42,7 @@ const Testimonial = () => {
       </motion.div>
 
       {/* Booking Section */}
-      <div className="max-w-[1280px] mx-auto bg-pryPablo mt-[6rem] md:mt-[8rem] lg:mt-[12rem] flex flex-col-reverse lg:flex-row justify-between items-center gap-[3rem] sm:p-[30px] p-5 xl:p-[40px] lg:h-[500px] rounded-[35px] overflow-hidden">
+      <div className=" mx-auto container bg-pryPablo mt-[6rem] md:mt-[8rem] lg:mt-[12rem] flex flex-col-reverse lg:flex-row justify-between items-center gap-[3rem] sm:p-[30px] p-5 xl:p-[40px] lg:h-[500px] rounded-[35px] overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -1,26 +1,132 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  addDays,
+  addMonths,
+  subMonths,
+  format,
+  isSameDay,
+  isWithinInterval,
+  isAfter,
+  isBefore,
+  isSameMonth,
+  startOfDay
+} from "date-fns";
+
+interface DateRange {
+  start: Date | null;
+  end: Date | null;
+}
 
 interface BookingFormProps {
     onNext: () => void;
     onPrevious: () => void;
 }
 
-interface DayObject {
-    day: number;
-    isCurrentMonth: boolean;
-}
-
 const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
-    const [selectedDate, setSelectedDate] = useState(null);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [eventType, setEventType] = useState('');
     const [demographic, setDemographic] = useState('Nigerian');
     const [state, setState] = useState('Texas');
     const [city, setCity] = useState('Houston');
+    const today: Date = startOfDay(new Date());
+    const minYear: number = today.getFullYear();
+    const minDate: Date = new Date(minYear, 0, 1); 
 
-    const [currentMonth, setCurrentMonth] = useState(new Date(2025, 4)); // May 2025
+    const [currentMonth, setCurrentMonth] = useState<Date>(
+      new Date(today.getFullYear(), today.getMonth(), 1)
+    );
+    const [range, setRange] = useState<DateRange>({ start: null, end: null });
+    const [dir, setDir] = useState<number>(0);
+
+    const goNext = (): void => {
+    setDir(1);
+    setCurrentMonth((m) => addMonths(m, 1));
+    };
+
+    const goPrev = (): void => {
+    setDir(-1);
+    setCurrentMonth((m) => subMonths(m, 1));
+    };
+
+    const handleDateClick = (day: Date): void => {
+    if (isDisabled(day)) return;
+
+    if (!range.start || (range.start && range.end)) {
+        setRange({ start: day, end: null });
+    } else if (isAfter(day, range.start)) {
+        setRange({ ...range, end: day });
+    } else {
+        setRange({ start: day, end: null });
+    }
+    };
+
+    const isDisabled = (day: Date): boolean => {
+    return isBefore(startOfDay(day), minDate);
+    };
+
+    const calendarMatrix: Date[][] = useMemo(() => {
+    const monthStart: Date = startOfMonth(currentMonth);
+    const monthEnd: Date = endOfMonth(monthStart);
+    const startDate: Date = startOfWeek(monthStart);
+    const endDate: Date = endOfWeek(monthEnd);
+
+    const rows: Date[][] = [];
+    let day: Date = startDate;
+
+    while (day <= endDate) {
+        const week: Date[] = [];
+        for (let i = 0; i < 7; i++) {
+        week.push(day);
+        day = addDays(day, 1);
+        }
+        rows.push(week);
+    }
+    return rows;
+    }, [currentMonth]);
+
+    const formatRange = (): string => {
+    if (range.start && range.end) {
+        return `${format(range.start, "MMM d, yyyy")} - ${format(
+        range.end,
+        "MMM d, yyyy"
+        )}`;
+    }
+    if (range.start) {
+        return `${format(range.start, "MMM d, yyyy")} - ${format(
+        range.start,
+        "MMM d, yyyy"
+        )}`;
+    }
+    return "May 8 , 2025 - May 8 , 2025";
+    };
+
+    const pageVariants = {
+    enter: (direction: number) => ({
+        x: direction > 0 ? 32 : -32,
+        opacity: 0,
+        position: "absolute" as const,
+    }),
+    center: {
+        x: 0,
+        opacity: 1,
+        position: "static" as const,
+    },
+    exit: (direction: number) => ({
+        x: direction > 0 ? -32 : 32,
+        opacity: 0,
+        position: "absolute" as const,
+    }),
+    };
+
+    const years: number[] = Array.from({ length: 11 }, (_, i) => minYear + i);
+    
 
     const eventTypes = [
         'Wedding',
@@ -38,39 +144,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM',
         '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM'
     ];
-
-    const getDaysInMonth = (date: Date): DayObject[] => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-        const days = [];
-
-        // Previous month days
-        for (let i = firstDay - 1; i >= 0; i--) {
-            days.push({ day: daysInPrevMonth - i, isCurrentMonth: false });
-        }
-
-        // Current month days
-        for (let i = 1; i <= daysInMonth; i++) {
-            days.push({ day: i, isCurrentMonth: true });
-        }
-
-        return days;
-    };
-
-    const monthYear = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    const days = getDaysInMonth(currentMonth);
-
-    const prevMonth = () => {
-        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
-    };
-
-    const nextMonth = () => {
-        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
-    };
 
     return (
         <div className="flex md:flex-row flex-col gap-6">
@@ -113,22 +186,40 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     {/* Event Date Header */}
                     <div className="flex justify-between items-center mb-4 border-2 border-black/15 p-3 rounded-2xl">
                         <span className="font-semibold inter">Event Date</span>
-                        <span className="text-sm text-gray-600 inter">May 8, 2025 - May 8, 2025</span>
+                        <span className="text-sm text-gray-600 inter">{formatRange()}</span>
                     </div>
 
                     {/* Calendar */}
                     <div className="bg-white rounded-lg p-4 mb-6">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-semibold text-2xl text-[#7E7360] inter">{monthYear}</h3>
+                            <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.5rem]">
+                                <span className="">
+                                    {format(currentMonth, "MMMM")}
+                                </span>
+                                <select
+                                    value={currentMonth.getFullYear()}
+                                    onChange={(e) => {
+                                    const newYear = parseInt(e.target.value, 10);
+                                    setCurrentMonth(new Date(newYear, currentMonth.getMonth(), 1));
+                                    }}
+                                    className="rounded px-2 py-1"
+                                >
+                                {years.map((year) => (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                    ))}
+                                </select>
+                            </div>
                             <div className="flex gap-2">
                                 <button
-                                    onClick={prevMonth}
+                                    onClick={goPrev}
                                     className="p-2 hover:bg-gray-100 rounded-2xl transition border border-black/15"
                                 >
                                     <BiChevronLeft size={30} color='#7E7360' />
                                 </button>
                                 <button
-                                    onClick={nextMonth}
+                                    onClick={goNext}
                                     className="p-2 hover:bg-gray-100 rounded-2xl transition border border-black/15"
                                 >
                                     <BiChevronRight size={30} color='#7E7360' />
@@ -143,8 +234,77 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 </div>
                             ))}
                         </div>
+                        <div className="relative min-h-[250px]">
+                            <AnimatePresence custom={dir} initial={false}>
+                            <motion.div
+                                key={format(currentMonth, "yyyy-MM")}
+                                custom={dir}
+                                variants={pageVariants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{ type: "tween", duration: 0.18 }}
+                                className="grid grid-rows-6 gap-1"
+                            >
+                                {calendarMatrix.map((week, wi) => (
+                                <div key={wi} className="grid grid-cols-7 gap-1">
+                                    {week.map((day, di) => {
+                                    const isStart = range.start && isSameDay(day, range.start);
+                                    const isEnd = range.end && isSameDay(day, range.end);
+                                    const inRange =
+                                        range.start &&
+                                        range.end &&
+                                        isWithinInterval(day, { start: range.start, end: range.end });
+            
+                                    // Check today
+                                    const isToday = isSameDay(day, today);
+            
+                                    // Disable if before today
+                                    const disabled: boolean = isBefore(startOfDay(day), today);
+            
+                                    const base =
+                                        "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+            
+                                    let stateClass = "";
+                                    const outsideCurrentMonth = !isSameMonth(day, currentMonth);
+            
+                                    if (disabled) {
+                                        stateClass =
+                                        "text-gray-300 bg-[#FBFBFB] border-[#F0F0F0] cursor-not-allowed";
+                                    } else if (isStart || isEnd) {
+                                        stateClass = "bg-[#7E7360] text-white font-medium border-[#CECECE]";
+                                    } else if (inRange) {
+                                        stateClass = "bg-yellow-100 border-[#CECECE]";
+                                    } else if(outsideCurrentMonth){
+                                        stateClass = "bg-[#E6F4FF] border-[#CECECE] hover:bg-blue-100 cursor-pointer"
+                                    }else {
+                                        stateClass =
+                                        "hover:bg-gray-100 cursor-pointer bg-[#F2F2F2] border-[#CECECE]";
+                                    }
+            
+                                    // Highlight today with purple border
+                                    if (isToday) {
+                                        stateClass += " ring-2 ring-[#8A2BE2]"; // Purple outline (customizable)
+                                    }
+            
+                                    return (
+                                        <button
+                                        key={`${wi}-${di}`}
+                                        onClick={() => handleDateClick(day)}
+                                        disabled={disabled}
+                                        className={`${base} ${stateClass}`}
+                                        >
+                                        {format(day, "d")}
+                                        </button>
+                                    );
+                                    })}
+                                </div>
+                                ))}
+                            </motion.div>
+                            </AnimatePresence>
+                        </div>
 
-                        <div className="grid grid-cols-7 gap-2">
+                        {/* <div className="grid grid-cols-7 gap-2">
                             {days.map((dateObj, idx) => (
                                 <button
                                     key={idx}
@@ -159,7 +319,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     {dateObj.day}
                                 </button>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Event Time */}
