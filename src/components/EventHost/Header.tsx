@@ -23,7 +23,7 @@ const Header = () => {
             As an expert event host, I transform your <br /> event into an unforgettable occasion that <br /> will always linger in your mind.
           </p>
 
-          <Link href='/booking' className='bg-white w-full sm:w-auto inter text-[clamp(16px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
+          <Link href='/booking' className='bg-white w-full sm:w-auto text-center inter text-[clamp(16px,1.6vw,16px)] px-6 py-4 border rounded-[16px] text-black border-b-[5px]'>
             Book Me!
           </Link>
         </div>

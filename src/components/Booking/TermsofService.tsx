@@ -2,6 +2,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface TermsOfServiceProps {
   onAgree: () => void;
@@ -220,12 +221,13 @@ const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) 
       </form>
 
       <div className="flex items-center justify-between mt-8">
-        <button
+        <Link
+          href={"/event-host"}
           onClick={onDisagree}
           className="border-2 border-b-4 text-sm cursor-pointer border-black/15 bg-white hover:bg-black/10 p-3 shadow-lg rounded-md transition-all duration-100"
         >
           Disagree
-        </button>
+        </Link>
         <button
           onClick={() => 
             handleAgree()
