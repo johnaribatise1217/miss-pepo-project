@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BiCheck } from 'react-icons/bi'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -8,7 +8,10 @@ import { useRouter } from 'next/navigation'
 
 function Page() {
     const router = useRouter()
-
+    useEffect(() => {
+    // Runs only in the browser
+        localStorage.clear();
+    }, []);
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-white to-brown/10 px-6 py-10">
             {/* Success Icon */}
@@ -24,7 +27,7 @@ function Page() {
 
 
                 {/* Header Text */}
-                <h1 className="text-3xl md:text-4xl font-semibold bricolage-grotesque text-brown">
+                <h1 className="text-xl md:text-2xl 2xl:text-4xl font-semibold bricolage-grotesque text-brown">
                     Payment Successful
                 </h1>
 
@@ -35,7 +38,7 @@ function Page() {
             </div>
 
             {/* Transaction Summary */}
-            <div className="bg-white shadow-md mt-10 p-6 md:p-8 rounded-2xl text-black text-center w-full max-w-md flex flex-col gap-3 border border-brown/10">
+            {/* <div className="bg-white shadow-md mt-10 p-6 md:p-8 rounded-2xl text-black text-center w-full max-w-md flex flex-col gap-3 border border-brown/10">
                 <h2 className="text-xl md:text-2xl bricolage-grotesque text-brown/90">Transaction Summary</h2>
                 <hr className="border border-gray-200 my-3" />
 
@@ -57,7 +60,7 @@ function Page() {
                         <span className="font-semibold text-gray-900">{new Date().toLocaleDateString()}</span>
                     </p>
                 </div>
-            </div>
+            </div> */}
 
             {/* Button */}
             <button

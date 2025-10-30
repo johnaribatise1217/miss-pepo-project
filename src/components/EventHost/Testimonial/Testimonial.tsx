@@ -81,6 +81,7 @@ const Testimonial = () => {
             alt="service"
             width={1000}
             height={1000}
+            loading='lazy'
             className="w-full h-full rounded-[20px] object-cover"
           />
         </motion.div>

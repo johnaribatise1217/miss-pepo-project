@@ -37,7 +37,7 @@ const Navbar = () => {
          justify-between gap-[1rem] w-[412px]'>
           {navLinks.map((link, index) => (
             <Link href={link.path} key={index}
-            className={`${pathname === link.path ? 'text-white font-[700]' : 'text-secGrey2 font-[200]'} text-[16px]  font-semibold`}>
+            className={`${pathname === link.path ? 'text-white font-[500]' : 'text-secGrey2 font-[300]'} leading-[150%] text-[16px] inter font-semibold`}>
               {link.name}
             </Link>
           ))}

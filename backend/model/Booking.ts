@@ -9,11 +9,14 @@ export interface IBooking extends Document{
   eventInfo : {
     eventType : string,
     audienceDemographic: string,
+    startTime : string,
+    endTime : string
   }
   location : {
     state : string
     city : string
   }
+  signature: string
   numberOfDays : number
   paymentInfo : {
     id : string,
@@ -21,11 +24,14 @@ export interface IBooking extends Document{
     amountPaid : number
   }
   paidAt : Date
-  createdAt : Date
 }
 
 const bookingSchema : Schema<IBooking> = new mongoose.Schema({
   clientName : {
+    type : String,
+    required : true
+  },
+  signature : {
     type : String,
     required : true
   },
@@ -48,24 +54,28 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
       type : String,
       required : true,
       enum : {
-        values : ['Event Hosting', "Content Collaboration", "Stage Play", "Youtube Collaboration"],
+        values : ['Event Hosting', 'Content Collaboration', 'Stage Play', 'Youtube Collaboration'],
       }
     },
     audienceDemographic : {
       type : String,
       required : true,
       enum : {
-        values : ['Chineese', "Nigerian", "Latino", "Black Americans", "White Americans"]
+        values : ['Chineese', "Nigerian", "Latino", "Black Americans", "White Americans", "American"]
       }
+    },
+    startTime : {
+      type : String,
+      required : true
+    },
+    endTime : {
+      type : String,
+      required : true
     }
   },
   paidAt : {
     type : Date,
-    required : true
-  },
-  createdAt : {
-    type : Date,
-    default : Date.now()
+    required : false
   },
   numberOfDays : {
     type: Number,
@@ -95,6 +105,6 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
       required : true
     }
   }
-})
+}, {timestamps : true})
 
 export default mongoose.models.Booking || mongoose.model("Booking", bookingSchema)

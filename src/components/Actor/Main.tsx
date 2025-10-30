@@ -6,6 +6,7 @@ import React from 'react'
 import { youtubeCard as data } from './data'
 import YoutubeCard from './YoutubeCard'
 import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
 
 const SwiperImages : string[] = [
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845273/image_52_uc504e.jpg',
@@ -40,6 +41,7 @@ const ActorMain = () => {
               alt='actor'
               height={1000}
               width={1000}
+              loading='lazy'
               className='object-cover h-full w-full lg:w-full rounded-[24px]'
             />
           </motion.div>
@@ -55,7 +57,10 @@ const ActorMain = () => {
             <p className='text-[clamp(18px,3vw,18px)] lg:hidden leading-[150%] font-[300] inter'>
               Acting is where my voice, body, and emotion align to  tell unforgettable stories. Whether on screen or stage, I bring every character to life with authenticity and depth — always leaving a lasting impression.
             </p>
-            <button className='border-gray-500 hidden lg:flex text-[clamp(14px,1.6vw,16px)] px-6 py-4 rounded-[16px] border-b-4 border-[1px]'>Watch Me in Action</button>
+            <Link target="_blank" rel="noopener noreferrer" href={"https://www.instagram.com/reel/DBdfolJp8oq/?igsh=MTUxZzQzNzN4Z3Rxcw%3D%3D"}>
+              <button className='border-gray-500 hidden lg:flex text-[clamp(14px,1.6vw,16px)] px-6 py-4 rounded-[16px] border-b-4 border-[1px]'>
+              Watch Me in Action</button>
+            </Link>
           </motion.div>
         </motion.div>
         <motion.div
@@ -75,27 +80,22 @@ const ActorMain = () => {
               msOverflowStyle: 'none', /* IE and Edge */
             }}
             >
-              <AnimatePresence mode='wait'>
                {
                 SwiperImages.map((card, index) => (
-                  <motion.div
+                  <div
                     className="flex-none" key={index}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                    viewport={{ once: true, amount: 0.5 }}
                   >
                     <Image
                       src={card}
                       alt={`explore-image-${index}`}
                       width={500}
                       height={500}
+                      loading='lazy'
                       className='w-auto h-[400px] md:h-[500px] object-cover rounded-[20px]'
                     />
-                  </motion.div>
+                  </div>
                 ))
               }
-              </AnimatePresence>
             </div>
             <div className="flex content-none bg-[#C18E68] h-[0.5] mt-[3rem] lg:hidden w-full"></div>
           </div>
@@ -118,6 +118,7 @@ const ActorMain = () => {
               alt='explore'
               height={500}
               width={500}
+              loading='lazy'
               className='object-cover rounded-[20px] w-full h-[480px] md:h-[576px]'
             />
           </motion.div>
@@ -155,7 +156,6 @@ const ActorMain = () => {
                     videoId={card.videoId}
                     duration={card.duration}
                     title={card.title}
-                    thumbnail={card.thumbnail}
                   />
                 </motion.div>
               </AnimatePresence>

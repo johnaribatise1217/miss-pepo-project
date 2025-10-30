@@ -1,7 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import InstagramCard from './InstagramCard'
-import { instagramPosts } from '@/app/lib/InstagramData'
 import YoutubeCard from '../Actor/YoutubeCard'
 import { InfluencerYoutubeData } from '../Actor/data'
 import Script from 'next/script';
@@ -36,7 +34,7 @@ const Main = () => {
        flex-col bricolage-grotesque gap-[8rem] lg:gap-[15rem] h-full">
         <div className="one w-full flex items-start flex-col gap-[2rem]">
           <div className="flex-col lg:flex-row flex w-full lg:justify-between lg:items-end">
-            <span className='text-[clamp(38px,4vw,52px)] w-full leading-[120%]'>
+            <span className='text-[clamp(36px,4vw,52px)] leading-[120%]'>
               Featured Instagram <br /> Content of Ms. Pepo
             </span>
             <Link 
@@ -47,7 +45,7 @@ const Main = () => {
               <button className='inter text-[16px] hidden lg:flex border-2 p-4 px-6 rounded-[16px] border-b-[5px] border-[#343434]'>View More</button>
             </Link>
           </div>
-          <div className="flex w-full gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          <div className="flex lg:hidden w-full gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
             style={{
               scrollbarWidth: 'none', /* Firefox */
               msOverflowStyle: 'none', /* IE and Edge */
@@ -59,18 +57,17 @@ const Main = () => {
             </div>
           ))}
           </div>
-          <div className="hidden  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full">
-            {instagramPosts.map((post, index) => (
-              <InstagramCard
-                key={index}
-                link={post.link}
-                image={post.image}
-                caption1={post.caption1}
-                caption2={post.caption2}
-                likes={post.likes}
-                date={post.date}
-              />
-            ))}
+          <div className="lg:grid hidden w-full lg:grid-cols-3 xl:grid-cols-4 gap-[2rem]"
+            style={{
+              scrollbarWidth: 'none', /* Firefox */
+              msOverflowStyle: 'none', /* IE and Edge */
+            }}
+          >
+            {instagramPostLinks.map((url, index) => (
+            <div key={index} className="flex-shrink-1">
+              <InstagramEmbed postUrl={url} />
+            </div>
+          ))}
           </div>
         </div>
         <div className="two w-full flex items-start flex-col gap-[2rem]">
@@ -91,10 +88,10 @@ const Main = () => {
               <YoutubeCard 
                 key={index}
                 href={card.href}
+                subtitle={null}
                 videoId={card.videoId}
                 duration={card.duration}
                 title={card.title}
-                thumbnail={card.thumbnail}
               />
             ))}
           </div>
@@ -110,7 +107,7 @@ const Main = () => {
         <div className="four w-full flex items-start flex-col gap-[2rem] mb-[3rem]">
           <div className="flex-col lg:flex-row flex w-full lg:justify-between lg:items-end">
             <span className='text-[clamp(38px,4vw,52px)] leading-[120%]'>
-              Featured TikTok Content of Ms. Pepo
+              Featured TikTok Content <br /> of Ms. Pepo
             </span>
             <Link 
               href="https://www.tiktok.com/@mspepo"

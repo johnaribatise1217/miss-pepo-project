@@ -39,6 +39,7 @@ const SectionTwo = () => {
             alt='misspepo'
             height={1000}
             width={1000}
+            loading='lazy'
             className='bg-cover w-full rounded-[30px]'
           />
         </motion.div>
@@ -73,6 +74,7 @@ const SectionTwo = () => {
                     src={card}
                     alt={`explore-image-${index}`}
                     width={500}
+                    loading='lazy'
                     height={500}
                     className='w-auto h-[400px] md:h-[500px] object-cover rounded-[20px]'
                   />

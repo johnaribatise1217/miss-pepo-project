@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Booking from "../../../../../backend/model/Booking";
 import { headers } from "next/headers";
 
-const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 export const POST = async(req: NextRequest) => {
   try {
@@ -21,6 +21,7 @@ export const POST = async(req: NextRequest) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    let newBooking
     
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
@@ -32,8 +33,9 @@ export const POST = async(req: NextRequest) => {
         amountPaid: session.amount_total / 100
       }
 
-      await Booking.create({
+      newBooking = await Booking.create({
         clientName: metadata.clientName,
+        signature : metadata.signature,
         email: metadata.email,
         eventDate: {
           startDate: new Date(metadata.startDate),
@@ -41,7 +43,9 @@ export const POST = async(req: NextRequest) => {
         },
         eventInfo: {
           eventType: metadata.eventType,
-          audienceDemographic: metadata.audienceDemographic
+          audienceDemographic: metadata.audienceDemographic,
+          startTime: metadata.startTime,
+          endTime: metadata.endTime
         },
         location: {
           state: metadata.state,
@@ -53,8 +57,9 @@ export const POST = async(req: NextRequest) => {
       });
     }
 
-    return NextResponse.json({ received: true , message : "Booked Successfully"});
+    return NextResponse.json({ received: true , message : "Booked Successfully", data : newBooking});
   } catch (error : any) {
+    console.error(error)
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

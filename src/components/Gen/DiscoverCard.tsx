@@ -10,13 +10,14 @@ const DiscoverCard = ({imgBg, path, bgColor, title, message} : DiscoverCard) => 
         src={imgBg}
         alt={`${title}`}
         height={1000}
+        loading='lazy'
         width={1000}
         className="w-full h-full object-cover rounded-[30px] scale-110 transition-all duration-500 group-hover:scale-95"
       />
 
       <div className=
         {`${bgColor}
-          absolute inset-0 bg-black bg-opacity-80 transition-all duration-500 group-hover:bg-opacity-0 z-10
+          absolute inset-0 bg-blend-overlay bg-black bg-opacity-80 transition-all duration-500 group-hover:bg-opacity-0 z-10
         `}></div>
 
        <div className="absolute bricolage-grotesque bottom-6 left-6 text-white mb-[20px] max-w-[60%] leading-[120%] text-[clamp(22px,3vw,45px)] transition-all duration-700 delay-100 group-hover:mb-[7rem] font-[400] z-20">

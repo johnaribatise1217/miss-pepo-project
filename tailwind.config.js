@@ -22,6 +22,9 @@ module.exports = {
         }
       },
       colors:{
+        discover1: "#222120",
+        discover2 : "#2D2C2B",
+        discover3: "#BEB0A7",
         pryBlack : "#010101",
         blackOne : "#282726",
         pryPablo : "#7E7360",

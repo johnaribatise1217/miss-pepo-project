@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <section className="lg:min-h-[115vh] bg-actorMobile bg-cover sm:bg-center min-h-[124vh] max-w-full lg:bg-bgAct bg-no-repeat lg:bg-cover pt-[6rem]">
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeInOut" }}
         viewport={{ once: true, amount: 0.3 }}
@@ -33,7 +33,7 @@ const Header = () => {
             </p>
 
             {/* --- Paragraph (Mobile) --- */}
-            <p className='lg:hidden text-white inter text-[clamp(15px,4vw,19px)] leading-[150%] tracking-[-0.5%] font-[300]'>
+            <p className='lg:hidden text-white inter text-[clamp(17px,4vw,19px)] leading-[150%] tracking-[-0.5%] font-[300]'>
               As a talented actor with creative artistry on screen, I pride myself with the perfect character interpretation of roles I play.
             </p>
 

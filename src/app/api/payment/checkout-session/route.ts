@@ -6,26 +6,21 @@ import dbConnect from '../../../../../backend/connect';
 
 dbConnect()
 
-const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
-export const GET = async(req : NextRequest) => {
-  const {searchParams} = new URL(req.url)
-
-  const email = searchParams.get('email')
-  const clientName = searchParams.get('clientName')
-  const startDate = searchParams.get('startDate')
-  const endDate = searchParams.get('endDate')
-  const eventType = searchParams.get('eventType')
-  const audienceDemographic = searchParams.get('audioDemographic')
-  const state = searchParams.get('state')
-  const city = searchParams.get('city')
-  const numberOfDays = searchParams.get('numberOfDays')
-  const amount = searchParams.get('amount')
+export const POST = async(req : NextRequest) => {
+  const body = await req.json()
+    const {
+      email, clientName, startDate, endDate,
+      eventType, audienceDemographic, state,
+      city, numberOfDays, amount, signature, startTime, endTime
+    } = body
   
-  const session = await stripe.checkout.sessions.create({
+  try {
+    const session = await stripe.checkout.sessions.create({
     payment_method_types : ["card", "us_bank_account", "cashapp", "crypto"],
     success_url : `${process.env.NEXT_PUBLIC_APP_URL}/event-host/success`,
-    cancel_url : `${process.env.NEXT_PUBLIC_APP_URL}/event-host`,
+    cancel_url : `${process.env.NEXT_PUBLIC_APP_URL}/booking`,
     customer_email : email,
     mode : "payment",
     metadata : {
@@ -37,22 +32,33 @@ export const GET = async(req : NextRequest) => {
       audienceDemographic,
       state,
       city,
-      numberOfDays
+      numberOfDays,
+      signature,
+      startTime,
+      endTime
     },
     line_items : [
-      {
-        price_data : {
-          currency : "usd",
-          product_data : {
-            name : `${eventType} by ${clientName}`,
-            description : `Event Type: ${eventType} \n Audience Demographic: ${audienceDemographic} \n Location: ${city}, ${state} \n Event Date: From ${startDate} to ${endDate} \n Number of Days: ${numberOfDays}`
+        {
+          price_data : {
+            currency : "usd",
+            product_data : {
+              name : `${eventType} by ${clientName}`,
+              description : `Event Type: ${eventType}
+              \n Audience Demographic: ${audienceDemographic} 
+              \n\n Location: ${city}, ${state} 
+              \n\n Event Date: From ${new Date(startDate).toISOString().split('T')[0]} to ${new Date(endDate).toISOString().split('T')[0]}
+              \n\n Number of Days: ${numberOfDays}`
+            },
+            unit_amount : Number(amount) * 100
           },
-          unit_amount : Number(amount) * 100
-        },
-        quantity : 1
-      }
-    ]
-  })
+          quantity : 1
+        }
+      ]
+    })
 
-  return NextResponse.json({session})
+    return NextResponse.json({session})
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({ error: 'Failed to create session' }, { status: 500 })
+  }
 }

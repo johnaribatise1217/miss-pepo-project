@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cloudinary": "^2.8.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.11.3",
     "moment": "^2.30.1",

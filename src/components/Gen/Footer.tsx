@@ -34,6 +34,7 @@ const Footer = () => {
                   <Image
                     src="/images/instagram.svg"
                     alt='instagram'
+                    loading='lazy'
                     width={20}
                     height={20}
                     className='cursor-pointer'

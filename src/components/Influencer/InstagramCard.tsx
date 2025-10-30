@@ -29,6 +29,7 @@ const InstagramCard = ({image , caption1, caption2, likes, date, link} : Instagr
           <Image
             src="/images/instagram-icon.svg"
             alt="instagram"
+            loading='lazy'
             height={30}
             width={30}
             className='object-cover h-[2rem] w-[2rem] rounded-full'

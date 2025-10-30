@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,6 +18,7 @@ import {
   isSameMonth,
   startOfDay
 } from "date-fns";
+import { useRouter } from 'next/navigation';
 
 interface DateRange {
   start: Date | null;
@@ -28,22 +30,115 @@ interface BookingFormProps {
     onPrevious: () => void;
 }
 
+interface EventTypeList {
+    event : string
+    price : number
+}
+
+interface States{
+    name : string
+    state_code : string
+}
+
 const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
+    const [isCheckoutReady, setIsCheckoutReady] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false)
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [eventType, setEventType] = useState('');
+    const [eventPrice, setEventPrice] = useState(0)
+    const [totalAmount, setTotalAmount] = useState(0)
+    const [serviceCharge, setServiceCharge] = useState(0)
+    const [eventList, setEventList] = useState<EventTypeList[]>([])
+    const [allStates, setAllStates] = useState<States[]>([])
+    const [allCities, setCities] = useState<string[]>([])
     const [demographic, setDemographic] = useState('Nigerian');
-    const [state, setState] = useState('Texas');
-    const [city, setCity] = useState('Houston');
+    const [state, setState] = useState('');
+    const [city, setCity] = useState('');
     const today: Date = startOfDay(new Date());
     const minYear: number = today.getFullYear();
     const minDate: Date = new Date(minYear, 0, 1); 
+    const router = useRouter()
 
     const [currentMonth, setCurrentMonth] = useState<Date>(
       new Date(today.getFullYear(), today.getMonth(), 1)
     );
     const [range, setRange] = useState<DateRange>({ start: null, end: null });
     const [dir, setDir] = useState<number>(0);
+
+    const numberOfDays = useCallback(() => {
+        if (range.start && range.end) {
+            const startDate = new Date(range.start);
+            const endDate = new Date(range.end);
+
+            const diffInMs = endDate.getTime() - startDate.getTime();
+            const number = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+
+            return number;
+        }
+
+        return 1;
+    }, [range]);
+
+
+    useEffect(() => {
+        let baseAmount
+        let serviceCharge
+        if(eventPrice && numberOfDays()){
+            baseAmount = eventPrice * numberOfDays()
+            serviceCharge = (0.030 * baseAmount + 0.50)
+            setServiceCharge(serviceCharge)
+            setTotalAmount(baseAmount + serviceCharge)
+        }
+    }, [eventType, eventPrice, numberOfDays])
+
+    useEffect(() => {
+        const fetchEventTypes = async () => {
+            const result = await fetch('/api/pricing', {
+                method : 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            result.json().then((res) => setEventList(res.data))
+        }
+        fetchEventTypes()
+    }, [])
+
+    useEffect(() => {
+        const request = {
+            country : "United States"
+        }
+        const fetchAllStates = async() => {
+            const result = await fetch('https://countriesnow.space/api/v0.1/countries/states', {
+                method : "POST",
+                body : JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            result.json().then((res) => setAllStates(res.data.states))
+        }
+        fetchAllStates()
+    }, [])
+
+    useEffect(() => {
+        const request = {
+            country: "United States",
+            state : state
+        }
+        const fetchCitiesByState = async() => {
+            const result = await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+                method : "POST",
+                body : JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            result.json().then((res) => setCities(res.data))
+        }
+        fetchCitiesByState()
+    }, [state])
 
     const goNext = (): void => {
     setDir(1);
@@ -68,7 +163,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     };
 
     const isDisabled = (day: Date): boolean => {
-    return isBefore(startOfDay(day), minDate);
+        return isBefore(startOfDay(day), minDate);
     };
 
     const calendarMatrix: Date[][] = useMemo(() => {
@@ -104,38 +199,28 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         "MMM d, yyyy"
         )}`;
     }
-    return "May 8 , 2025 - May 8 , 2025";
+    return "May 8 , 2025 - May 10 , 2025";
     };
 
     const pageVariants = {
-    enter: (direction: number) => ({
-        x: direction > 0 ? 32 : -32,
-        opacity: 0,
-        position: "absolute" as const,
-    }),
-    center: {
-        x: 0,
-        opacity: 1,
-        position: "static" as const,
-    },
-    exit: (direction: number) => ({
-        x: direction > 0 ? -32 : 32,
-        opacity: 0,
-        position: "absolute" as const,
-    }),
+        enter: (direction: number) => ({
+            x: direction > 0 ? 32 : -32,
+            opacity: 0,
+            position: "absolute" as const,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+            position: "static" as const,
+        },
+        exit: (direction: number) => ({
+            x: direction > 0 ? -32 : 32,
+            opacity: 0,
+            position: "absolute" as const,
+        }),
     };
 
     const years: number[] = Array.from({ length: 11 }, (_, i) => minYear + i);
-    
-
-    const eventTypes = [
-        'Wedding',
-        'Corporate Event',
-        'Birthday Party',
-        'Anniversary',
-        'Conference',
-        'Other'
-    ];
 
     const timeSlots = [
         '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
@@ -145,6 +230,85 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM'
     ];
 
+    useEffect(() => {
+        const isComplete =
+            eventType &&
+            demographic &&
+            state &&
+            city &&
+            startTime &&
+            endTime &&
+            range.start &&
+            range.end &&
+            totalAmount > 0;
+
+        setIsCheckoutReady(Boolean(isComplete));
+    }, [eventType, demographic, state, city, startTime, endTime, range, totalAmount]);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("eventBooking");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setEventType(parsed.eventType || "");
+            setDemographic(parsed.audienceDemographic || "Nigerian");
+            setState(parsed.state || "");
+            setCity(parsed.city || "");
+            setStartTime(parsed.startTime || "");
+            setEndTime(parsed.endTime || "");
+            setRange(parsed.range || { start: null, end: null });
+            setEventPrice(parsed.eventPrice || 0);
+            setServiceCharge(parsed.serviceCharge || 0);
+            setTotalAmount(parsed.amount || 0);
+        }
+    }, []);
+
+
+    const handleCheckout = async() => {
+        const termsData = localStorage.getItem("termsData")
+        let parsedTermsData
+        if(termsData) {
+            parsedTermsData = JSON.parse(termsData)
+        }
+        const bookingData = {
+            eventType,
+            audienceDemographic : demographic,
+            state,
+            city,
+            startTime,
+            endTime,
+            endDate : range.end,
+            startDate : range.start,
+            range,
+            eventPrice,
+            serviceCharge,
+            amount : totalAmount,
+            numberOfDays : numberOfDays()
+        };
+
+        localStorage.setItem("eventBooking", JSON.stringify(bookingData));
+        const finalCheckoutData = {...parsedTermsData, ...bookingData}
+
+        if(isCheckoutReady) {
+            setIsProcessing(true)
+            try {
+                const checkout = await fetch("/api/payment/checkout-session", {
+                    method : "POST",
+                    body : JSON.stringify(finalCheckoutData),
+                    headers : {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                checkout.json().then((res) => {
+                    setIsProcessing(false)
+                    router.push(res.session.url as string)
+                })
+            } catch (error) {
+                throw error
+            }
+        }
+    };
+
+
     return (
         <div className="flex md:flex-row flex-col gap-6">
             {/* Left Sidebar */}
@@ -153,7 +317,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 <div className="bg-gray-100 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Note!</h3>
                     <p className="text-sm text-gray-700 mb-4 inter">
-                        Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 day before event date.
+                        Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 days before the event date.
                     </p>
                     <ul className="text-sm text-gray-700 space-y-1">
                         <li>• Accommodation Allowance</li>
@@ -166,22 +330,22 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Summary</h3>
                     <div className="flex justify-between items-center mb-4 inter">
                         <span className="text-gray-700 inter">Service Charge</span>
-                        <span className="font-semibold inter">$0.00</span>
+                        <span className="font-semibold inter">${serviceCharge.toFixed(2)}</span>
                     </div>
                     <div className="border-t pt-4 flex justify-between items-center">
                         <span className="font-bold inter">Total</span>
-                        <span className="font-bold inter">$0.00</span>
+                        <span className="font-bold inter">${totalAmount.toFixed(2)}</span>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
             <div className="flex-1">
-                <h1 className="text-4xl mb-5 bricolage-grotesque">Event Host Booking</h1>
+                <h1 className="lg:text-4xl text-2xl mb-5 bricolage-grotesque">Event Host Booking</h1>
 
                 {/* Date & Time Section */}
                 <div className="mb-8">
-                    <h2 className="text-2xl mb-6 bricolage-grotesque">Choose Date & Time</h2>
+                    <h2 className="lg:text-2xl text-xl mb-6 bricolage-grotesque">Choose Date & Time</h2>
 
                     {/* Event Date Header */}
                     <div className="flex justify-between items-center mb-4 border-2 border-black/15 p-3 rounded-2xl">
@@ -303,23 +467,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             </motion.div>
                             </AnimatePresence>
                         </div>
-
-                        {/* <div className="grid grid-cols-7 gap-2">
-                            {days.map((dateObj, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => dateObj.isCurrentMonth && setSelectedDate(dateObj.day)}
-                                    disabled={!dateObj.isCurrentMonth}
-                                    className={`
-                                        aspect-square rounded-2xl flex items-center justify-center text-sm transition border border-black/15 bg-[#F2F2F2] h-14 w-full
-                                        ${!dateObj.isCurrentMonth ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100'}
-                                        ${selectedDate === dateObj.day && dateObj.isCurrentMonth ? 'bg-[#645C4C] text-white hover:bg-[#645C4C]' : ''}
-                                    `}
-                                >
-                                    {dateObj.day}
-                                </button>
-                            ))}
-                        </div> */}
                     </div>
 
                     {/* Event Time */}
@@ -329,7 +476,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <span className="text-sm text-gray-600 inter">11:00 AM - 05:00 PM</span>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2 inter">Start Time</label>
                                 <select
@@ -364,17 +511,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 <div className="mb-8">
                     <h2 className="text-2xl font-semibold mb-6 bricolage-grotesque">Event Information</h2>
 
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Type</label>
                             <select
                                 value={eventType}
-                                onChange={(e) => setEventType(e.target.value)}
+                                disabled={eventList.length === 0}
+                                onChange={(e) => {
+                                    const selectedType = eventList.find(
+                                    (type) => type.event === e.target.value
+                                    );
+                                    setEventType(e.target.value);
+                                    if (selectedType) setEventPrice(selectedType.price);
+                                }}
                                 className="w-full p-3 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
-                            >
-                                <option value="">Select event type</option>
-                                {eventTypes.map(type => (
-                                    <option key={type} value={type}>{type}</option>
+                                >
+                                {eventList.length === 0 ? (
+                                    <option value="">Loading...</option>
+                                ) : (
+                                    <option value="">Select event type</option>
+                                )}
+                                {eventList.map((type) => (
+                                    <option key={type.event} value={type.event}>
+                                    {type.event}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -385,23 +545,29 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 onChange={(e) => setDemographic(e.target.value)}
                                 className="w-full p-3 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
+                                <option value="Chineese">Chineese</option>
                                 <option value="Nigerian">Nigerian</option>
                                 <option value="American">American</option>
-                                <option value="Mixed">Mixed</option>
-                                <option value="Other">Other</option>
+                                <option value="Latino">Latino</option>
                             </select>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
                         <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <select
                                 value={state}
+                                disabled={allStates.length == 0}
                                 onChange={(e) => setState(e.target.value)}
                                 className="w-full p-3 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
-                                <option value="Texas">Texas</option>
+                                {allStates.length == 0 ? <option value="">Loading...</option> : <option value="">Select State</option>}
+                                {allStates.map((state, index) => (
+                                    <option value={state.name} key={index}>
+                                        {state.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div>
@@ -409,31 +575,37 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <select
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
+                                disabled={!state}
                                 className="w-full p-3 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
-                                <option value="Houston">Houston</option>
+                                {!state ? <option>Select a state first</option> : <option value="">Select City</option>}
+                                {allCities && allCities.map((city, index) => (
+                                    <option key={index}>{city}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center justify-between mt-8">
+                <div className="flex flex-col w-full gap-[1rem] lg:flex-row items-center justify-between mt-8">
                     <button
                         onClick={onPrevious}
-                        className="border-2 border-b-4 text-sm border-black/15 bg-white hover:bg-black/10 p-3 shadow-lg rounded-md transition-all duration-100"
+                        className="border-2 2xl:w-[20%] w-full border-b-4 text-sm border-black/15 bg-white hover:bg-black/10 p-3 shadow-lg rounded-md transition-all duration-100"
                     >
                         Previous
                     </button>
                     <button
-                        onClick={onNext}
-                        className="border-2 border-b-4 text-sm border-[#645C4C] bg-[#7E7360] hover:bg-[#5c5446] text-white p-3 shadow-lg rounded-md transition-all duration-100"
-                    >
-                        Proceed to Checkout
+                        onClick={handleCheckout}
+                        disabled={!isCheckoutReady}
+                        className="border-2 w-full 2xl:w-[20%] border-b-4 text-sm 
+                        border-[#645C4C] bg-[#7E7360] hover:bg-[#5c5446] text-white 
+                        disabled:bg-white disabled:text-[#645C4C] cursor-pointer 
+                        p-3 shadow-lg rounded-md transition-all duration-100"
+                        >
+                        {isProcessing ? "Processing..." : "Proceed to Checkout"}
                     </button>
                 </div>
-
-
             </div>
         </div>
     );

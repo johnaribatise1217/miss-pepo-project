@@ -20,10 +20,10 @@ const Header = ({ aboutRef }: { aboutRef: React.RefObject<HTMLElement | null> })
       >
         <div className='container h-full'>
           <div className='flex flex-col gap-[2rem] text-white mt-[5rem] w-full sm:my-[15%]'>
-            <p className='text-[clamp(80px,5vw,112px)] bricolage-grotesque font-normal leading-[110%]'>
+            <p className='text-[clamp(80px,6vw,112px)] bricolage-grotesque font-normal leading-[110%]'>
               Ms.Pepo
             </p>
-            <p className='text-[clamp(45px,5vw,75px)] inter font-[200]'>
+            <p className='text-[clamp(45px,5vw,72px)] leading-[120%] tracking-[2%] inter font-[200]'>
               Where the <br />Vibe Begins
             </p>
             <RotaryButton onClick={scrollToNext} />
@@ -71,7 +71,7 @@ const RotaryButton = ({ onClick }: any) => {
       <button
         onClick={onClick}
         style={{ background: colors[colorIndex] }}
-        className="relative overflow-hidden cursor-pointer z-10 w-12 h-12 rounded-[5px] border border-b-3 border-[#3F3B34] p-4 text-black font-bold flex items-center justify-center shadow-md">
+        className="relative overflow-hidden cursor-pointer z-10 w-12 h-12 rounded-[12px] border border-b-3 border-[#3F3B34] p-4 text-black font-bold flex items-center justify-center shadow-md">
         <svg
           className="w-8 h-8 text-white"
           fill="none"
