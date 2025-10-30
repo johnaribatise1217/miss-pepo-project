@@ -482,7 +482,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <select
                                     value={startTime}
                                     onChange={(e) => setStartTime(e.target.value)}
-                                    className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                    className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                                 >
                                     <option value="">Select one...</option>
                                     {timeSlots.map(time => (
@@ -495,7 +495,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <select
                                     value={endTime}
                                     onChange={(e) => setEndTime(e.target.value)}
-                                    className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                    className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                                 >
                                     <option value="">Select one...</option>
                                     {timeSlots.map(time => (
@@ -524,7 +524,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     setEventType(e.target.value);
                                     if (selectedType) setEventPrice(selectedType.price);
                                 }}
-                                className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                                 >
                                 {eventList.length === 0 ? (
                                     <option value="">Loading...</option>
@@ -543,7 +543,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <select
                                 value={demographic}
                                 onChange={(e) => setDemographic(e.target.value)}
-                                className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
                                 <option value="Chineese">Chineese</option>
                                 <option value="Nigerian">Nigerian</option>
@@ -560,7 +560,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 value={state}
                                 disabled={allStates.length == 0}
                                 onChange={(e) => setState(e.target.value)}
-                                className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
                                 {allStates.length == 0 ? <option value="">Loading...</option> : <option value="">Select State</option>}
                                 {allStates.map((state, index) => (
@@ -576,7 +576,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
                                 disabled={!state}
-                                className="w-full p-3 h-[2rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
                                 {!state ? <option>Select a state first</option> : <option value="">Select City</option>}
                                 {allCities && allCities.map((city, index) => (
