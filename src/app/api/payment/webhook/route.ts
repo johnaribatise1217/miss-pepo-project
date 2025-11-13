@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-require-imports */
 'use server'
 import { NextRequest, NextResponse } from "next/server";
 import Booking from "../../../../../backend/model/Booking";
 import { headers } from "next/headers";
+import {sendBookingConfirmationEmail} from "../../../../../backend/email";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
@@ -51,13 +53,22 @@ export const POST = async(req: NextRequest) => {
           state: metadata.state,
           city: metadata.city
         },
+        paymentMethod: metadata.paymentMethod,
         numberOfDays: metadata.numberOfDays,
         paidAt: new Date(),
-        paymentInfo
+        paymentInfo,
       });
+
+      await sendBookingConfirmationEmail(metadata.clientName, metadata.email, {
+        eventType: metadata.eventType,
+        startDate: metadata.startDate,
+        endDate: metadata.endDate,
+        paymentMethod: metadata.paymentMethod,
+        amount: session.amount_total / 100
+      }, "");
     }
 
-    return NextResponse.json({ received: true , message : "Booked Successfully", data : newBooking});
+    return NextResponse.json({ received: true , message : "Booked Successfully"});
   } catch (error : any) {
     console.error(error)
     return NextResponse.json({ error: error.message }, { status: 400 });

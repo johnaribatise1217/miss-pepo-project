@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
@@ -19,10 +20,15 @@ import {
   startOfDay
 } from "date-fns";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface DateRange {
   start: Date | null;
   end: Date | null;
+}
+
+interface PaymentMethod {
+    method : 'Zelle' | 'Stripe'
 }
 
 interface BookingFormProps {
@@ -45,6 +51,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     const [isProcessing, setIsProcessing] = useState(false)
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod['method']>('Zelle');
     const [eventType, setEventType] = useState('');
     const [eventPrice, setEventPrice] = useState(0)
     const [totalAmount, setTotalAmount] = useState(0)
@@ -59,6 +66,57 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     const minYear: number = today.getFullYear();
     const minDate: Date = new Date(minYear, 0, 1); 
     const router = useRouter()
+    const [isUploading, setIsUploading] = useState<boolean>(false)
+    const [zelleReceiptUrl, setZelleReceiptUrl] = useState<string>("")
+    const [bookedRanges, setBookedRanges] = useState<{ startDate: string; endDate: string }[]>([])
+
+     useEffect(() => {
+        const fetchBookedRanges = async () => {
+            try {
+                const res = await fetch('/api/booking');
+                const json = await res.json();
+                if (json?.booked) {
+                    setBookedRanges(json.booked);
+                }
+            } catch (err) {
+                console.error('Failed to load booked dates', err);
+            }
+        };
+        fetchBookedRanges();
+    }, []);
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string);
+        formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string);
+        formData.append('resource_type', 'auto');
+
+        try {
+            const res = await fetch(
+            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`,
+            {
+                method: 'POST',
+                body: formData,
+            }
+            );
+
+            const data = await res.json();
+            if(data.secure_url){
+                setZelleReceiptUrl(data.secure_url);
+            }
+        } catch (error) {
+            console.error('Cloudinary upload failed:', error);
+            alert('Upload failed. Please try again.');
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const [currentMonth, setCurrentMonth] = useState<Date>(
       new Date(today.getFullYear(), today.getMonth(), 1)
@@ -84,13 +142,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     useEffect(() => {
         let baseAmount
         let serviceCharge
-        if(eventPrice && numberOfDays()){
+        if(eventPrice && paymentMethod !== "Zelle" && numberOfDays()){
             baseAmount = eventPrice * numberOfDays()
             serviceCharge = (0.030 * baseAmount + 0.50)
             setServiceCharge(serviceCharge)
             setTotalAmount(baseAmount + serviceCharge)
+        } else {
+            setServiceCharge(0)
+            setTotalAmount(eventPrice * numberOfDays())
         }
-    }, [eventType, eventPrice, numberOfDays])
+    }, [eventType, eventPrice, paymentMethod, numberOfDays])
 
     useEffect(() => {
         const fetchEventTypes = async () => {
@@ -163,7 +224,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     };
 
     const isDisabled = (day: Date): boolean => {
-        return isBefore(startOfDay(day), minDate);
+        // disable days before minDate OR days inside any booked range
+        const beforeMin = isBefore(startOfDay(day), minDate);
+        const inBooked = bookedRanges.some((r) => {
+            const s = startOfDay(new Date(r.startDate));
+            const e = startOfDay(new Date(r.endDate));
+            return isWithinInterval(startOfDay(day), { start: s, end: e });
+        });
+        return beforeMin || inBooked;
     };
 
     const calendarMatrix: Date[][] = useMemo(() => {
@@ -240,10 +308,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             endTime &&
             range.start &&
             range.end &&
+            paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
             totalAmount > 0;
 
         setIsCheckoutReady(Boolean(isComplete));
-    }, [eventType, demographic, state, city, startTime, endTime, range, totalAmount]);
+    }, [eventType, demographic, state, city, startTime, endTime, range, totalAmount, zelleReceiptUrl, paymentMethod]);
 
     useEffect(() => {
         const saved = localStorage.getItem("eventBooking");
@@ -259,11 +328,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             setEventPrice(parsed.eventPrice || 0);
             setServiceCharge(parsed.serviceCharge || 0);
             setTotalAmount(parsed.amount || 0);
+            setPaymentMethod(parsed.paymentMethod || "Zelle");
+            setZelleReceiptUrl(parsed.zelleReceiptUrl || "");
         }
     }, []);
 
-
-    const handleCheckout = async() => {
+    const handleCompleteZellePayment = async() => {
         const termsData = localStorage.getItem("termsData")
         let parsedTermsData
         if(termsData) {
@@ -282,6 +352,56 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             eventPrice,
             serviceCharge,
             amount : totalAmount,
+            paymentMethod,
+            zelleReceiptUrl,
+            numberOfDays : numberOfDays()
+        };
+
+        localStorage.setItem("eventBooking", JSON.stringify(bookingData));
+        const finalCheckoutData = {...parsedTermsData, ...bookingData}
+
+        if(isCheckoutReady){
+            setIsProcessing(true)
+            try {
+                const response = await fetch("/api/payment/zelle", {
+                    method : "POST",
+                    body : JSON.stringify(finalCheckoutData),
+                    headers : {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                response.json().then((res) => {
+                    if(res.received){
+                        setIsProcessing(false)
+                        router.push('/event-host/success')
+                    }
+                })
+            } catch (error) {
+                throw error
+            }
+        }
+    }
+
+    const handleStripeCheckout = async() => {
+        const termsData = localStorage.getItem("termsData")
+        let parsedTermsData
+        if(termsData) {
+            parsedTermsData = JSON.parse(termsData)
+        }
+        const bookingData = {
+            eventType,
+            audienceDemographic : demographic,
+            state,
+            city,
+            startTime,
+            endTime,
+            endDate : range.end,
+            startDate : range.start,
+            range,
+            eventPrice,
+            serviceCharge,
+            amount : totalAmount,
+            paymentMethod,
             numberOfDays : numberOfDays()
         };
 
@@ -308,7 +428,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         }
     };
 
-
+    const paymentOptions = [
+        { id: "zelle", icon: "/images/zelle.svg", brand: "Zelle", text: "Pay via Zelle to"},
+        { id: "stripe", icon: "/images/Group.svg", brand: "Stripe", text: "Payment Gateway with Card / Crypto"},
+    ];
     return (
         <div className="flex md:flex-row flex-col gap-6">
             {/* Left Sidebar */}
@@ -317,7 +440,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 <div className="bg-gray-100 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Note!</h3>
                     <p className="text-sm text-gray-700 mb-4 inter">
-                        Based on my service agreement, the event planner or individual inviting Ms. Pepo for any event outside of Houston, Texas means you are responsible for providing the following at least 7 days before the event date.
+                        Based on my service agreement, the event planner or individual inviting Ms.Pepo for any event outside of <b className='font-bold'>Houston, Texas</b> means you are responsible for providing the following at least 7 days before the event date.
                     </p>
                     <ul className="text-sm text-gray-700 space-y-1">
                         <li>• Accommodation Allowance</li>
@@ -337,6 +460,99 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                         <span className="font-bold inter">${totalAmount.toFixed(2)}</span>
                     </div>
                 </div>
+
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Method</h3>
+                    <div className="space-y-2">
+                        {paymentOptions.map((option) => (
+                            <label key={option.id} className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                type="radio"
+                                name="payment"
+                                value={option.brand}
+                                onChange={() => setPaymentMethod(option.brand.toString() as PaymentMethod['method'])}
+                                className="hidden"
+                                />
+                                <span
+                                className={`w-5 h-5 flex items-center justify-center rounded-[6px] border-[1px] transition-all duration-200 ${
+                                    paymentMethod === option.brand
+                                    ? "border-[#8C8C8C]"
+                                    : "border-gray-300 group-hover:border-gray-400"
+                                }`}
+                                >
+                                {paymentMethod === option.brand && (
+                                    <span className="w-2.5 h-2.5 bg-[#7E7360] rounded-[2px]" />
+                                )}
+                                {paymentMethod !== option.brand && (
+                                    <span className="w-2.5 h-2.5 bg-[#F2F1EF] rounded-[2px]" />
+                                )}
+                                </span>
+
+                                <span className="text-sm flex items-center gap-2 font-medium text-gray-700">
+                                    Pay with
+                                    <span className={`font-semibold`}>
+                                        <Image
+                                            src={option.icon}
+                                            alt={option.brand}
+                                            width={1000}
+                                            height={1000}
+                                            className="w-10 h-10"
+                                        />
+                                    </span>
+                                </span>
+                                <small className='flex-1 text-[10px]'>{option.text}</small>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                {paymentMethod === "Zelle" && (
+                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                        <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Zelle Information</h3>
+                        <div className="flex justify-between items-center mb-4 inter">
+                            <span className="text-gray-700 inter">Name</span>
+                            <span className="font-semibold inter">21 Void LLC</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="inter text-gray-700">Email</span>
+                            <span className="font-bold inter">info.mspepo@gmail.com</span>
+                        </div>
+
+                        <div className='mt-5 border-t py-3'>
+                            <label className="inter text-[16px] leading-relaxed">Have you paid?</label>
+                            <label
+                                htmlFor="zelleReceiptUrl"
+                                className="flex flex-col items-center justify-center w-full h-12 border-2 border-dashed border-black/30 bg-black/5 rounded-lg cursor-pointer hover:bg-black/10 transition"
+                                >
+                                {isUploading ? (
+                                    <span className="text-gray-500 text-sm animate-pulse">
+                                    Uploading...
+                                    </span>
+                                ) : zelleReceiptUrl ? (
+                                    <Image
+                                    src={zelleReceiptUrl}
+                                    height={1000}
+                                    width={1000}
+                                    alt="Zelle Receipt URL"
+                                    className="h-10 object-contain"
+                                    />
+                                ) : (
+                                    <span className="text-gray-500 text-sm">
+                                        Click here to upload Zelle Receipt
+                                    </span>
+                                )}
+                                <input
+                                    id="zelleReceiptUrl"
+                                    type="file"
+                                    name="zelleReceiptUrl"
+                                    accept=".pdf,application/pdf"
+                                    onChange={handleFileUpload}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Main Content */}
@@ -423,11 +639,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     // Check today
                                     const isToday = isSameDay(day, today);
             
-                                    // Disable if before today
-                                    const disabled: boolean = isBefore(startOfDay(day), today);
+                                    const isBooked = bookedRanges.some((r) => {
+                                        const s = startOfDay(new Date(r.startDate));
+                                        const e = startOfDay(new Date(r.endDate));
+                                        return isWithinInterval(startOfDay(day), { start: s, end: e });
+                                    });
+                                    const disabled: boolean = isBefore(startOfDay(day), today) || isBooked;
             
-                                    const base =
-                                        "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+                                    const base = "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
+                                    
+                                    // add brown X overlay for booked days
+                                    const bookedX = isBooked ? (
+                                        <span className="absolute top-1 right-1 text-[#7E4B2B] font-bold">✕</span>
+                                    ) : null;
             
                                     let stateClass = "";
                                     const outsideCurrentMonth = !isSameMonth(day, currentMonth);
@@ -459,6 +683,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                         className={`${base} ${stateClass}`}
                                         >
                                         {format(day, "d")}
+                                        {bookedX}
                                         </button>
                                     );
                                     })}
@@ -549,6 +774,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <option value="Nigerian">Nigerian</option>
                                 <option value="American">American</option>
                                 <option value="Latino">Latino</option>
+                                <option value="Black Americans">Black Americans</option>
+                                <option value="White Americans">White Americans</option>
+                                <option value="Mixed">Mixed</option>
+                                <option value="Others">Others</option>
                             </select>
                         </div>
                     </div>
@@ -595,16 +824,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     >
                         Previous
                     </button>
-                    <button
-                        onClick={handleCheckout}
-                        disabled={!isCheckoutReady}
-                        className="border-2 w-full 2xl:w-[20%] border-b-4 text-sm 
-                        border-[#645C4C] bg-[#7E7360] hover:bg-[#5c5446] text-white 
-                        disabled:bg-white disabled:text-[#645C4C] cursor-pointer 
-                        p-3 shadow-lg rounded-md transition-all duration-100"
-                        >
-                        {isProcessing ? "Processing..." : "Proceed to Checkout"}
-                    </button>
+                    {paymentMethod === "Zelle" && (
+                        <button
+                            onClick={handleCompleteZellePayment}
+                            disabled={!isCheckoutReady}
+                            className="border-2 w-full 2xl:w-[20%] border-b-4 text-sm 
+                            border-[#645C4C] bg-[#7E7360] hover:bg-[#5c5446] text-white 
+                            disabled:bg-white disabled:text-[#645C4C] cursor-pointer 
+                            p-3 shadow-lg rounded-md transition-all duration-100"
+                            >
+                            {isProcessing ? "Processing..." : "Complete Booking"}
+                        </button>
+                    )}
+                    {paymentMethod === "Stripe" && (
+                        <button
+                            onClick={handleStripeCheckout}
+                            disabled={!isCheckoutReady}
+                            className="border-2 w-full 2xl:w-[20%] border-b-4 text-sm 
+                            border-[#645C4C] bg-[#7E7360] hover:bg-[#5c5446] text-white 
+                            disabled:bg-white disabled:text-[#645C4C] cursor-pointer 
+                            p-3 shadow-lg rounded-md transition-all duration-100"
+                            >
+                            {isProcessing ? "Processing..." : "Proceed to Stripe Checkout"}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ export const POST = async(req : NextRequest) => {
     const {
       email, clientName, startDate, endDate,
       eventType, audienceDemographic, state,
-      city, numberOfDays, amount, signature, startTime, endTime
+      city, numberOfDays, amount, signature, startTime, endTime, paymentMethod
     } = body
   
   try {
@@ -35,7 +35,8 @@ export const POST = async(req : NextRequest) => {
       numberOfDays,
       signature,
       startTime,
-      endTime
+      endTime,
+      paymentMethod
     },
     line_items : [
         {

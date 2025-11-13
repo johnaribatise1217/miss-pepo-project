@@ -5,7 +5,6 @@ import { BiCheck } from 'react-icons/bi'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 
-
 function Page() {
     const router = useRouter()
     useEffect(() => {

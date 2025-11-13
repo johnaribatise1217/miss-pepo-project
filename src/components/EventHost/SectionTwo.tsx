@@ -7,7 +7,9 @@ import React from 'react'
 const exploreImages : string[] = [
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844602/explore1_xnsvx2.svg',
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844608/explore2_ctzyrc.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1762801152/IMG_5074_lnsmu5.jpg',
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844605/explore3_bftvc5.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1762801140/MC_2_salip7.jpg',
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844618/explore4_exkpal.svg',
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844607/explore5_pwwvbw.png',
   'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844610/explore6_wx0qrv.png',
@@ -34,13 +36,25 @@ const SectionTwo = () => {
           transition={{ duration: 1.3, ease: "easeInOut" }}
           viewport={{ once: true, amount: 0.4 }}
         >
-          <Image
+          {/* <Image
             src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844528/section2-one_ynsbqw.svg"
             alt='misspepo'
             height={1000}
             width={1000}
             loading='lazy'
             className='bg-cover w-full rounded-[30px]'
+          /> */}
+          <iframe
+            src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_lxqswx&profile=cld-adaptive-stream"
+            // src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_lxqswx&chapters=true&show_jump_controls=true&transformation[0][effect][0]=volume%3Aauto&control_bar[fullscreenToggle]=false"
+            width="640"
+            height="360" 
+            loading='lazy'
+            style={{height: 'auto', width: '100%', aspectRatio: '360 / 360', borderRadius: '30px'}}
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            frameBorder="0"
           />
         </motion.div>
         <motion.div className='flex flex-col gap-[2rem] items-start lg:w-[50%] w-full'>

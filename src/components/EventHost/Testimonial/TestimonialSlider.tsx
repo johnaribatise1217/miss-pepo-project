@@ -27,6 +27,17 @@ const testimonials: Testimonial[] = [
     text1: "Hi Pepo, how are you doing? My name is Hope and i would like to inquire about your MC services for a wedding in September. My sister is getting married and i would love for you to MC the event.",
     text2: "I have been following for quite some time and i also was part of an event you MC’ed last year and it was amazing",
     name: "Hope"
+  },
+  {
+    id: 4,
+    text1: "Mspepo words are not enough! Take your flowers! Everyone enjoyed your presence! Your ability to carry everyone along irrespective of their age, gender and race is admirable!",
+    text2: "Thanks for making my birthday memorable!",
+    name : "Dr Folake"
+  },
+  {
+    id: 5,
+    text1: "You are the best MC I've seen in 11years since i started shooting.. I kid you not",
+    name: "Bezy"
   }
 ]
 

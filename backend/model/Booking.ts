@@ -6,6 +6,8 @@ export interface IBooking extends Document{
     startDate: Date,
     endDate: Date
   }
+  paymentMethod: string
+  zelleReceiptUrl? : string
   eventInfo : {
     eventType : string,
     audienceDemographic: string,
@@ -30,6 +32,17 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
   clientName : {
     type : String,
     required : true
+  },
+  paymentMethod : {
+    type : String,
+    required : true,
+    enum : {
+      values : ['Zelle', 'Stripe']
+    }
+  },
+  zelleReceiptUrl: {
+    type : String,
+    required : false
   },
   signature : {
     type : String,
@@ -61,7 +74,7 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
       type : String,
       required : true,
       enum : {
-        values : ['Chineese', "Nigerian", "Latino", "Black Americans", "White Americans", "American"]
+        values : ['Chineese', "Nigerian", "Latino", "Black Americans", "White Americans", "American", "Mixed", "Others"]
       }
     },
     startTime : {
@@ -94,7 +107,8 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
   paymentInfo : {
     id : {
       type : String,
-      required : true
+      required : true,
+      unique : true
     },
     status : {
       type : String,
