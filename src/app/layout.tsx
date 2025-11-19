@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Miss Pepo | Event Host - Actor - Content Creator",
+  title: "Miss Pepo | Event Host | Actor | Content Creator",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

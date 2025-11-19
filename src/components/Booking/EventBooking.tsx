@@ -308,7 +308,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             endTime &&
             range.start &&
             range.end &&
-            paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
+            // paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
             totalAmount > 0;
 
         setIsCheckoutReady(Boolean(isComplete));

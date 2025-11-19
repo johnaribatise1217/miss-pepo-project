@@ -67,7 +67,7 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
       type : String,
       required : true,
       enum : {
-        values : ['Event Hosting', 'Content Collaboration', 'Stage Play', 'Youtube Collaboration'],
+        values : ['Event Hosting', 'Content Collaboration', 'Stage Play', 'Youtube Collaboration', "Adult Birthday", "Wedding", "Baby Shower", "Graduation"],
       }
     },
     audienceDemographic : {

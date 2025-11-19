@@ -81,7 +81,9 @@ const TestimonialSlider = () => {
   return (
     <div className='flex flex-col items-start gap-[1.5rem]'>
       <div className="mt-6 hidden lg:grid lg:grid-cols-3 gap-6 transition-all duration-500">
-        {testimonials.map((testimonial) => (
+        {testimonials
+        // .sort(() => Math.random() - 0.5).slice(0, 3)
+        .map((testimonial) => (
           <AnimatePresence mode="wait" key={testimonial.id}>
             <motion.div
               key={testimonial.id}
@@ -110,7 +112,9 @@ const TestimonialSlider = () => {
         onMouseMove={onMouseMove}
       >
         <AnimatePresence mode="wait">
-          {testimonials.map((testimonial) => (
+          {testimonials
+          .sort(() => Math.random() - 0.5).slice(0, 3)
+          .map((testimonial) => (
             <motion.div
               key={testimonial.id}
               className="bg-black flex flex-col w-[300px] h-auto justify-between gap-[2.5rem] text-pryWhite px-7 cursor-pointer p-6 rounded-3xl flex-shrink-0"
