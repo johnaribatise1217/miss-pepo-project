@@ -109,6 +109,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             const data = await res.json();
             if(data.secure_url){
                 setZelleReceiptUrl(data.secure_url);
+                alert("Zelle receipt uploaded successfully")
             }
         } catch (error) {
             console.error('Cloudinary upload failed:', error);
@@ -215,11 +216,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     if (isDisabled(day)) return;
 
     if (!range.start || (range.start && range.end)) {
-        setRange({ start: day, end: null });
+        setRange({ start: day, end: day });
     } else if (isAfter(day, range.start)) {
         setRange({ ...range, end: day });
     } else {
-        setRange({ start: day, end: null });
+        setRange({ start: day, end: day });
     }
     };
 
@@ -290,13 +291,25 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
 
     const years: number[] = Array.from({ length: 11 }, (_, i) => minYear + i);
 
-    const timeSlots = [
-        '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
-        '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM',
-        '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM',
-        '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM',
-        '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM'
-    ];
+    const generateTimeSlots = (intervalMinutes = 60) => {
+        const slots: string[] = [];
+        for (let mins = 0; mins < 24 * 60; mins += intervalMinutes) {
+            const hours = Math.floor(mins / 60);
+            const minutes = mins % 60;
+            const d = new Date();
+            d.setHours(hours, minutes, 0, 0);
+            const label = d.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+            });
+            slots.push(label);
+        }
+        return slots;
+    };
+
+    // Use 60 for hourly slots (12:00 AM - 11:00 PM). Use 30 for half-hour slots.
+    const timeSlots = generateTimeSlots(60);
 
     useEffect(() => {
         const isComplete =
@@ -307,8 +320,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             startTime &&
             endTime &&
             range.start &&
-            range.end &&
-            // paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
+            (range.end || range.start) && 
+            paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
             totalAmount > 0;
 
         setIsCheckoutReady(Boolean(isComplete));
@@ -529,13 +542,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     Uploading...
                                     </span>
                                 ) : zelleReceiptUrl ? (
-                                    <Image
-                                    src={zelleReceiptUrl}
-                                    height={1000}
-                                    width={1000}
-                                    alt="Zelle Receipt URL"
-                                    className="h-10 object-contain"
-                                    />
+                                    <p>Receipt Uploaded</p>
                                 ) : (
                                     <span className="text-gray-500 text-sm">
                                         Click here to upload Zelle Receipt
@@ -783,7 +790,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <select
                                 value={state}
@@ -812,6 +819,25 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     <option key={index}>{city}</option>
                                 ))}
                             </select>
+                        </div> */}
+                        <div>
+                            <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
+                            <input
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                placeholder='Enter State'
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-2 inter">Event Location (City)</label>
+                            <input
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                placeholder='Enter City'
+                                disabled={!state}
+                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                            />
                         </div>
                     </div>
                 </div>

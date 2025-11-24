@@ -1,25 +1,11 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import TestimonialSlider from './TestimonialSlider'
 import Image from 'next/image'
-import EventBookingModal from '@/components/Gen/modals/EventBookingModal'
-import TermsServiceModal from '@/components/Gen/modals/TermsServiceModal'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 const Testimonial = () => {
-  const [showTerms, setShowTerms] = useState(false);
-  const [showBooking, setShowBooking] = useState(false);
-
-  // const handleTermsClick = () => setShowTerms(true);
-  // const handleTermsAgree = () => {
-  //   setShowTerms(false);
-  //   setShowBooking(true);
-  // };
-  const handleBookingPrevious = () => {
-    setShowBooking(false);
-    setShowTerms(true);
-  };
 
   return (
     <section className="bg-secBlack relative w-full min-h-[100vh] py-[8.5%] flex flex-col gap-[2rem] overflow-x-hidden">
@@ -63,7 +49,7 @@ const Testimonial = () => {
           </p>
 
           <Link href='/booking'
-            className="bg-white w-full lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px] hover:bg-gray-50 transition"
+            className="bg-white w-full text-center lg:w-auto inter px-6 py-6 border rounded-[16px] border-b-[5px] hover:bg-gray-50 transition"
           >
             Book Me!
           </Link>
@@ -86,19 +72,6 @@ const Testimonial = () => {
           />
         </motion.div>
       </div>
-
-      {/* Modals */}
-      <TermsServiceModal
-        isOpen={showTerms}
-        onClose={() => setShowTerms(false)}
-      // onAgree={handleTermsAgree}
-      />
-      <EventBookingModal
-        isOpen={showBooking}
-        onClose={() => setShowBooking(false)}
-        onProceed={() => { }}
-        onPrevious={handleBookingPrevious}
-      />
     </section>
   );
 };

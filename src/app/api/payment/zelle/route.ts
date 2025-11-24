@@ -12,20 +12,20 @@ export const POST = async(req : NextRequest) => {
   const body = await req.json()
   try {
     const {
-      email, clientName, startDate, endDate,
+      email, firstName, lastName, startDate, endDate,
       eventType, audienceDemographic, state, startTime, endTime,
-      city, numberOfDays, zelleReceiptUrl, signature, paymentMethod, amount
+      city, numberOfDays, zelleReceiptUrl,  paymentMethod, amount
     } = body
     
     const paymentInfo ={
-      id: clientName + "_" + zelleReceiptUrl,
+      id: firstName + "_" + lastName + "_" + zelleReceiptUrl,
       status: "paid",
       amountPaid: amount
     }
 
     await Booking.create({
-      clientName,
-      signature,
+      firstName,
+      lastName,
       email,
       eventDate: {
         startDate: new Date(startDate),
@@ -48,7 +48,7 @@ export const POST = async(req : NextRequest) => {
       paymentInfo,
     })
 
-    await sendBookingConfirmationEmail(clientName, email, {
+    await sendBookingConfirmationEmail(`${firstName - lastName}`, email, {
       eventType,
       startDate,
       endDate,

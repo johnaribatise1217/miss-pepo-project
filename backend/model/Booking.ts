@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 export interface IBooking extends Document{
   clientName : string
+  firstName: string
+  lastName : string
   email : string
   eventDate : {
     startDate: Date,
@@ -18,7 +20,6 @@ export interface IBooking extends Document{
     state : string
     city : string
   }
-  signature: string
   numberOfDays : number
   paymentInfo : {
     id : string,
@@ -29,7 +30,11 @@ export interface IBooking extends Document{
 }
 
 const bookingSchema : Schema<IBooking> = new mongoose.Schema({
-  clientName : {
+  firstName : {
+    type : String,
+    required : true
+  },
+  lastName : {
     type : String,
     required : true
   },
@@ -43,10 +48,6 @@ const bookingSchema : Schema<IBooking> = new mongoose.Schema({
   zelleReceiptUrl: {
     type : String,
     required : false
-  },
-  signature : {
-    type : String,
-    required : true
   },
   email : {
     type : String,

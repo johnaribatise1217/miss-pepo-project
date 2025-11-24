@@ -2,18 +2,15 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 'use server'
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '../../../../../backend/connect';
-
-dbConnect()
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 export const POST = async(req : NextRequest) => {
   const body = await req.json()
     const {
-      email, clientName, startDate, endDate,
+      email, firstName, lastName, startDate, endDate,
       eventType, audienceDemographic, state,
-      city, numberOfDays, amount, signature, startTime, endTime, paymentMethod
+      city, numberOfDays, amount, startTime, endTime, paymentMethod
     } = body
   
   try {
@@ -24,7 +21,8 @@ export const POST = async(req : NextRequest) => {
     customer_email : email,
     mode : "payment",
     metadata : {
-      clientName,
+      firstName,
+      lastName,
       email,
       startDate,
       endDate,
@@ -33,7 +31,6 @@ export const POST = async(req : NextRequest) => {
       state,
       city,
       numberOfDays,
-      signature,
       startTime,
       endTime,
       paymentMethod
@@ -43,7 +40,7 @@ export const POST = async(req : NextRequest) => {
           price_data : {
             currency : "usd",
             product_data : {
-              name : `${eventType} by ${clientName}`,
+              name : `${eventType} by ${firstName} ${lastName}`,
               description : `Event Type: ${eventType}
               \n Audience Demographic: ${audienceDemographic} 
               \n\n Location: ${city}, ${state} 

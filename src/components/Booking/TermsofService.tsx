@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 interface TermsOfServiceProps {
@@ -10,21 +9,21 @@ interface TermsOfServiceProps {
 }
 
 export interface TermsData {
-  clientName: string;
+  firstName : string
+  lastName : string
   email: string;
   date: string;
-  signature: string;
 }
 
 const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) => {
   const [termsData, setTermsData] = useState<TermsData>({
-    clientName: '',
+    firstName : '',
+    lastName : '',
     email: '',
     date: new Date().toISOString().split('T')[0],
-    signature: '',
   });
 
-  const [isUploading, setIsUploading] = useState<boolean>(false)
+  // const [isUploading, setIsUploading] = useState<boolean>(false)
   const [iscontinue, setIsContinue] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,47 +50,47 @@ const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) 
   }, [])
 
   // 📁 Handle signature upload
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    setIsUploading(true);
+  //   setIsUploading(true);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string);
-    formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string);
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string);
+  //   formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string);
 
-    try {
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+  //   try {
+  //     const res = await fetch(
+  //       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+  //       {
+  //         method: 'POST',
+  //         body: formData,
+  //       }
+  //     );
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      setTermsData((prev) => ({
-        ...prev,
-        signature: data.secure_url,
-      }));
-    } catch (error) {
-      console.error('Cloudinary upload failed:', error);
-      alert('Upload failed. Please try again.');
-    } finally {
-      setIsUploading(false);
-    }
-  };
+  //     setTermsData((prev) => ({
+  //       ...prev,
+  //       signature: data.secure_url,
+  //     }));
+  //   } catch (error) {
+  //     console.error('Cloudinary upload failed:', error);
+  //     alert('Upload failed. Please try again.');
+  //   } finally {
+  //     setIsUploading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    if(!termsData.clientName || !termsData.date || !termsData.email || !termsData.signature){
+    if(!termsData.firstName || !termsData.date || !termsData.email || !termsData.lastName){
       setIsContinue(false)
     } else {
       setIsContinue(true)
     }
-  }, [termsData, isUploading])
+  }, [termsData])
 
   return (
     <>
@@ -150,17 +149,27 @@ const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) 
       {/* 🧾 FORM SECTION */}
       <form className="grid md:grid-cols-2 gap-4 mt-5">
         <div>
-          <label className="inter text-[16px] leading-relaxed">Client's Name</label>
+          <label className="inter text-[16px] leading-relaxed">First Name</label>
           <input
             type="text"
-            name="clientName"
-            value={termsData.clientName}
+            name="firstName"
+            value={termsData.firstName}
             onChange={handleChange}
-            placeholder="Your Fullname"
+            placeholder="Your Firstname"
             className="p-3 w-full border-2 border-black/15 bg-black/5 rounded-lg text-sm"
           />
         </div>
-
+        <div>
+          <label className="inter text-[16px] leading-relaxed">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={termsData.lastName}
+            onChange={handleChange}
+            placeholder="Your Lastname"
+            className="p-3 w-full border-2 border-black/15 bg-black/5 rounded-lg text-sm"
+          />
+        </div>
         <div>
           <label className="inter text-[16px] leading-relaxed">Email</label>
           <input
@@ -184,7 +193,7 @@ const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) 
           />
         </div>
 
-        <div>
+        {/* <div>
           <label className="inter text-[16px] leading-relaxed">Signature</label>
 
           <label
@@ -217,7 +226,7 @@ const TermsOfService: React.FC<TermsOfServiceProps> = ({ onAgree, onDisagree }) 
               className="hidden"
             />
           </label>
-        </div>
+        </div> */}
       </form>
 
       <div className="flex items-center justify-between mt-8">

@@ -36,7 +36,8 @@ export const POST = async(req: NextRequest) => {
       }
 
       newBooking = await Booking.create({
-        clientName: metadata.clientName,
+        firstName : metadata.firstName,
+        lastName : metadata.lastName,
         signature : metadata.signature,
         email: metadata.email,
         eventDate: {
@@ -59,7 +60,7 @@ export const POST = async(req: NextRequest) => {
         paymentInfo,
       });
 
-      await sendBookingConfirmationEmail(metadata.clientName, metadata.email, {
+      await sendBookingConfirmationEmail(`${metadata.firstName - metadata.lastName}`, metadata.email, {
         eventType: metadata.eventType,
         startDate: metadata.startDate,
         endDate: metadata.endDate,
