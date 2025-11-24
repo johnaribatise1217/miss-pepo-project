@@ -11,7 +11,9 @@ const dbConnect = async() => {
   if(process.env.NODE_ENV === "development") DB_URI = process.env.MONGODB_LOCAL_URI!
   if(process.env.NODE_ENV === "production") DB_URI = process.env.MONGODB_URI!
 
-  await mongoose.connect(DB_URI).then((con) => console.log('DB connected')).
+  await mongoose.connect(DB_URI, {
+    dbName : process.env.DB_NAME
+  }).then((con) => console.log('DB connected')).
   catch((error) => console.log(error))
 }
 

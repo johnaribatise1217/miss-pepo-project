@@ -21,6 +21,7 @@ import {
 } from "date-fns";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import LOCATIONS from '../../app/lib/Location';
 
 interface DateRange {
   start: Date | null;
@@ -168,39 +169,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     }, [])
 
     useEffect(() => {
-        const request = {
-            country : "United States"
+        // Populate states from local LOCATIONS object (offline fallback)
+        try {
+            const states = Object.keys(LOCATIONS).map((name) => ({ name, state_code: name }));
+            setAllStates(states);
+        } catch (err) {
+            console.error('Failed to load local states', err);
+            setAllStates([]);
         }
-        const fetchAllStates = async() => {
-            const result = await fetch('https://countriesnow.space/api/v0.1/countries/states', {
-                method : "POST",
-                body : JSON.stringify(request),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            result.json().then((res) => setAllStates(res.data.states))
-        }
-        fetchAllStates()
-    }, [])
+    }, []);
 
     useEffect(() => {
-        const request = {
-            country: "United States",
-            state : state
+        // Populate cities from local LOCATIONS when the state changes
+        if (!state) {
+            setCities([]);
+            return;
         }
-        const fetchCitiesByState = async() => {
-            const result = await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
-                method : "POST",
-                body : JSON.stringify(request),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            result.json().then((res) => setCities(res.data))
+        try {
+            const cities = (LOCATIONS as Record<string, string[]>)[state] || [];
+            setCities(cities);
+        } catch (err) {
+            console.error('Failed to load local cities for state', state, err);
+            setCities([]);
         }
-        fetchCitiesByState()
-    }, [state])
+    }, [state]);
 
     const goNext = (): void => {
     setDir(1);
@@ -215,13 +207,33 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     const handleDateClick = (day: Date): void => {
     if (isDisabled(day)) return;
 
-    if (!range.start || (range.start && range.end)) {
-        setRange({ start: day, end: day });
-    } else if (isAfter(day, range.start)) {
-        setRange({ ...range, end: day });
-    } else {
-        setRange({ start: day, end: day });
+    // No start selected -> set start (await end)
+    if (!range.start) {
+        setRange({ start: day, end: null });
+        return;
     }
+
+    // Start exists but no end -> attempt to set end
+    if (range.start && !range.end) {
+        // clicking same day -> single-day range
+        if (isSameDay(day, range.start)) {
+            setRange({ start: range.start, end: range.start });
+            return;
+        }
+
+        // clicking a later day -> set as end
+        if (isAfter(day, range.start)) {
+            setRange({ start: range.start, end: day });
+            return;
+        }
+
+        // clicking an earlier day -> treat as new start
+        setRange({ start: day, end: null });
+        return;
+    }
+
+    // Both start and end exist -> start a new selection with this day as start
+    setRange({ start: day, end: null });
     };
 
     const isDisabled = (day: Date): boolean => {
@@ -315,8 +327,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         const isComplete =
             eventType &&
             demographic &&
-            state &&
-            city &&
+            state !== '' &&
+            city !== '' &&
             startTime &&
             endTime &&
             range.start &&
@@ -790,11 +802,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
-                        {/* <div>
+                        <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <select
                                 value={state}
-                                disabled={allStates.length == 0}
+                                // disabled={allStates.length == 0}
                                 onChange={(e) => setState(e.target.value)}
                                 className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
@@ -819,8 +831,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     <option key={index}>{city}</option>
                                 ))}
                             </select>
-                        </div> */}
-                        <div>
+                        </div>
+                        {/* <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <input
                                 value={state}
@@ -838,7 +850,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 disabled={!state}
                                 className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
