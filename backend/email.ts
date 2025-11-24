@@ -34,3 +34,9 @@ export const sendBookingConfirmationEmail = async (clientName: string, email: st
 
   await transporter.sendMail(mailOptions);
 };
+
+export const parseLocalDate = (dateStr: string) => {
+  const d = new Date(dateStr);
+  d.setHours(12, 0, 0, 0);
+  return d;
+};

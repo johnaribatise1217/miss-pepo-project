@@ -5,17 +5,17 @@ import Image from 'next/image'
 import React from 'react'
 
 const exploreImages : string[] = [
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844602/explore1_xnsvx2.svg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844608/explore2_ctzyrc.svg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1762801152/IMG_5074_lnsmu5.jpg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844605/explore3_bftvc5.jpg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1762801140/MC_2_salip7.jpg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844618/explore4_exkpal.svg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844607/explore5_pwwvbw.png',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844610/explore6_wx0qrv.png',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844610/explore7_kzhkjw.png',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844612/explore8_notr29.png',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758844614/explore9_b6v9ud.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844602/explore1_xnsvx2.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844608/explore2_ctzyrc.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1762801152/IMG_5074_lnsmu5.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844605/explore3_bftvc5.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1762801140/MC_2_salip7.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844618/explore4_exkpal.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844607/explore5_pwwvbw.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844610/explore6_wx0qrv.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844610/explore7_kzhkjw.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844612/explore8_notr29.png',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844614/explore9_b6v9ud.png',
 ]
 
 const SectionTwo = () => {
@@ -45,11 +45,13 @@ const SectionTwo = () => {
             className='bg-cover w-full rounded-[30px]'
           /> */}
           <iframe
-            src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_lxqswx&profile=cld-adaptive-stream"
+            src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_ieudej&profile=cld-default&poster=https%3A%2F%2Fres.cloudinary.com%2Fdfptoh5fz%2Fimage%2Fupload%2Fv1758844610%2Fexplore6_wx0qrv.png"
+            // src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_lxqswx&profile=cld-default&q-auto=best"
             // src="https://player.cloudinary.com/embed/?cloud_name=dfptoh5fz&public_id=IMG_5122_lxqswx&chapters=true&show_jump_controls=true&transformation[0][effect][0]=volume%3Aauto&control_bar[fullscreenToggle]=false"
             width="640"
             height="360" 
             loading='lazy'
+            q-auto='best'
             style={{height: 'auto', width: '100%', aspectRatio: '360 / 360', borderRadius: '30px'}}
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
             allowFullScreen

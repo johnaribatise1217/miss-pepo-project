@@ -9,11 +9,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 
 const SwiperImages : string[] = [
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845273/image_52_uc504e.jpg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845583/actor2_a5fwnw.svg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845124/actor3_hcxmwx.svg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845383/image_51_shvbmx.jpg',
-  'https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845392/image_xbud0i.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845273/image_52_uc504e.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845583/actor2_a5fwnw.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845124/actor3_hcxmwx.svg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845383/image_51_shvbmx.jpg',
+  'https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845392/image_xbud0i.jpg',
 ]
 
 const ActorMain = () => {
@@ -37,7 +37,7 @@ const ActorMain = () => {
             viewport={{ once: true, amount: 0.4 }}
           >
             <Image
-              src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758845124/actor3_hcxmwx.svg"
+              src="https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758845124/actor3_hcxmwx.svg"
               alt='actor'
               height={1000}
               width={1000}
@@ -114,7 +114,7 @@ const ActorMain = () => {
             viewport={{ once: true, amount: 0.4 }}
           >
             <Image
-              src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758843906/explore-new_o0kwkb.jpg"
+              src="https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758843906/explore-new_o0kwkb.jpg"
               alt='explore'
               height={500}
               width={500}

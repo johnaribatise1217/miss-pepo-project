@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../../../backend/connect';
 import Booking from '../../../../../backend/model/Booking';
-import { sendBookingConfirmationEmail } from '../../../../../backend/email';
+import { parseLocalDate, sendBookingConfirmationEmail } from '../../../../../backend/email';
 
 dbConnect()
 
@@ -28,8 +28,8 @@ export const POST = async(req : NextRequest) => {
       lastName,
       email,
       eventDate: {
-        startDate: new Date(startDate),
-        endDate: new Date(endDate)
+        startDate: parseLocalDate(startDate),
+        endDate: parseLocalDate(endDate)
       },
       eventInfo: {
         eventType,
@@ -48,7 +48,7 @@ export const POST = async(req : NextRequest) => {
       paymentInfo,
     })
 
-    await sendBookingConfirmationEmail(`${firstName - lastName}`, email, {
+    await sendBookingConfirmationEmail(`${firstName} ${lastName}`, email, {
       eventType,
       startDate,
       endDate,
