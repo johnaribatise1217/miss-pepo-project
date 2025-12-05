@@ -474,7 +474,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 </div>
 
                 {/* Payment Summary */}
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white border hidden lg:block border-gray-200 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Summary</h3>
                     <div className="flex justify-between items-center mb-4 inter">
                         <span className="text-gray-700 inter">Service Charge</span>
@@ -486,7 +486,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     </div>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white border hidden lg:block border-gray-200 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Method</h3>
                     <div className="space-y-2">
                         {paymentOptions.map((option) => (
@@ -532,7 +532,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 </div>
 
                 {paymentMethod === "Zelle" && (
-                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    <div className="bg-white border hidden lg:block border-gray-200 rounded-lg p-6">
                         <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Zelle Information</h3>
                         <div className="flex justify-between items-center mb-4 inter">
                             <span className="text-gray-700 inter">Name</span>
@@ -579,7 +579,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 <h1 className="lg:text-4xl text-2xl mb-5 bricolage-grotesque">Event Host Booking</h1>
 
                 {/* Date & Time Section */}
-                <div className="mb-8">
+                <div className="mb-6">
                     <h2 className="lg:text-2xl text-xl mb-6 bricolage-grotesque">Choose Date & Time</h2>
 
                     {/* Event Date Header */}
@@ -589,7 +589,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     </div>
 
                     {/* Calendar */}
-                    <div className="bg-white rounded-lg p-4 mb-6">
+                    <div className="bg-white rounded-lg px-4 py-2 mb-6">
                         <div className="flex justify-between items-center mb-4">
                             <div className="left text-[20px] font-semibold text-[#7E7360] items-center gap-[0.5rem]">
                                 <span className="">
@@ -781,6 +781,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     </option>
                                 ))}
                             </select>
+                            <p className='lg:hidden text-[13px]'>Price: ${eventPrice}</p>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Audience Demographic</label>
@@ -832,6 +833,108 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 ))}
                             </select>
                         </div>
+                        <div className="bg-white border lg:hidden border-gray-200 rounded-lg p-6">
+                            <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Summary</h3>
+                            <div className="flex justify-between items-center mb-4 inter">
+                                <span className="text-gray-700 inter">Service Charge</span>
+                                <span className="font-semibold inter">${serviceCharge.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-4 inter">
+                                <span className="text-gray-700 text-[13px] inter">Number of days (1 by default)</span>
+                                <span className="font-semibold inter">{numberOfDays()}</span>
+                            </div>
+                            <div className="border-t pt-4 flex justify-between items-center">
+                                <span className="font-bold inter">Total</span>
+                                <span className="font-bold inter">${totalAmount.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white border lg:hidden border-gray-200 rounded-lg p-6">
+                            <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Method</h3>
+                            <div className="space-y-2">
+                                {paymentOptions.map((option) => (
+                                    <label key={option.id} className="flex items-center gap-3 cursor-pointer">
+                                        <input
+                                        type="radio"
+                                        name="payment"
+                                        value={option.brand}
+                                        onChange={() => setPaymentMethod(option.brand.toString() as PaymentMethod['method'])}
+                                        className="hidden"
+                                        />
+                                        <span
+                                        className={`w-5 h-5 flex items-center justify-center rounded-[6px] border-[1px] transition-all duration-200 ${
+                                            paymentMethod === option.brand
+                                            ? "border-[#8C8C8C]"
+                                            : "border-gray-300 group-hover:border-gray-400"
+                                        }`}
+                                        >
+                                        {paymentMethod === option.brand && (
+                                            <span className="w-2.5 h-2.5 bg-[#7E7360] rounded-[2px]" />
+                                        )}
+                                        {paymentMethod !== option.brand && (
+                                            <span className="w-2.5 h-2.5 bg-[#F2F1EF] rounded-[2px]" />
+                                        )}
+                                        </span>
+
+                                        <span className="text-sm flex items-center gap-2 font-medium text-gray-700">
+                                            Pay with
+                                            <span className={`font-semibold`}>
+                                                <Image
+                                                    src={option.icon}
+                                                    alt={option.brand}
+                                                    width={1000}
+                                                    height={1000}
+                                                    className="w-10 h-10"
+                                                />
+                                            </span>
+                                        </span>
+                                        <small className='flex-1 text-[10px]'>{option.text}</small>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        {paymentMethod === "Zelle" && (
+                            <div className="bg-white border lg:hidden  border-gray-200 rounded-lg p-6">
+                                <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Zelle Information</h3>
+                                <div className="flex justify-between items-center mb-4 inter">
+                                    <span className="text-gray-700 inter">Name</span>
+                                    <span className="font-semibold inter">21 Void LLC</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="inter text-gray-700">Email</span>
+                                    <span className="font-bold inter">info.mspepo@gmail.com</span>
+                                </div>
+
+                                <div className='mt-5 border-t py-3'>
+                                    <label className="inter text-[16px] leading-relaxed">Have you paid?</label>
+                                    <label
+                                        htmlFor="zelleReceiptUrl"
+                                        className="flex flex-col items-center justify-center w-full h-12 border-2 border-dashed border-black/30 bg-black/5 rounded-lg cursor-pointer hover:bg-black/10 transition"
+                                        >
+                                        {isUploading ? (
+                                            <span className="text-gray-500 text-sm animate-pulse">
+                                            Uploading...
+                                            </span>
+                                        ) : zelleReceiptUrl ? (
+                                            <p>Receipt Uploaded</p>
+                                        ) : (
+                                            <span className="text-gray-500 text-sm">
+                                                Click here to upload Zelle Receipt
+                                            </span>
+                                        )}
+                                        <input
+                                            id="zelleReceiptUrl"
+                                            type="file"
+                                            name="zelleReceiptUrl"
+                                            accept=".pdf,application/pdf"
+                                            onChange={handleFileUpload}
+                                            className="hidden"
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                        )}
                         {/* <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <input

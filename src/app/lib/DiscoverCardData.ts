@@ -26,7 +26,7 @@ export const CardData: DiscoverCard[] = [
     imgBg : "https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758844137/don-baba_fkoznh.png",
     title : "Content Creator",
     message : "Her Charm captivates all",
-    path : "/influencer",
+    path : "/content-creator",
     bgColor : "bg-discover3"
   },
 ]
