@@ -969,11 +969,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             </div>
                             <div className="border-t pt-4 flex justify-between items-center">
                                 <span className="font-bold inter">{selectedPaymentPercentage}% Upfront Payment:</span>
-        +                       <span className="font-bold inter">${amountPaid?.toFixed(2)}</span>
+                               <span className="font-bold inter">${amountPaid?.toFixed(2)}</span>
                             </div>
                             <div className="pt-2 flex justify-between items-center">
                                 <span className="font-bold inter">Balance to be Paid:</span>
-        +                       <span className="font-bold inter">${balanceToBePaid?.toFixed(2)}</span>
+                               <span className="font-bold inter">${balanceToBePaid?.toFixed(2)}</span>
                             </div>
                             <div className="pt-2 text-gray-300 text-[12px] flex justify-between items-center">
                                 <span className="font-bold inter">Base Amount</span>

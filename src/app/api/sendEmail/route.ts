@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   const mailOptions = {
     from: process.env.NEXT_PUBLIC_EMAIL_USER,
-    to: 'johnaribatise@hsass.org',
+    to: 'info.mspepo@gmail.com',
     subject: `REACH OUT TO MISS.PEPO: ${subject}`,
     text: `
       Name: ${name}
