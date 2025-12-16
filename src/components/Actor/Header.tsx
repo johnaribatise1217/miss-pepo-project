@@ -18,12 +18,12 @@ const Header = () => {
           <div className="left flex flex-col items-start w-full gap-[1.5rem] bricolage-grotesque">
 
             {/* --- Large Screen Text --- */}
-            <p className='hidden lg:flex text-white leading-[110%] tracking-[-1%] font-[400] overflow-hidden text-[clamp(50px,6vw,100px)]'>
+            <p className='hidden lg:flex text-white leading-[110%] tracking-[-1%] font-[400] overflow-hidden text-[clamp(55px,6vw,100px)]'>
               Actor and <br /> Scene-Stealer
             </p>
 
             {/* --- Mobile / Tablet Text --- */}
-            <p className='lg:hidden text-white overflow-y-hidden leading-[110%] tracking-[-1%] font-[400] text-[clamp(42px,8vw,80px)]'>
+            <p className='lg:hidden text-white overflow-y-hidden leading-[110%] tracking-[-1%] font-[400] text-[clamp(45px,8vw,80px)]'>
               Bringing <br /> Characters <br /> to Life
             </p>
 

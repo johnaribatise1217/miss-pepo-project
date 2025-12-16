@@ -24,7 +24,7 @@ const tikTokVideos = [
   'https://www.tiktok.com/@mspepo/video/7509934977652395272', // Please Sir don't do it (34 likes)
   'https://www.tiktok.com/@mspepo/video/7497981290495413510', // On this day (139 likes)
   // Add a fourth example or replace; fetch more from her profile if needed
-  'https://www.tiktok.com/@mspepo/video/7506456342891302167', // Workout video (example from related search)
+// Workout video (example from related search)
 ];
 
 const Main = () => {

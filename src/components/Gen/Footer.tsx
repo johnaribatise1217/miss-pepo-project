@@ -44,7 +44,7 @@ const Footer = () => {
               <div className='content-none w-full h-[1px] bg-underline'></div>
             </div>
             <div className='flex flex-col inter w-full gap-[0.5rem] items-start'>
-              <Link href={""}>
+              <Link href={"https://web.facebook.com/MsPepo1?_rdc=1&_rdr#"} target='_blank' rel="noreferrer">
                 <small className='text-white text-[16px] flex items-center gap-[1.5rem]'>
                   Facebook
                   <Image

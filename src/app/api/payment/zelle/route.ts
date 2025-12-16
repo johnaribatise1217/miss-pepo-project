@@ -14,13 +14,18 @@ export const POST = async(req : NextRequest) => {
     const {
       email, firstName, lastName, startDate, endDate,
       eventType, audienceDemographic, state, startTime, endTime,
-      city, numberOfDays, zelleReceiptUrl,  paymentMethod, amount
+      city, numberOfDays, zelleReceiptUrl,  paymentMethod, amount,
+      baseAmount, percentagePaid, percentageRemaining, balanceToBePaid
     } = body
     
     const paymentInfo ={
       id: firstName + "_" + lastName + "_" + zelleReceiptUrl,
       status: "paid",
-      amountPaid: amount
+      amountPaid: amount,
+      baseAmount,
+      percentagePaid,
+      percentageRemaining,
+      balanceToBePaid
     }
 
     await Booking.create({
@@ -53,7 +58,8 @@ export const POST = async(req : NextRequest) => {
       startDate,
       endDate,
       paymentMethod,
-      amount
+      amount,
+      baseAmount, percentagePaid, percentageRemaining, balanceToBePaid
     }, zelleReceiptUrl);
 
     return NextResponse.json({ message: 'Zelle payment recorded successfully', received : true })

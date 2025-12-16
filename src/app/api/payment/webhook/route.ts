@@ -32,7 +32,11 @@ export const POST = async(req: NextRequest) => {
       const paymentInfo ={
         id: session.payment_intent,
         status: session.payment_status,
-        amountPaid: session.amount_total / 100
+        amountPaid: session.amount_total / 100,
+        baseAmount: metadata.baseAmount,
+        percentagePaid: metadata.percentagePaid,
+        percentageRemaining: metadata.percentageRemaining,
+        balanceToBePaid: metadata.balanceToBePaid
       }
 
       newBooking = await Booking.create({
@@ -65,8 +69,12 @@ export const POST = async(req: NextRequest) => {
         startDate: metadata.startDate,
         endDate: metadata.endDate,
         paymentMethod: metadata.paymentMethod,
-        amount: session.amount_total / 100
-      }, "");
+        amount: session.amount_total / 100,
+        baseAmount: metadata.baseAmount,
+        percentagePaid: metadata.percentagePaid,
+        percentageRemaining: metadata.percentageRemaining,
+        balanceToBePaid: metadata.balanceToBePaid
+      });
     }
 
     return NextResponse.json({ received: true , message : "Booked Successfully"});

@@ -15,7 +15,7 @@ const Header = () => {
       >
         <div className="container flex flex-col mt-[5rem] items-start sm:my-[10%] gap-[1.5rem] text-white overflow-x-hidden break-words">
 
-          <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite text-[clamp(42px,6vw,100px)]">
+          <p className="bricolage-grotesque font-[400] leading-[120%] text-pryWhite text-[clamp(45px,8vw,100px)]">
             Hosting <br /> Memorable <br /> Experiences
           </p>
 

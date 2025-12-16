@@ -57,10 +57,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     const [eventPrice, setEventPrice] = useState(0)
     const [totalAmount, setTotalAmount] = useState(0)
     const [serviceCharge, setServiceCharge] = useState(0)
+    const [balanceToBePaid, setBalanceToBePaid] = useState<number | null>(null);
+    const [amountPaid, setAmountPaid] = useState<number | null>(null);
+    const [selectedPaymentPercentage, setSelectedPaymentPercentage] = useState<number>(30); // default 30%
     const [eventList, setEventList] = useState<EventTypeList[]>([])
     const [allStates, setAllStates] = useState<States[]>([])
     const [allCities, setCities] = useState<string[]>([])
-    const [demographic, setDemographic] = useState('Nigerian');
+    const [demographic, setDemographic] = useState('');
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
     const today: Date = startOfDay(new Date());
@@ -70,6 +73,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     const [isUploading, setIsUploading] = useState<boolean>(false)
     const [zelleReceiptUrl, setZelleReceiptUrl] = useState<string>("")
     const [bookedRanges, setBookedRanges] = useState<{ startDate: string; endDate: string }[]>([])
+    const [customEventType, setCustomEventType] = useState<string>('');
+    const [customDemographic, setCustomDemographic] = useState<string>('');
 
      useEffect(() => {
         const fetchBookedRanges = async () => {
@@ -140,13 +145,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         return 1;
     }, [range]);
 
-
     useEffect(() => {
         let baseAmount
         let serviceCharge
         if(eventPrice && paymentMethod !== "Zelle" && numberOfDays()){
             baseAmount = eventPrice * numberOfDays()
-            serviceCharge = (0.030 * baseAmount + 0.50)
+            serviceCharge = (0.030 * baseAmount + 0.30)
             setServiceCharge(serviceCharge)
             setTotalAmount(baseAmount + serviceCharge)
         } else {
@@ -154,6 +158,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             setTotalAmount(eventPrice * numberOfDays())
         }
     }, [eventType, eventPrice, paymentMethod, numberOfDays])
+
+    useEffect(() => {
+        if(totalAmount > 0 && selectedPaymentPercentage){
+            const upfrontAmount = (totalAmount * selectedPaymentPercentage / 100)
+            const balanceAmount = totalAmount - upfrontAmount
+            setAmountPaid(Number(upfrontAmount.toFixed(2)))
+            setBalanceToBePaid(Number(balanceAmount.toFixed(2)))
+        }
+    }, [totalAmount, selectedPaymentPercentage])
 
     useEffect(() => {
         const fetchEventTypes = async () => {
@@ -168,31 +181,40 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         fetchEventTypes()
     }, [])
 
-    useEffect(() => {
-        // Populate states from local LOCATIONS object (offline fallback)
-        try {
-            const states = Object.keys(LOCATIONS).map((name) => ({ name, state_code: name }));
-            setAllStates(states);
-        } catch (err) {
-            console.error('Failed to load local states', err);
-            setAllStates([]);
+     useEffect(() => {
+        const request = {
+            country : "United States"
         }
-    }, []);
+        const fetchAllStates = async() => {
+            const result = await fetch('https://countriesnow.space/api/v0.1/countries/states', {
+                method : "POST",
+                body : JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            result.json().then((res) => setAllStates(res.data.states))
+        }
+        fetchAllStates()
+    }, [])
 
     useEffect(() => {
-        // Populate cities from local LOCATIONS when the state changes
-        if (!state) {
-            setCities([]);
-            return;
+        const request = {
+            country: "United States",
+            state : state
         }
-        try {
-            const cities = (LOCATIONS as Record<string, string[]>)[state] || [];
-            setCities(cities);
-        } catch (err) {
-            console.error('Failed to load local cities for state', state, err);
-            setCities([]);
+        const fetchCitiesByState = async() => {
+            const result = await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+                method : "POST",
+                body : JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            result.json().then((res) => setCities(res.data))
         }
-    }, [state]);
+        fetchCitiesByState()
+    }, [state])
 
     const goNext = (): void => {
     setDir(1);
@@ -235,6 +257,21 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     // Both start and end exist -> start a new selection with this day as start
     setRange({ start: day, end: null });
     };
+
+    // const handleDateClick = (day: Date): void => {
+    //     if (isDisabled(day)) return;
+
+    //     if (!range.start || (range.start && range.end)) {
+    //         // First click or after a complete range: start a new single-day selection
+    //         setRange({ start: day, end: day });
+    //     } else if (isAfter(day, range.start)) {
+    //         // Extend to a range if clicking a later day
+    //         setRange({ ...range, end: day });
+    //     } else {
+    //         // Clicking earlier or same: reset to single-day
+    //         setRange({ start: day, end: day });
+    //     }
+    // };
 
     const isDisabled = (day: Date): boolean => {
         // disable days before minDate OR days inside any booked range
@@ -327,13 +364,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         const isComplete =
             eventType &&
             demographic &&
-            state !== '' &&
-            city !== '' &&
+            state  &&
+            city  &&
             startTime &&
             endTime &&
             range.start &&
             (range.end || range.start) && 
-            paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe" &&
+            (paymentMethod === "Zelle" ? zelleReceiptUrl !== "" : paymentMethod === "Stripe") &&
             totalAmount > 0;
 
         setIsCheckoutReady(Boolean(isComplete));
@@ -345,6 +382,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             const parsed = JSON.parse(saved);
             setEventType(parsed.eventType || "");
             setDemographic(parsed.audienceDemographic || "Nigerian");
+            setCustomDemographic(parsed.customDemographic || "")
+            setCustomEventType(parsed.customEventType)
             setState(parsed.state || "");
             setCity(parsed.city || "");
             setStartTime(parsed.startTime || "");
@@ -365,18 +404,23 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             parsedTermsData = JSON.parse(termsData)
         }
         const bookingData = {
-            eventType,
-            audienceDemographic : demographic,
+            eventType : customEventType !== "" ? customEventType : eventType,
+            audienceDemographic : customDemographic !== "" ? customDemographic : demographic,
             state,
             city,
             startTime,
             endTime,
-            endDate : range.end,
+            endDate : range.end || range.start,
             startDate : range.start,
             range,
             eventPrice,
             serviceCharge,
-            amount : totalAmount,
+            amount : amountPaid,
+            baseAmount: totalAmount,
+            percentagePaid: selectedPaymentPercentage,
+            balanceToBePaid,
+            percentageRemaining: Number(100 - selectedPaymentPercentage),
+
             paymentMethod,
             zelleReceiptUrl,
             numberOfDays : numberOfDays()
@@ -414,18 +458,23 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             parsedTermsData = JSON.parse(termsData)
         }
         const bookingData = {
-            eventType,
-            audienceDemographic : demographic,
+            eventType : customEventType !== "" ? customEventType : eventType,
+            audienceDemographic : customDemographic !== "" ? customDemographic : demographic,
             state,
             city,
             startTime,
             endTime,
-            endDate : range.end,
+            endDate : range.end || range.start,
             startDate : range.start,
             range,
             eventPrice,
             serviceCharge,
-            amount : totalAmount,
+            amount : amountPaid,
+            baseAmount: totalAmount,
+            percentagePaid: selectedPaymentPercentage,
+            balanceToBePaid,
+            percentageRemaining: Number(100 - selectedPaymentPercentage),
+
             paymentMethod,
             numberOfDays : numberOfDays()
         };
@@ -476,12 +525,39 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 {/* Payment Summary */}
                 <div className="bg-white border hidden lg:block border-gray-200 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Summary</h3>
+                    <div className="flex flex-wrap gap-4 mb-3">
+                        {[30, 40, 50, 60].map((percentage) => (
+                            <button
+                                key={percentage}
+                                onClick={() => setSelectedPaymentPercentage(percentage)}
+                                className={`px-3 py-2 rounded-lg text-[11px] font-semibold border-2 transition ${
+                                    selectedPaymentPercentage === percentage
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : 'bg-white text-gray-800 border-gray-300 hover:border-blue-600'
+                                }`}
+                            >
+                                {percentage}% Upfront
+                            </button>
+                        ))}
+                    </div>
                     <div className="flex justify-between items-center mb-4 inter">
                         <span className="text-gray-700 inter">Service Charge</span>
                         <span className="font-semibold inter">${serviceCharge.toFixed(2)}</span>
                     </div>
+                    <div className="flex justify-between items-center mb-4 inter">
+                        <span className="text-gray-700 text-[13px] inter">Number of days (1 by default)</span>
+                        <span className="font-semibold inter">{numberOfDays()}</span>
+                    </div>
                     <div className="border-t pt-4 flex justify-between items-center">
-                        <span className="font-bold inter">Total</span>
+                        <span className="font-bold inter">{selectedPaymentPercentage}% Upfront Payment:</span>
+                        <span className="font-bold inter">${amountPaid?.toFixed(2)}</span>
+                    </div>
+                    <div className="pt-2 flex justify-between items-center">
+                        <span className="font-bold inter">Balance to be Paid:</span>
+                        <span className="font-bold inter">${balanceToBePaid?.toFixed(2)}</span>
+                    </div>
+                    <div className="pt-2 text-gray-300 text-[12px] flex justify-between items-center">
+                        <span className="font-bold inter">Base Amount</span>
                         <span className="font-bold inter">${totalAmount.toFixed(2)}</span>
                     </div>
                 </div>
@@ -717,13 +793,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                     <div className="mb-6">
                         <div className="flex justify-between items-center mb-4 border-2 border-black/15 p-3 rounded-2xl">
                             <span className="font-semibold inter">Event Time</span>
-                            <span className="text-sm text-gray-600 inter">11:00 AM - 05:00 PM</span>
+                            <span className="text-sm text-gray-600 inter">{startTime} - {endTime}</span>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2  gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2 inter">Start Time</label>
                                 <select
+                                    required
                                     value={startTime}
                                     onChange={(e) => setStartTime(e.target.value)}
                                     className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
@@ -738,6 +815,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <label className="block text-sm font-medium mb-2 inter">End Time</label>
                                 <select
                                     value={endTime}
+                                    required
                                     onChange={(e) => setEndTime(e.target.value)}
                                     className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                                 >
@@ -760,6 +838,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <label className="block text-sm font-medium mb-2 inter">Event Type</label>
                             <select
                                 value={eventType}
+                                required
                                 disabled={eventList.length === 0}
                                 onChange={(e) => {
                                     const selectedType = eventList.find(
@@ -781,15 +860,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     </option>
                                 ))}
                             </select>
-                            <p className='lg:hidden text-[13px]'>Price: ${eventPrice}</p>
+                            {eventType === 'Others' && (
+                                <input
+                                    type="text"
+                                    placeholder="Enter custom event type"
+                                    value={customEventType}
+                                    onChange={(e) => {
+                                        setCustomEventType(e.target.value);
+                                        // setEventType(e.target.value); // Set state to custom value
+                                    }}
+                                    className="w-full p-3 py-4 mt-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                    required
+                                />
+                            )}
+                            <p className='text-[13px]'>Price: ${eventPrice}</p>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2 inter">Event Audience Demographic</label>
                             <select
                                 value={demographic}
+                                required
                                 onChange={(e) => setDemographic(e.target.value)}
                                 className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
+                                <option value="">Select Audience Demographic</option>
                                 <option value="Chineese">Chineese</option>
                                 <option value="Nigerian">Nigerian</option>
                                 <option value="American">American</option>
@@ -799,6 +893,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <option value="Mixed">Mixed</option>
                                 <option value="Others">Others</option>
                             </select>
+                            {demographic === 'Others' && (
+                                <input
+                                    type="text"
+                                    placeholder="Enter custom audience demographic"
+                                    value={customDemographic}
+                                    onChange={(e) => {
+                                        setCustomDemographic(e.target.value);
+                                        // setDemographic(e.target.value); // Set state to custom value
+                                    }}
+                                    className="w-full p-3 mt-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                    required
+                                />
+                            )}
                         </div>
                     </div>
 
@@ -807,6 +914,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
                             <select
                                 value={state}
+                                required
                                 // disabled={allStates.length == 0}
                                 onChange={(e) => setState(e.target.value)}
                                 className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
@@ -823,6 +931,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                             <label className="block text-sm font-medium mb-2 inter">Event Location (City)</label>
                             <select
                                 value={city}
+                                required
                                 onChange={(e) => setCity(e.target.value)}
                                 disabled={!state}
                                 className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
@@ -835,6 +944,21 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                         </div>
                         <div className="bg-white border lg:hidden border-gray-200 rounded-lg p-6">
                             <h3 className="font-bold text-lg mb-4 bricolage-grotesque">Payment Summary</h3>
+                            <div className="flex flex-wrap gap-4">
+                                {[30, 40, 50, 60].map((percentage) => (
+                                    <button
+                                        key={percentage}
+                                        onClick={() => setSelectedPaymentPercentage(percentage)}
+                                        className={`px-3 py-2 rounded-lg text-[12px] font-semibold border-2 transition ${
+                                            selectedPaymentPercentage === percentage
+                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                : 'bg-white text-gray-800 border-gray-300 hover:border-blue-600'
+                                        }`}
+                                    >
+                                        {percentage}% Upfront
+                                    </button>
+                                ))}
+                            </div>
                             <div className="flex justify-between items-center mb-4 inter">
                                 <span className="text-gray-700 inter">Service Charge</span>
                                 <span className="font-semibold inter">${serviceCharge.toFixed(2)}</span>
@@ -844,7 +968,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 <span className="font-semibold inter">{numberOfDays()}</span>
                             </div>
                             <div className="border-t pt-4 flex justify-between items-center">
-                                <span className="font-bold inter">Total</span>
+                                <span className="font-bold inter">{selectedPaymentPercentage}% Upfront Payment:</span>
+        +                       <span className="font-bold inter">${amountPaid?.toFixed(2)}</span>
+                            </div>
+                            <div className="pt-2 flex justify-between items-center">
+                                <span className="font-bold inter">Balance to be Paid:</span>
+        +                       <span className="font-bold inter">${balanceToBePaid?.toFixed(2)}</span>
+                            </div>
+                            <div className="pt-2 text-gray-300 text-[12px] flex justify-between items-center">
+                                <span className="font-bold inter">Base Amount</span>
                                 <span className="font-bold inter">${totalAmount.toFixed(2)}</span>
                             </div>
                         </div>
@@ -935,25 +1067,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                 </div>
                             </div>
                         )}
-                        {/* <div>
-                            <label className="block text-sm font-medium mb-2 inter">Event Location (State)</label>
-                            <input
-                                value={state}
-                                onChange={(e) => setState(e.target.value)}
-                                placeholder='Enter State'
-                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-2 inter">Event Location (City)</label>
-                            <input
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                placeholder='Enter City'
-                                disabled={!state}
-                                className="w-full p-3 h-[3.5rem] lg:h-[4rem] bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
-                            />
-                        </div> */}
                     </div>
                 </div>
 

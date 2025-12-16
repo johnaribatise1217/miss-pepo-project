@@ -10,7 +10,8 @@ export const POST = async(req : NextRequest) => {
     const {
       email, firstName, lastName, startDate, endDate,
       eventType, audienceDemographic, state,
-      city, numberOfDays, amount, startTime, endTime, paymentMethod
+      city, numberOfDays, amount, startTime, endTime, paymentMethod,
+      baseAmount, percentagePaid, percentageRemaining, balanceToBePaid
     } = body
   
   try {
@@ -33,7 +34,8 @@ export const POST = async(req : NextRequest) => {
       numberOfDays,
       startTime,
       endTime,
-      paymentMethod
+      paymentMethod,
+      baseAmount, percentagePaid, percentageRemaining, balanceToBePaid
     },
     line_items : [
         {
