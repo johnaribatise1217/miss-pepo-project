@@ -62,7 +62,7 @@ const SectionTwo = () => {
         <motion.div className='flex flex-col gap-[2rem] items-start lg:w-[50%] w-full'>
           <p className='bricolage-grotesque text-[clamp(35px,4vw,52px)] leading-[120%] font-[400] text-pryWhite'>Your Event Deserves the Best Host</p>
           <p className='text-[clamp(18.5px,3.5vw,20px)] text-white font-[300]'>
-            Ms. Pepo brings a unique flair to every event she hosts Her commitment to audience engagement and personalized experience ensures unforgettable moments for all
+            Ms. Pepo brings a unique flair to every event she hosts. Her commitment to audience engagement and personalized experience ensures unforgettable moments for all
           </p>
         </motion.div>
       </motion.div>

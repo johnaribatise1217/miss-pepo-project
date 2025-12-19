@@ -16,7 +16,7 @@ export const POST = async(req : NextRequest) => {
   
   try {
     const session = await stripe.checkout.sessions.create({
-    payment_method_types : ["card", "us_bank_account", "cashapp"],
+    payment_method_types : ["card", "us_bank_account", "cashapp", "apple_pay", "amazon_pay"],
     success_url : `${process.env.NEXT_PUBLIC_APP_URL}/event-host/success`,
     cancel_url : `${process.env.NEXT_PUBLIC_APP_URL}/booking`,
     customer_email : email,

@@ -24,8 +24,8 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 3,
-    text1: "Hi Pepo, how are you doing? My name is Hope and i would like to inquire about your MC services for a wedding in September. My sister is getting married and i would love for you to MC the event.",
-    text2: "I have been following for quite some time and i also was part of an event you MC’ed last year and it was amazing",
+    // text1: "Hi Pepo, how are you doing? My name is Hope and i would like to inquire about your MC services for a wedding in September. My sister is getting married and i would love for you to MC the event.",
+    text1: "I have been following for quite some time and i also was part of an event you MC’ed last year and it was amazing",
     name: "Hope"
   },
   {
