@@ -30,8 +30,8 @@ export const sendBookingConfirmationEmail = async (clientName: string, email: st
         <h2 style="font-size: 18px; margin-bottom: 15px; color: #333;">Event Details</h2>
         <ul style="list-style: none; padding: 0; margin: 0;">
           <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Event Type:</strong> ${bookingDetails.eventType}</li>
-          <li><strong>Start Date:</strong> ${formatDate(bookingDetails.startDate)}</li>
-          <li><strong>End Date:</strong> ${formatDate(bookingDetails.endDate)}</li>
+          <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Start Date:</strong> ${formatDate(bookingDetails.startDate)}</li>
+          <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>End Date:</strong> ${formatDate(bookingDetails.endDate)}</li>
           <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Payment Method:</strong> ${bookingDetails.paymentMethod}</li>
           ${zelleReceiptUrl ? `<li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Zelle Receipt:</strong> <a href="${zelleReceiptUrl}" style="color: #007bff; text-decoration: none;">View Receipt</a></li>` : ''}
         </ul>
