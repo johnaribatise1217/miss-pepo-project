@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Booking from "../../../../../backend/model/Booking";
 import { headers } from "next/headers";
-import {parseLocalDate, sendBookingConfirmationEmail} from "../../../../../backend/email";
+import {sendBookingConfirmationEmail} from "../../../../../backend/email";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
@@ -45,8 +45,8 @@ export const POST = async(req: NextRequest) => {
         signature : metadata.signature,
         email: metadata.email,
         eventDate: {
-          startDate: parseLocalDate(metadata.startDate),
-          endDate: parseLocalDate(metadata.endDate)
+          startDate: metadata.startDate,
+          endDate: metadata.endDate
         },
         eventInfo: {
           eventType: metadata.eventType,

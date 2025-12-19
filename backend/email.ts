@@ -5,10 +5,20 @@ export const sendBookingConfirmationEmail = async (clientName: string, email: st
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.NEXT_PUBLIC_EMAIL_USER,
-      pass: process.env.NEXT_PUBLIC_EMAIL_PASS,
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
+
+  const formatDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC", // critical
+    }).format(new Date(Date.UTC(year, month - 1, day)));
+  };
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
@@ -20,8 +30,8 @@ export const sendBookingConfirmationEmail = async (clientName: string, email: st
         <h2 style="font-size: 18px; margin-bottom: 15px; color: #333;">Event Details</h2>
         <ul style="list-style: none; padding: 0; margin: 0;">
           <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Event Type:</strong> ${bookingDetails.eventType}</li>
-          <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Start Date:</strong> ${new Date(bookingDetails.startDate).toLocaleDateString('en-US', { dateStyle: 'long' })}</li>
-          <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>End Date:</strong> ${new Date(bookingDetails.endDate).toLocaleDateString('en-US', { dateStyle: 'long' })}</li>
+          <li><strong>Start Date:</strong> ${formatDate(bookingDetails.startDate)}</li>
+          <li><strong>End Date:</strong> ${formatDate(bookingDetails.endDate)}</li>
           <li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Payment Method:</strong> ${bookingDetails.paymentMethod}</li>
           ${zelleReceiptUrl ? `<li style="font-size: 14px; margin-bottom: 10px; color: #666;"><strong>Zelle Receipt:</strong> <a href="${zelleReceiptUrl}" style="color: #007bff; text-decoration: none;">View Receipt</a></li>` : ''}
         </ul>
@@ -45,18 +55,12 @@ export const sendBookingConfirmationEmail = async (clientName: string, email: st
 
 
   const mailOptions = {
-    from: process.env.NEXT_PUBLIC_EMAIL_USER,
+    from: process.env.EMAIL_USER,
     to: email,
     cc: 'info.mspepo@gmail.com', // Send to Ms Pepo as well
     subject: 'Booking Confirmation',
     html
   };
 
-  await transporter.sendMail(mailOptions);
-};
-
-export const parseLocalDate = (dateStr: string) => {
-  const d = new Date(dateStr);
-  d.setHours(12, 0, 0, 0);
-  return d;
+  await transporter.sendMail(mailOptions).catch((err) => console.log(err));
 };

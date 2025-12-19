@@ -216,6 +216,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         fetchCitiesByState()
     }, [state])
 
+    const toDateOnly = (date: Date): string => {
+        return format(date, "yyyy-MM-dd");
+    };
+
     const goNext = (): void => {
     setDir(1);
     setCurrentMonth((m) => addMonths(m, 1));
@@ -227,35 +231,35 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
     };
 
     const handleDateClick = (day: Date): void => {
-    if (isDisabled(day)) return;
+        if (isDisabled(day)) return;
 
-    // No start selected -> set start (await end)
-    if (!range.start) {
-        setRange({ start: day, end: null });
-        return;
-    }
-
-    // Start exists but no end -> attempt to set end
-    if (range.start && !range.end) {
-        // clicking same day -> single-day range
-        if (isSameDay(day, range.start)) {
-            setRange({ start: range.start, end: range.start });
+        // No start selected -> set start (await end)
+        if (!range.start) {
+            setRange({ start: day, end: null });
             return;
         }
 
-        // clicking a later day -> set as end
-        if (isAfter(day, range.start)) {
-            setRange({ start: range.start, end: day });
+        // Start exists but no end -> attempt to set end
+        if (range.start && !range.end) {
+            // clicking same day -> single-day range
+            if (isSameDay(day, range.start)) {
+                setRange({ start: range.start, end: range.start });
+                return;
+            }
+
+            // clicking a later day -> set as end
+            if (isAfter(day, range.start)) {
+                setRange({ start: range.start, end: day });
+                return;
+            }
+
+            // clicking an earlier day -> treat as new start
+            setRange({ start: day, end: null });
             return;
         }
 
-        // clicking an earlier day -> treat as new start
+        // Both start and end exist -> start a new selection with this day as start
         setRange({ start: day, end: null });
-        return;
-    }
-
-    // Both start and end exist -> start a new selection with this day as start
-    setRange({ start: day, end: null });
     };
 
     // const handleDateClick = (day: Date): void => {
@@ -381,9 +385,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
         if (saved) {
             const parsed = JSON.parse(saved);
             setEventType(parsed.eventType || "");
-            setDemographic(parsed.audienceDemographic || "Nigerian");
+            setDemographic(parsed.audienceDemographic || "");
             setCustomDemographic(parsed.customDemographic || "")
-            setCustomEventType(parsed.customEventType)
+            setCustomEventType(parsed.customEventType || "")
             setState(parsed.state || "");
             setCity(parsed.city || "");
             setStartTime(parsed.startTime || "");
@@ -396,6 +400,35 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             setZelleReceiptUrl(parsed.zelleReceiptUrl || "");
         }
     }, []);
+
+    useEffect(() => {
+        const bookingData = {
+            eventType : customEventType !== "" ? customEventType : eventType,
+            audienceDemographic : customDemographic !== "" ? customDemographic : demographic,
+            state,
+            city,
+            startTime,
+            endTime,
+            startDate: range.start ? toDateOnly(range.start) : null,
+            endDate: (range.end || range.start) ? toDateOnly(range.end || range.start) : null,
+            range,
+            eventPrice,
+            serviceCharge,
+            amount : amountPaid,
+            baseAmount: totalAmount,
+            percentagePaid: selectedPaymentPercentage,
+            balanceToBePaid,
+            percentageRemaining: Number(100 - selectedPaymentPercentage),
+
+            paymentMethod,
+            zelleReceiptUrl,
+            numberOfDays : numberOfDays()
+        };
+
+        localStorage.setItem("eventBooking", JSON.stringify(bookingData));
+    }, [eventType, customDemographic, customEventType, state, city, startTime, endTime, range, eventPrice, serviceCharge, amountPaid, totalAmount, selectedPaymentPercentage, balanceToBePaid,
+        paymentMethod, numberOfDays, demographic, zelleReceiptUrl
+    ])
 
     const handleCompleteZellePayment = async() => {
         const termsData = localStorage.getItem("termsData")
@@ -410,8 +443,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             city,
             startTime,
             endTime,
-            endDate : range.end || range.start,
-            startDate : range.start,
+            startDate: range.start ? toDateOnly(range.start) : null,
+            endDate: (range.end || range.start) ? toDateOnly(range.end || range.start) : null,
             range,
             eventPrice,
             serviceCharge,
@@ -464,8 +497,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             city,
             startTime,
             endTime,
-            endDate : range.end || range.start,
-            startDate : range.start,
+            startDate: range.start ? toDateOnly(range.start) : null,
+            endDate: (range.end || range.start) ? toDateOnly(range.end || range.start) : null,
             range,
             eventPrice,
             serviceCharge,

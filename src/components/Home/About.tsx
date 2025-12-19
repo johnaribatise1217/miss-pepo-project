@@ -37,6 +37,7 @@ const About = forwardRef<HTMLElement>((props, ref) => {
           >
             <Image
               src="https://res.cloudinary.com/dfptoh5fz/image/upload/v1758843248/about_oqm3v2.svg"
+              // src="/images/about-new.png"
               alt="About Ms.Pepo"
               loading='lazy'
               width={100}

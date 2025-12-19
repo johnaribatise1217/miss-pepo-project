@@ -6,7 +6,7 @@ import { Metadata } from 'next'
 import React, { useRef } from 'react'
 
 export const metadata: Metadata = {
-  title: "Miss Pepo | Onaopemipo Olatunde | Me",
+  title: "Miss Pepo | Onaopemipo Olatunde",
   icons: {
     icon: "favicon.ico",
     shortcut: "favicon.ico",

@@ -5,7 +5,7 @@ import Testimonial from '@/components/EventHost/Testimonial/Testimonial'
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Miss Pepo | Event Host | Me",
+  title: "Miss Pepo | Event Host",
   icons: {
     icon: "favicon.ico",
     shortcut: "favicon.ico",

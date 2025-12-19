@@ -5,7 +5,7 @@ import LastSection from '@/components/Actor/LastSection'
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Miss Pepo | Actor | Me",
+  title: "Miss Pepo | Actor",
   icons: {
     icon: "favicon.ico",
     shortcut: "favicon.ico",

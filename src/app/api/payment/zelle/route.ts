@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../../../backend/connect';
 import Booking from '../../../../../backend/model/Booking';
-import { parseLocalDate, sendBookingConfirmationEmail } from '../../../../../backend/email';
+import {sendBookingConfirmationEmail } from '../../../../../backend/email';
 
 dbConnect()
 
@@ -33,8 +33,8 @@ export const POST = async(req : NextRequest) => {
       lastName,
       email,
       eventDate: {
-        startDate: parseLocalDate(startDate),
-        endDate: parseLocalDate(endDate)
+        startDate,
+        endDate
       },
       eventInfo: {
         eventType,
@@ -63,8 +63,8 @@ export const POST = async(req : NextRequest) => {
     }, zelleReceiptUrl);
 
     return NextResponse.json({ message: 'Zelle payment recorded successfully', received : true })
-  } catch (error) {
+  } catch (error: any) {
     console.error(error)
-    return NextResponse.json({ error: 'Failed to record Zelle payment' }, { status: 500 })
+    return NextResponse.json({ error}, { status: 500 })
   }
 }

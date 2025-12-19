@@ -58,8 +58,8 @@ module.exports = {
         // tiktok2 : "url('/images/tiktok-2.svg')",
         // tiktok3 : "url('/images/tiktok3.svg')",
         // tiktok4 : "url('/images/tiktok4.svg')",
-        // homeMobile : "url('https://res.cloudinary.com/dfptoh5fz/image/upload/v1758841984/home-mobile_abwoqb.svg')",
-        homeMobile : "url('/images/home-sm2.jpg')",
+        // homeMobile : "url('https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758841984/home-mobile_abwoqb.svg')",
+        homeMobile : "url('/images/home-sm2-new.png')",
         eventMobile : "url('https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758842594/event-mobile_ouiohi.svg')",
         actorMobile : "url('https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758842985/actor-mobile_bmkwup.svg')",
         contentMobile : "url('https://res.cloudinary.com/dfptoh5fz/image/upload/q_auto:best/v1758842039/influencer-mobile_rnbnay.svg')"
