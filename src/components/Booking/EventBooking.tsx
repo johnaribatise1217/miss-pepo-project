@@ -673,7 +673,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                     id="zelleReceiptUrl"
                                     type="file"
                                     name="zelleReceiptUrl"
-                                    accept=".pdf,application/pdf"
+                                    accept=".pdf,application/pdf,.jpg,.jpeg,.png"
                                     onChange={handleFileUpload}
                                     className="hidden"
                                 />
