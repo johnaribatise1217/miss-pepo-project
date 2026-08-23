@@ -35,7 +35,7 @@ const BookingPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col w-full bg-white overflow-hidden">
-            {/* ✅ Stepper Header (Now Responsive) */}
+            
             <div className="w-full border-b-2 border-gray-200 px-4 sm:px-8 md:px-16 lg:px-32 py-5">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 md:gap-10">
                     {[
@@ -81,7 +81,6 @@ const BookingPage = () => {
                 </div>
             </div>
 
-            {/* Step Content */}
             <div className="flex flex-1 w-full">
                 <div className="flex-1"></div>
 

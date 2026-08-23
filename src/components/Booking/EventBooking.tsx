@@ -285,7 +285,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             const e = startOfDay(new Date(r.endDate));
             return isWithinInterval(startOfDay(day), { start: s, end: e });
         });
-        return beforeMin || inBooked;
+
+        const isBlockedMonth = (d: Date) =>
+            d.getFullYear() === 2026 && (d.getMonth() === 7 || d.getMonth() === 8);
+
+        return beforeMin || inBooked || isBlockedMonth(day);
     };
 
     const calendarMatrix: Date[][] = useMemo(() => {
@@ -544,8 +548,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
             {/* Left Sidebar */}
             <div className="md:w-80 w-full space-y-6">
                 {/* Note Section */}
+
                 <div className="bg-gray-100 rounded-lg p-6">
-                    <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Note!</h3>
+                    <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Booking Note!</h3>
+                    <p className="text-sm text-gray-700 mb-4 inter">
+                        Hey Love, Ms. Pepo will not be taking bookings during <b className='font-bold'>August and September 2026.</b> <br /> Bookings reopen from <b>October 1, 2026</b> onward. To request a date or ask about availability, please email{" "}
+                        <a href="mailto:info.mspepo@gmail.com" className="text-blue-600 underline">info.mspepo@gmail.com</a>.
+                        Thank you , I look forward to working with you.
+                    </p>
+                </div>
+
+                <div className="bg-gray-100 rounded-lg p-6">
+                    <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Service Note!</h3>
                     <p className="text-sm text-gray-700 mb-4 inter">
                         Based on my service agreement, the event planner or individual inviting Ms.Pepo for any event outside of <b className='font-bold'>Houston, Texas</b> means you are responsible for providing the following at least 7 days before the event date.
                     </p>
@@ -772,7 +786,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                                         const e = startOfDay(new Date(r.endDate));
                                         return isWithinInterval(startOfDay(day), { start: s, end: e });
                                     });
-                                    const disabled: boolean = isBefore(startOfDay(day), today) || isBooked;
+                                    // block August(7) and September(8) of 2026
+                                    const isBlocked = day.getFullYear() === 2026 && (day.getMonth() === 7 || day.getMonth() === 8);
+
+                                    const disabled: boolean = isBefore(startOfDay(day), today) || isBooked || isBlocked;
             
                                     const base = "p-3 rounded-[9px] flex items-center justify-center text-sm border relative";
                                     
