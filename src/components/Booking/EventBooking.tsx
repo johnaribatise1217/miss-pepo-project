@@ -552,7 +552,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onNext, onPrevious }) => {
                 <div className="bg-gray-100 rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-3 bricolage-grotesque">Booking Note!</h3>
                     <p className="text-sm text-gray-700 mb-4 inter">
-                        Hey Love, Ms. Pepo will not be taking bookings during <b className='font-bold'>August and September 2026.</b> <br /> Bookings reopen from <b>October 1, 2026</b> onward. To request a date or ask about availability, please email{" "}
+                        Hey Love, Ms. Pepo will not be taking bookings during <b className='font-bold'>August and September 2026.</b> <br /> Bookings are allowed from <b>October 1, 2026</b> onward. To request a date or ask about availability, please email{" "}
                         <a href="mailto:info.mspepo@gmail.com" className="text-blue-600 underline">info.mspepo@gmail.com</a>.
                         Thank you , I look forward to working with you.
                     </p>
